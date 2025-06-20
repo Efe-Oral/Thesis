@@ -1,0 +1,6 @@
+
+
+- [X] Print the name of the gameobject that is being looked at on the console
+- [] Get other information of the gameobject, not just its name e.g. Transfor, rotation values etc.
+- [] Create wirebox shader around the selected object
+- [] Print the name of the gameobject that is being looked at as a floating label UI
