@@ -30,18 +30,23 @@ public class LookAndAttach : MonoBehaviour
             return;
         }
 
-        Debug.Log("Adding Outline script");
-        target.AddComponent<Outline>();
+        else
+        {
+            Debug.Log("Adding Outline script");
+            target.AddComponent<Outline>();
+        }
     }
 
     private void UpdateHighlight(GameObject target)
     {
         // If we're still looking at the same object, do nothing
-        if (target == currentlyHighlightedObject)
+
+        if (target == currentlyHighlightedObject) /*3*/ // automaticDescriptor.lastHitObject == currentlyHighlightedObject
             return;
 
         // Disable outline on previously highlighted object
-        if (currentOutline != null)
+
+        if (currentOutline is not null)    /*2*/
         {
             currentOutline.enabled = false;
             currentlyHighlightedObject = null;
@@ -49,7 +54,7 @@ public class LookAndAttach : MonoBehaviour
         }
 
         // If looking at a new valid object
-        if (target != null)
+        if (target != null)      /*1*/
         {
             Outline outline = target.GetComponent<Outline>();
             if (outline == null)
