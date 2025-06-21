@@ -7,7 +7,7 @@ public class AutomaticDescriptor : MonoBehaviour
     public float rayLength = 10f;
     private LineRenderer lineRenderer;
     private Camera mainCamera;
-    private GameObject lastHitObject;
+    public GameObject lastHitObject;
     public Vector3 rayCameraDistance = new Vector3(0, 0, 10);
 
     // Start is called before the first frame update
@@ -65,23 +65,7 @@ public class AutomaticDescriptor : MonoBehaviour
     private void HandleRaycastHit(RaycastHit hit)
     {
         Debug.Log("Looking at: " + hit.collider.gameObject.name);
-        lastHitObject = hit.collider.gameObject;
+        lastHitObject = hit.collider.gameObject; // Last Hit Object is the object that is being looked at, public
     }
 
-    private void OnDrawGizmos()
-    {
-        if (lastHitObject != null)
-        {
-            Debug.Log("Last hit object is NOT null");
-            Gizmos.color = Color.yellow;
-            var meshRenderer = lastHitObject.GetComponent<MeshRenderer>();
-            if (meshRenderer != null)
-            {
-                Gizmos.matrix = lastHitObject.transform.localToWorldMatrix;
-                Bounds bounds = meshRenderer.bounds;
-                Gizmos.DrawWireCube(bounds.center - lastHitObject.transform.position, bounds.size);
-                Gizmos.matrix = Matrix4x4.identity;
-            }
-        }
-    }
 }

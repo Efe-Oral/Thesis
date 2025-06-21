@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class LookAndAttach : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
+    [SerializeField] private AutomaticDescriptor automaticDescriptor;
 
-    // Update is called once per frame
     void Update()
     {
+        AttachScript();
+    }
 
+    private void AttachScript()
+    {
+        GameObject target = automaticDescriptor.lastHitObject;
+
+        if (target == null) return;
+
+        // Check if Outline script is already attached
+        if (target.GetComponent<Outline>() != null)
+        {
+            Debug.Log("Outline script already exists");
+            return;
+        }
+
+        // Attach Outline script
+        Debug.Log("Adding Outline script");
+        target.AddComponent<Outline>();
     }
 }
