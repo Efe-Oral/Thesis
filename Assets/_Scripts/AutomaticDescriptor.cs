@@ -70,6 +70,9 @@ public class AutomaticDescriptor : MonoBehaviour
         if (currentLookedObject != lastLokkedObject)
         {
             Debug.Log("Looking at: " + currentLookedObject.name);
+            Debug.Log(currentLookedObject.name + "'s Transform Position is at: " + currentLookedObject.transform.position);
+            Debug.Log(currentLookedObject.name + "'s Transform Rotation is at: " + currentLookedObject.transform.rotation);
+            Debug.Log(currentLookedObject.name + "'s Transform Scale is at: " + currentLookedObject.transform.lossyScale);
             lastLokkedObject = currentLookedObject;
         }
     }

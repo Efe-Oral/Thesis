@@ -16,9 +16,9 @@
 - [X] Print the name of the gameobject that is being looked at on the console
 - [X] Create outline shader around the selected object
 - [X] When you look at an object, just print its name to the console once, not continuasly
+- [X] Get other information of the gameobject, not just its name e.g. Transfor, rotation values etc.
 
 
-- [] Get other information of the gameobject, not just its name e.g. Transfor, rotation values etc.
 - [] Print the name of the gameobject that is being looked at as a floating label UI
 - [] 3D Game asset generator using MCP & Hugging face  (https://github.com/MubarakHAlketbi/game-asset-mcp)
 - [] Integrate TTS and STT from unity praktikum to use MCP without typing in cursor
