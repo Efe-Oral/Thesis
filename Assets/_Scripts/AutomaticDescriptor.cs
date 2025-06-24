@@ -7,7 +7,8 @@ public class AutomaticDescriptor : MonoBehaviour
     public float rayLength = 10f;
     private LineRenderer lineRenderer;
     private Camera mainCamera;
-    public GameObject lastHitObject;
+    private GameObject currentLookedObject;
+    public GameObject lastLokkedObject;
     public Vector3 rayCameraDistance = new Vector3(0, 0, 10);
 
     // Start is called before the first frame update
@@ -50,7 +51,7 @@ public class AutomaticDescriptor : MonoBehaviour
         }
         else
         {
-            lastHitObject = null;
+            lastLokkedObject = null;
         }
 
         DrawRay(origin, endPosition);
@@ -64,8 +65,13 @@ public class AutomaticDescriptor : MonoBehaviour
 
     private void HandleRaycastHit(RaycastHit hit)
     {
-        Debug.Log("Looking at: " + hit.collider.gameObject.name);
-        lastHitObject = hit.collider.gameObject; // Last Hit Object is the object that is being looked at, public
+        currentLookedObject = hit.collider.gameObject;
+
+        if (currentLookedObject != lastLokkedObject)
+        {
+            Debug.Log("Looking at: " + currentLookedObject.name);
+            lastLokkedObject = currentLookedObject;
+        }
     }
 
 }

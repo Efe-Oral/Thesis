@@ -14,12 +14,12 @@ public class LookAndAttach : MonoBehaviour
     void Update()
     {
         AttachScript();
-        UpdateHighlight(automaticDescriptor.lastHitObject);
+        UpdateHighlight(automaticDescriptor.lastLokkedObject);
     }
 
     private void AttachScript()
     {
-        GameObject target = automaticDescriptor.lastHitObject;
+        GameObject target = automaticDescriptor.lastLokkedObject;
 
         if (target == null) return;
 
@@ -41,7 +41,7 @@ public class LookAndAttach : MonoBehaviour
     {
         // If we're still looking at the same object, do nothing
 
-        if (target == currentlyHighlightedObject) /*3*/ // automaticDescriptor.lastHitObject == currentlyHighlightedObject
+        if (target == currentlyHighlightedObject) /*3*/ // automaticDescriptor.lastLokkedObject == currentlyHighlightedObject
             return;
 
         // Disable outline on previously highlighted object
