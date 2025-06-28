@@ -19,12 +19,13 @@
 - [X] Get other information of the gameobject, not just its name e.g. Transfor, rotation values etc.
 - [X] Add an open source text to 3D asset/model generator model (rn only img to 3d implemented) (https://github.com/YanWenKun/Hunyuan3D-2-WinPortable?tab=readme-ov-file)
    |- dependincies: CUDA v12.4 install only CUDA>>Runtime>>Libraries and CUDA>>Dev>>Complier; vs_BuildTools. You need to add these to path via environment variable check with cl and nvcc --version
-
 - [X] In cursor, find a way to auto accept the performed tasks from MCP (Agent>Pencil Symbol>Auto-run activate)
+
+- [] Make STT a package and add easily (use elevenlabs API key)
+
+
 - [] Print the name of the gameobject that is being looked at as a floating label UI
-
-
-- [] Make TTS and STT a package and add easily (use elevenlabs API key)
    |- [] Integrate TTS and STT from unity praktikum to use MCP with speech in cursor
+
 - [] Add undo action for modified assets in game
 - [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
