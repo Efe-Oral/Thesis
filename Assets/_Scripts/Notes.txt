@@ -21,9 +21,10 @@
    |- dependincies: CUDA v12.4 install only CUDA>>Runtime>>Libraries and CUDA>>Dev>>Complier; vs_BuildTools. You need to add these to path via environment variable check with cl and nvcc --version
 - [X] In cursor, find a way to auto accept the performed tasks from MCP (Agent>Pencil Symbol>Auto-run activate)
 - [X] Make STT a package and add easily (use elevenlabs API key)
+- [X] Merge MCP-testing branch to main
 
-- [] Merge MCP-testing branch to main
-
+- [] Give STT output to cursor, to use MCP tools with speech
+- [] Add new MCP tools
 
 - [] Print the name of the gameobject that is being looked at as a floating label UI
    |- [] Integrate TTS and STT from unity praktikum to use MCP with speech in cursor
