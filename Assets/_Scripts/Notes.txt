@@ -23,11 +23,14 @@
 - [X] Make STT a package and add easily (use elevenlabs API key)
 - [X] Merge MCP-testing branch to main
 
+
+- [] Create a custom MCP tool for communication with unity 
+   |DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends the request via POST request
+
 - [] Give STT output to cursor, to use MCP tools with speech
 - [] Add new MCP tools
 
 - [] Print the name of the gameobject that is being looked at as a floating label UI
-   |- [] Integrate TTS and STT from unity praktikum to use MCP with speech in cursor
-
 - [] Add undo action for modified assets in game
 - [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
+- [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
