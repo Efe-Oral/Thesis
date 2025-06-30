@@ -24,12 +24,19 @@
 - [X] Merge MCP-testing branch to main
 
 
-- [] Create a custom MCP tool for communication with unity 
-   |DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends the request via POST request
+
+
+- [] Add a new MCP toolset for unity, see if you can use it with exisitng mcp tools 
+   |(https://github.com/CoderGamester/mcp-unity)
+   |(https://github.com/IvanMurzak/Unity-MCP)
 
 - [] Give STT output to cursor, to use MCP tools with speech
-- [] Add new MCP tools
+- [] Create a CUSTOM  MCP tool for communication with unity (voice_command_tool.py) [https://www.youtube.com/watch?v=wa_A0qY0anA]
+   |DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends the request via POST request
 
+
+- [] Find a way to press enter in inspector mode to use MCP Voice command tool and send the text to the .txt file
+- [] Find a way to add MCP servers to github repo, hence the end prodcut package
 - [] Print the name of the gameobject that is being looked at as a floating label UI
 - [] Add undo action for modified assets in game
 - [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
