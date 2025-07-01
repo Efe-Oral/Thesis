@@ -72,7 +72,7 @@ public class SpeechRecognition : MonoBehaviour
         if (result.Reason == ResultReason.RecognizedSpeech)
         {
             recognizedSpeech = result.Text;
-            Debug.Log("Recognized: " + recognizedSpeech);
+            Debug.Log("Recognized: " + recognizedSpeech + ". Use corresponding tool.");
         }
         else
         {
