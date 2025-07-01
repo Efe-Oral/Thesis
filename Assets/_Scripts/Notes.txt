@@ -27,6 +27,7 @@
 
 - [] Print the name of the gameobject that is being looked at as a floating label UI
 - [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
+- [] Read papers
 
 
 
