@@ -5,12 +5,16 @@ using UnityEngine;
 public class LookAndAttach : MonoBehaviour
 {
 
-    [SerializeField] private AutomaticDescriptor automaticDescriptor;
+    private AutomaticDescriptor automaticDescriptor;
 
     private GameObject currentlyHighlightedObject;
     private Outline currentOutline;
 
 
+    void Start()
+    {
+        automaticDescriptor = FindObjectOfType<AutomaticDescriptor>();
+    }
     void Update()
     {
         AttachScript();

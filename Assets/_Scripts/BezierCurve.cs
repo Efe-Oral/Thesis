@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using TMPro;
 
 namespace Unity.VRTemplate
 {
@@ -40,6 +41,8 @@ namespace Unity.VRTemplate
         [SerializeField, Tooltip("The time within the frame that the curve will be updated. If this Bezier Curve is attached to a transform that is updating before render, then enabling updates in Before Render will keep the line connected without delay.")]
         UpdateType m_UpdateTrackingType = UpdateType.Update;
 
+        [SerializeField] TMP_Text objectName;
+
         [SerializeField, Tooltip("The transform that determines the position, handle rotation, and handle scale of the start point of the bezier curve.")]
         Transform m_StartPoint;
 
@@ -67,7 +70,7 @@ namespace Unity.VRTemplate
         [SerializeField, Tooltip("The line renderer that will draw the curve. If not set it will find a line renderer on this GameObject.")]
         LineRenderer m_LineRenderer;
 #pragma warning restore 649
-
+        AutomaticDescriptor automaticDescriptor;
         Vector3[] m_ControlPoints = new Vector3[4];
         float m_Time;
         float m_LineWidth;
@@ -79,6 +82,7 @@ namespace Unity.VRTemplate
 
         void Awake()
         {
+            automaticDescriptor = FindObjectOfType<AutomaticDescriptor>();
             if (m_LineRenderer == null)
                 m_LineRenderer = GetComponent<LineRenderer>();
 
@@ -120,8 +124,19 @@ namespace Unity.VRTemplate
         [ContextMenu("Draw")]
         public void DrawCurve()
         {
-            var startPointPosition = m_StartPoint.position;
-            var endPointPosition = m_EndPoint.position;
+
+            var objPosition = automaticDescriptor.lastLokkedObject.transform.position;
+
+            var startPointPosition = objPosition;
+            var endPointPosition = objPosition + new Vector3(1f, 0.7f, -0.5f);
+
+            //var startPointPosition = m_StartPoint.position;
+            //var endPointPosition = m_EndPoint.position;
+
+            m_StartPoint.position = startPointPosition;
+            m_EndPoint.position = endPointPosition;
+            objectName.text = automaticDescriptor.lastLokkedObject.name;
+
 
             if (startPointPosition == m_LastStartPosition &&
                 endPointPosition == m_LastEndPosition)

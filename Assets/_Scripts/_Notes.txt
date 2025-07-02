@@ -23,9 +23,11 @@
 - [X] Make STT a package and add easily (use elevenlabs API key)
 - [X] Merge MCP-testing branch to main
 - [X] Find a way to add MCP server packages to github repo, hence the end prodcut package
+- [X] Print the name of the gameobject that is being looked at as a floating label UI
 
 
-- [] Print the name of the gameobject that is being looked at as a floating label UI
+
+- [] Re-factor the code of floating UI
 - [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
 - [] Read papers
 
