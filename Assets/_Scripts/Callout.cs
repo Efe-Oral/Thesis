@@ -28,13 +28,20 @@ namespace Unity.VRTemplate
         [Tooltip("Whether the associated tooltip and curve will be disabled on Start.")]
         bool m_TurnOffAtStart = true;
 
+        [SerializeField]
+        [Tooltip("The Canvas Transform to rotate to face the main camera.")]
+        Transform m_CanvasToFace;
+
         bool m_Gazing = false;
+
+        Camera mainCamera;
 
         Coroutine m_StartCo;
         Coroutine m_EndCo;
 
         void Start()
         {
+            mainCamera = FindObjectOfType<Camera>();
             if (m_Unparent)
             {
                 if (m_LazyTooltip != null)
@@ -47,6 +54,15 @@ namespace Unity.VRTemplate
                     m_LazyTooltip.gameObject.SetActive(false);
                 if (m_Curve != null)
                     m_Curve.SetActive(false);
+            }
+        }
+
+        void LateUpdate()
+        {
+            if (mainCamera != null && m_CanvasToFace != null)
+            {
+                m_CanvasToFace.LookAt(mainCamera.transform.position, Vector3.up);
+                m_CanvasToFace.Rotate(0, 180, 0); // Flip if text is backwards
             }
         }
 

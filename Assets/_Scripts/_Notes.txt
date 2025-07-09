@@ -27,7 +27,7 @@
 
 
 
-- [] Re-factor the code of floating UI
+- [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 - [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
 - [] Read papers
 

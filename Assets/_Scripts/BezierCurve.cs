@@ -124,9 +124,12 @@ namespace Unity.VRTemplate
         [ContextMenu("Draw")]
         public void DrawCurve()
         {
+            if (automaticDescriptor.lastLokkedObject == null)
+            {
+                return;
+            }
 
             var objPosition = automaticDescriptor.lastLokkedObject.transform.position;
-
             var startPointPosition = objPosition;
             var endPointPosition = objPosition + new Vector3(1f, 0.7f, -0.5f);
 
