@@ -26,24 +26,24 @@
 - [X] Print the name of the gameobject that is being looked at as a floating label UI
 
 
+- [] Give STT output to cursor, to use MCP tools with speech
+- [] Create a CUSTOM  MCP tool for communication with unity (voice_command_tool.py) [https://github.com/justinpbarnett/unity-mcp/blob/0351e4fcf4288a23db4dbe71b863c6c4124acf10/HOW_TO_ADD_A_TOOL.md]
+   |DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends the request via POST request
+
+- [] Find a way to press enter in inspector mode to test MCP Voice command tool and send the text to the .txt file
+
+
+
+- [] Solve ERROR: Port 6400 is already in use (issue #103). Temp. soulution is change the port number is the following scripts: UnityMcpBridge.cs; UnityMcpEditorWindow.cs; config.py
+- [] Add a new MCP toolset for unity, see if you can use it with exisitng mcp tools 
+   |[X] (https://github.com/justinpbarnett/unity-mcp)
+   |[X] (https://github.com/CoderGamester/mcp-unity)
+   |[ ] (https://github.com/IvanMurzak/Unity-MCP)
+
+- [] Add undo action for modified assets in game
+- [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
+   | Check this text to 3d model creation repo, write its owner (https://github.com/Scriptwonder/Unity-Text2Model)
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 - [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
 - [] Read papers
-
-
-
-- [] Give STT output to cursor, to use MCP tools with speech
-- [] Solve ERROR: Port 6400 is already in use. Soulution is change the port number is the following scripts: UnityMcpBridge.cs; UnityMcpEditorWindow.cs; config.py
-- [] Add a new MCP toolset for unity, see if you can use it with exisitng mcp tools 
-   |[X] (https://github.com/justinpbarnett/unity-mcp)
-   |[X ] (https://github.com/CoderGamester/mcp-unity)
-   |[ ] (https://github.com/IvanMurzak/Unity-MCP)
-
-- [] Create a CUSTOM  MCP tool for communication with unity (voice_command_tool.py) [https://www.youtube.com/watch?v=wa_A0qY0anA]
-   |DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends the request via POST request
-   
-- [] Add undo action for modified assets in game
-- [] Find a way to press enter in inspector mode to use MCP Voice command tool and send the text to the .txt file
-- [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
-   | Check this text to 3d model creation repo, write its owner (https://github.com/Scriptwonder/Unity-Text2Model)
