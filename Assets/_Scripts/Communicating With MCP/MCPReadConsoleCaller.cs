@@ -9,8 +9,8 @@ using Newtonsoft.Json.Linq; // Requires Newtonsoft.Json package (see below)
 
 public class MCPReadConsoleCaller : MonoBehaviour
 {
-    public string mcpHost = "127.0.0.1";
-    public int mcpPort = 6500;
+    private string mcpHost = "127.0.0.1";
+    public int mcpPort = 6400; //Get this port number dynamically
 
     [ContextMenu("Call MCP read_console")]
     public void CallReadConsole()
