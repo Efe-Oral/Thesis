@@ -5,16 +5,18 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq; // Requires Newtonsoft.Json package (see below)
+using Newtonsoft.Json.Linq;
+using UnityEditor; // Requires Newtonsoft.Json package (see below)
 
 public class MCPReadConsoleCaller : MonoBehaviour
 {
     private string mcpHost = "127.0.0.1";
-    public int mcpPort = 6400; //Get this port number dynamically
+    private int mcpPort; //Getting this port number dynamically
 
     [ContextMenu("Call MCP read_console")]
     public void CallReadConsole()
     {
+        mcpPort = GetMcpPort();
         StartCoroutine(CallReadConsoleCoroutine());
     }
 
@@ -88,5 +90,13 @@ public class MCPReadConsoleCaller : MonoBehaviour
                 Debug.LogError("Failed to parse MCP response: " + ex.Message);
             }
         }
+    }
+
+    private int GetMcpPort()
+    {
+        TextAsset portText = Resources.Load<TextAsset>("mcp_port_number");
+        if (portText != null && int.TryParse(portText.text, out int port))
+            return port;
+        return 6490; //Default port number at the start
     }
 }
