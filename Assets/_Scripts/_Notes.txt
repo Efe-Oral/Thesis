@@ -25,21 +25,23 @@
 - [X] Find a way to add MCP server packages to github repo, hence the end prodcut package
 - [X] Print the name of the gameobject that is being looked at as a floating label UI
 - [X] Solve ERROR: Port 6400 is already in use (issue #103). Temp. soulution is change the port number is the following scripts: UnityMcpBridge.cs; UnityMcpEditorWindow.cs; config.py
+- [X] Find a way to press enter in inspector mode to test MCP Voice command tool. Manuel testing of MCP Voice command tool is abandoned
+- [X] Create a CUSTOM  MCP bridge for communication with unity [https://github.com/justinpbarnett/unity-mcp/blob/0351e4fcf4288a23db4dbe71b863c6c4124acf10/HOW_TO_ADD_A_TOOL.md]
+   |-DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends a POST request. 
+                    These design choises are ultimalty abandoned and finally a local LLM that serve as a bridge between unity and MCP server implemented (https://github.com/jonigl/ollama-mcp-bridge)
+
+- [X] Add a new MCP toolset for unity, see if you can use it with exisitng mcp tools 
+   |-[X] (https://github.com/justinpbarnett/unity-mcp)
+   |-[X] (https://github.com/CoderGamester/mcp-unity)
 
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
-- [] Give STT output to cursor, to use MCP tools with speech
-
-- [] Create a CUSTOM  MCP tool for communication with unity [https://github.com/justinpbarnett/unity-mcp/blob/0351e4fcf4288a23db4dbe71b863c6c4124acf10/HOW_TO_ADD_A_TOOL.md]
-   |-DESIGN CHOICE: unity writes to a .txt file and cursor reads OR unity sends the request via POST request
-
-- [] Find a way to press enter in inspector mode to test MCP Voice command tool's Serializefield and send the text to the .txt file
-
-- [] Add a new MCP toolset for unity, see if you can use it with exisitng mcp tools 
-   |-[X] (https://github.com/justinpbarnett/unity-mcp)
-   |-[X] (https://github.com/CoderGamester/mcp-unity)
-   |-[ ] (https://github.com/IvanMurzak/Unity-MCP)
-
+- [] Give STT output to Ollama, to use MCP tools with speech
+- [] Right now the only working Ollama model with tools is Qwen3. Others give the ERROR: Model doesn't support tools. Fix this problem
+- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
+- [] Find Cursor's raw JSON wrapping that it sends to the MCP server and analayze it. According to that JSON request, modify your own
+- [] Research about "temperature" and "top_p" parameters in Ollama model JSON requests
+- [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
 - [] Add undo action for modified assets in game
 - [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
    |-Check this text to 3d model creation repo, write its owner (https://github.com/Scriptwonder/Unity-Text2Model)
