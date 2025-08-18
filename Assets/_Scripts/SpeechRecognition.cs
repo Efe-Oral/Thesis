@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
-using System.Net.Http;
-using System.Text;
 
 public class SpeechRecognition : MonoBehaviour
 {
@@ -69,13 +67,12 @@ public class SpeechRecognition : MonoBehaviour
         isRecognizing = false;
     }
 
-    private async void ProcessSpeechResult(SpeechRecognitionResult result)
+    private void ProcessSpeechResult(SpeechRecognitionResult result)
     {
         if (result.Reason == ResultReason.RecognizedSpeech)
         {
             recognizedSpeech = result.Text;
-            Debug.Log("Recognized: " + recognizedSpeech + " Sending to Flask server...");
-            await SendPromptToFlask(recognizedSpeech);
+            Debug.Log("Recognized: " + recognizedSpeech);
         }
         else
         {
@@ -88,25 +85,6 @@ public class SpeechRecognition : MonoBehaviour
         if (clip != null && audioSource != null)
         {
             audioSource.PlayOneShot(clip);
-        }
-    }
-
-    private async Task SendPromptToFlask(string prompt)
-    {
-        using (var client = new HttpClient())
-        {
-            var json = "{\"prompt\": \"" + prompt.Replace("\"", "\\\"") + "\"}";
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            try
-            {
-                var response = await client.PostAsync("http://localhost:5005/unity_prompt", content);
-                string responseString = await response.Content.ReadAsStringAsync();
-                Debug.Log("Flask server response: " + responseString);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError("Error sending prompt to Flask server: " + ex.Message);
-            }
         }
     }
 }
