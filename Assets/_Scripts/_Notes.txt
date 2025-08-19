@@ -35,22 +35,29 @@
    |-[X] (https://github.com/CoderGamester/mcp-unity)
 
 - [X] Find a way to send natural language prompts (which will be converted to JSON format) from Unity to the MCP server
+- [X] Try this new git repo https://github.com/patruff/ollama-mcp-bridge to see if its better than the one you use rightnow which is from jonigl
 
 
-- [] Try this new git repo https://github.com/patruff/ollama-mcp-bridge to see if its better than the one you use rightnow which is from jonigl
+- [X] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
+
 - [] Get rid of unnecesarry MCP servers e.g. weather MCP server
-- [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 - [] Give STT output to Ollama, to use MCP tools with speech
-- [] Right now the only working Ollama model with tools is Qwen3. Others give the ERROR: Model doesn't support tools. Fix this problem
-- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
-- [] Find Cursor's raw JSON wrapping that it sends to the MCP server and analayze it. According to that JSON request, modify your own
 - [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
+
+
+
+
+
+
+
+- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID
+- [] Right now the only working Ollama model with tools is Qwen3. Others give the ERROR: Model doesn't support tools. Fix this problem do some research
+- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
+
+- [] Find Cursor's raw JSON wrapping that it sends to the MCP server and analayze it. According to that JSON request, modify your own
 - [] Research about "temperature" and "top_p" parameters in Ollama model JSON requests
 - [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
 - [] Add undo action for modified assets in game
-- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID
-
-
 - [] BONUS: Run the project on Mac and see if its faster
 - [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
    |-Check this text to 3d model creation repo, write its owner (https://github.com/Scriptwonder/Unity-Text2Model)
