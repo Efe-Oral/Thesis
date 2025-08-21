@@ -6,12 +6,12 @@ using Microsoft.CognitiveServices.Speech.Audio;
 
 public class SpeechRecognition : MonoBehaviour
 {
+    [Header("MCP Prompt Sender")]
+    [SerializeField] private McpPromptSender mcpPromptSender;
+
     [Header("Azure Speech Settings")]
     [SerializeField] private string speechKey = "DuTF9airVdsZZpxpgaQBj0TgJbQtkxGW22Cwrb014SyboVhXoziOJQQJ99BCACPV0roXJ3w3AAAYACOGBSBH";
     [SerializeField] private string speechRegion = "germanywestcentral"; // e.g. "germanywestcentral"
-
-    [Header("MCP Integration")]
-    [SerializeField] private McpPromptSender mcpPromptSender;
 
     [Header("Audio Feedback")]
     [SerializeField] private AudioClip startSound;
@@ -76,15 +76,17 @@ public class SpeechRecognition : MonoBehaviour
         {
             recognizedSpeech = result.Text;
             Debug.Log("Recognized: " + recognizedSpeech);
-
-            // Send the recognized speech to MCP bridge
             if (mcpPromptSender != null)
             {
+                // Sending recognized speech to MCP bridge
+                mcpPromptSender.testPrompt = recognizedSpeech;
                 mcpPromptSender.Send(recognizedSpeech);
+
+                //mcpPromptSender.lastPrompt = recognizedSpeech;
             }
             else
             {
-                Debug.LogWarning("McpPromptSender reference is missing. Please assign it in the Unity Inspector.");
+                Debug.LogError("MCP Prompt Sender script is NOT assigned!");
             }
         }
         else

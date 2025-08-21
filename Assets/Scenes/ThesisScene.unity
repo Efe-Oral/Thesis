@@ -1368,7 +1368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   apiUrl: http://localhost:8000/api/chat
-  model: gpt-oss:20b
+  model: qwen3:4b
   systemPrompt: You are an AI assistant whose ONLY job is to control a Unity scene
     by calling MCP tools exposed by the unityMCP server.
   think: 0

@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 
 public class McpPromptSender : MonoBehaviour
 {
+
     [Header("Endpoint")]
     [SerializeField] private string apiUrl = "http://localhost:8000/api/chat";
 
@@ -48,7 +49,7 @@ public class McpPromptSender : MonoBehaviour
     [Header("Testing")]
     [TextArea] public string testPrompt = "Create 3 cubes with meshes";
 
-    [ContextMenu("Send Prompt (Play mode)")]
+    [ContextMenu("Send Prompt (in Play mode)")]
     public void SendFromInspector()
     {
         StartCoroutine(SendCoroutine(testPrompt));
