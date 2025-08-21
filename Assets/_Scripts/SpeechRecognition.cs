@@ -10,6 +10,9 @@ public class SpeechRecognition : MonoBehaviour
     [SerializeField] private string speechKey = "DuTF9airVdsZZpxpgaQBj0TgJbQtkxGW22Cwrb014SyboVhXoziOJQQJ99BCACPV0roXJ3w3AAAYACOGBSBH";
     [SerializeField] private string speechRegion = "germanywestcentral"; // e.g. "germanywestcentral"
 
+    [Header("MCP Integration")]
+    [SerializeField] private McpPromptSender mcpPromptSender;
+
     [Header("Audio Feedback")]
     [SerializeField] private AudioClip startSound;
     [SerializeField] private AudioClip endSound;
@@ -73,6 +76,16 @@ public class SpeechRecognition : MonoBehaviour
         {
             recognizedSpeech = result.Text;
             Debug.Log("Recognized: " + recognizedSpeech);
+
+            // Send the recognized speech to MCP bridge
+            if (mcpPromptSender != null)
+            {
+                mcpPromptSender.Send(recognizedSpeech);
+            }
+            else
+            {
+                Debug.LogWarning("McpPromptSender reference is missing. Please assign it in the Unity Inspector.");
+            }
         }
         else
         {
