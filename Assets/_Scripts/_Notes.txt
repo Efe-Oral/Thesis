@@ -36,11 +36,9 @@
 
 - [X] Find a way to send natural language prompts (which will be converted to JSON format) from Unity to the MCP server
 - [X] Try this new git repo https://github.com/patruff/ollama-mcp-bridge to see if its better than the one you use rightnow which is from jonigl
+- [X] Get rid of unnecesarry MCP servers e.g. weather MCP server (only justinpbarnett's mcp server is active, others deleted)
 
 
-- [X] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
-
-- [] Get rid of unnecesarry MCP servers e.g. weather MCP server
 - [] Give STT output to Ollama, to use MCP tools with speech
 - [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
 
@@ -50,6 +48,7 @@
 
 
 
+- [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID
 - [] Right now the only working Ollama model with tools is Qwen3. Others give the ERROR: Model doesn't support tools. Fix this problem do some research
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
