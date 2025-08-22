@@ -22,7 +22,7 @@ public class McpPromptSender : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float topP = 0.9f;
 
     [TextArea] public string lastPrompt;
-    [TextArea] public string lastResponse;
+    [TextArea(15, 20)] public string lastResponse;
 
     [System.Serializable]
     private class Message { public string role; public string content; public Message(string r, string c) { role = r; content = c; } }
