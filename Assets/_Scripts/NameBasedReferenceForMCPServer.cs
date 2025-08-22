@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InstanceIdTest : MonoBehaviour
+public class NameBasedReferenceForMCPServer : MonoBehaviour
 {
     [SerializeField] private McpPromptSender mcpPromptSender;
     [SerializeField] private GameObject targetObject;

@@ -1508,7 +1508,7 @@ GameObject:
   - component: {fileID: 1679171915}
   - component: {fileID: 1679171914}
   m_Layer: 0
-  m_Name: Instance ID Test
+  m_Name: Name BasedReference For MCP Server
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
