@@ -4,32 +4,28 @@ using UnityEngine;
 
 public class InstanceIdTest : MonoBehaviour
 {
-
     [SerializeField] private McpPromptSender mcpPromptSender;
+    [SerializeField] private GameObject targetObject;
 
     void Start()
     {
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        int id = cube.GetInstanceID();
-        string idString = id.ToString();
-
-        Debug.Log("InstanceID int: " + id);
-        Debug.Log("InstanceID string: \"" + idString + "\"");
-
-        // Example prompt to simulate
-        string prompt = "Delete object with id" + idString;
-        Debug.Log("Prompt: " + prompt);
-
-        if (mcpPromptSender != null)
+        if (targetObject != null)
         {
-            mcpPromptSender.testPrompt = prompt;
-            mcpPromptSender.Send(prompt);
+            // Use the object's name instead of instance ID
+            string prompt = $"Delete the gameobject named \"{targetObject.name}\"";
+
+            Debug.Log($"Target Object: {targetObject.name}");
+            Debug.Log($"Generated Prompt: {prompt}");
+
+            if (mcpPromptSender != null)
+            {
+                mcpPromptSender.testPrompt = prompt;
+                mcpPromptSender.Send(prompt);
+            }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        else
+        {
+            Debug.LogError("Please assign a target object in the Inspector!");
+        }
     }
 }
