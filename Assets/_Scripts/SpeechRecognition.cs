@@ -82,7 +82,6 @@ public class SpeechRecognition : MonoBehaviour
                 mcpPromptSender.testPrompt = recognizedSpeech;
                 mcpPromptSender.Send(recognizedSpeech);
 
-                //mcpPromptSender.lastPrompt = recognizedSpeech;
             }
             else
             {
