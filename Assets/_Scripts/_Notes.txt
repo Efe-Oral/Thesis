@@ -44,7 +44,7 @@
 
 
 
-- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID
+- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID and then CONVERT THE ID TO A STRING
 
 - [] Add undo action for modified assets in game
 

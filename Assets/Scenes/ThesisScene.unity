@@ -1367,12 +1367,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596c36394aceca24899006c096b99925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiUrl: http://localhost:8000/api/chat
   model: qwen3:4b
   systemPrompt: You are an AI assistant whose ONLY job is to control a Unity scene
     by calling MCP tools exposed by the unityMCP server.
-  think: 0
-  stream: 0
   temperature: 0.7
   topP: 0.9
   lastPrompt: Create 3 cubes with meshes

@@ -8,7 +8,7 @@ public class McpPromptSender : MonoBehaviour
 {
 
     [Header("Endpoint")]
-    [SerializeField] private string apiUrl = "http://localhost:8000/api/chat";
+    private string apiUrl = "http://localhost:8000/api/chat";
 
     [Header("Chat config")]
     [SerializeField] private string model = "qwen3:4b";
@@ -16,13 +16,13 @@ public class McpPromptSender : MonoBehaviour
     [SerializeField]
     private string systemPrompt =
         "You are an AI assistant whose ONLY job is to control a Unity scene by calling MCP tools exposed by the unityMCP server.";
-    [SerializeField] private bool think = false;
-    [SerializeField] private bool stream = false;
+    private bool think = false;
+    private bool stream = false;
     [SerializeField, Range(0f, 1f)] private float temperature = 0.7f;
     [SerializeField, Range(0f, 1f)] private float topP = 0.9f;
 
     [TextArea] public string lastPrompt;
-    [TextArea(15, 20)] public string lastResponse;
+    [TextArea(17, 10)] public string lastResponse;
 
     [System.Serializable]
     private class Message { public string role; public string content; public Message(string r, string c) { role = r; content = c; } }
