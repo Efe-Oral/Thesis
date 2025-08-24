@@ -1475,9 +1475,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: qwen3:4b
-  systemPrompt: You are an AI assistant whose ONLY job is to control a Unity scene
-    by calling MCP tools exposed by the unityMCP server.
-  temperature: 0.7
+  systemPrompt: You control Unity game engine only by calling MCP tools exposed by
+    unityMCP. Output valid JSON only. No explanations.
+  temperature: 0.2
   topP: 0.9
   lastPrompt: Create 3 cubes with meshes
   lastResponse: 

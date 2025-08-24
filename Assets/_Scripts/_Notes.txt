@@ -40,17 +40,15 @@
 - [X] Connect to the university VPN, and try to run the Ollama models in the server (models are: gpt-oss:120b and gpt-oss:20b)
 - [X] Give STT output to Ollama, to use MCP tools with speech
 - [X] Find Cursor's raw JSON wrapping that it sends to the MCP server and analayze it. According to that JSON request, modify your own
+- [X] Research about "temperature" and "top_p" parameters in Ollama model JSON requests, and adjust them for optimal configuration
 
 
 
 
-
-
-- [] Right now the only working Ollama model with tools is Qwen3 (a reasoning model). Others give the ERROR: Model doesn't support tools. Fix this problem do some research
-
-- [] Research about "temperature" and "top_p" parameters in Ollama model JSON requests, and adjust them for optimal configuration
 
 - [] Find which model is the fastest in Cursor mcp client configuration
+
+- [] Right now the only working Ollama model with tools is Qwen3 (a reasoning model). Others give the ERROR: Model doesn't support tools. Fix this problem do some research
 
  -[] Start STT for both "Space" input and "X" button of the left VR controller
 

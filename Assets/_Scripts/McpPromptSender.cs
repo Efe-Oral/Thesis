@@ -15,10 +15,14 @@ public class McpPromptSender : MonoBehaviour
     [TextArea]
     [SerializeField]
     private string systemPrompt =
-        "You are an AI assistant whose ONLY job is to control a Unity scene by calling MCP tools exposed by the unityMCP server.";
+        "You control Unity game engine only by calling MCP tools exposed by unityMCP. Output valid JSON only. No explanations.";
     private bool think = false;
     private bool stream = false;
-    [SerializeField, Range(0f, 1f)] private float temperature = 0.7f;
+
+    //temperature: Adjust the probability distribution over the next token. Higher more creative; Lower more deterministic
+    //top_p: controls how many of the most likely words the model can choose from. 
+    // Higher top_p model considers more tokens for the next; Lower top_p model restricts to only very top tokens and becomes more focused, less diverse
+    [SerializeField, Range(0f, 1f)] private float temperature = 0.2f;
     [SerializeField, Range(0f, 1f)] private float topP = 0.9f;
 
     [TextArea] public string lastPrompt;
