@@ -41,14 +41,14 @@
 - [X] Give STT output to Ollama, to use MCP tools with speech
 - [X] Find Cursor's raw JSON wrapping that it sends to the MCP server and analayze it. According to that JSON request, modify your own
 - [X] Research about "temperature" and "top_p" parameters in Ollama model JSON requests, and adjust them for optimal configuration
-
-
+- [X] Right now the only working Ollama model with tools is Qwen3 (a reasoning model) (https://qwen.readthedocs.io/en/latest/framework/function_call.html). Others give the ERROR: Model doesn't support tools. Fix this problem do some research
+   | Tool calling isn't about model being a reasoning model (Chane of Thoughts CoT) but it comes from model's traning data and fine-tuning (exposing the model to function calls, JSON schemas etc.)
 
 
 
 - [] Find which model is the fastest in Cursor mcp client configuration
 
-- [] Right now the only working Ollama model with tools is Qwen3 (a reasoning model). Others give the ERROR: Model doesn't support tools. Fix this problem do some research
+- [] Try these models other than Qwen3 for tool calling: watt-tool-8b ; phi4-mini ; granite3-dense ; mistral ; llama3-groq-tool-use:8b ; firefunction-v2 (run on uni server)
 
  -[] Start STT for both "Space" input and "X" button of the left VR controller
 
