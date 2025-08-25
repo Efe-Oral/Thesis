@@ -45,14 +45,17 @@
    | Tool calling isn't about model being a reasoning model (Chane of Thoughts CoT) but it comes from model's traning data and fine-tuning (exposing the model to function calls, JSON schemas etc.)
 
 - [X] Find which model is the fastest in Cursor mcp client configuration. claude-3.5-sonnet = claude-4-sonnet > gpt-4.1 > gpt-4o >deepseek-v3.1 
+- [X] Do some research on how to run local llms faster 
 
 
 
 - [] Try these models other than Qwen3 for tool calling: watt-tool-8b ; phi4-mini ; granite3-dense ; mistral ; llama3-groq-tool-use:8b ; firefunction-v2 (run on uni server)
 
- -[] Start STT for both "Space" input and "X" button of the left VR controller
+- [] Start STT for both "Space" input and "X" button of the left VR controller
 
 - [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
+
+- [] Crete a Docker container with all the dependinceis
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID and then CONVERT THE ID TO A STRING
    |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
