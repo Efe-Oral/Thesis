@@ -1477,7 +1477,7 @@ MonoBehaviour:
   model: qwen3:4b
   systemPrompt: You control Unity game engine only by calling MCP tools exposed by
     unityMCP. Output valid JSON only. No explanations.
-  temperature: 0.2
+  temperature: 0.5
   topP: 0.9
   lastPrompt: Create 3 cubes with meshes
   lastResponse: 

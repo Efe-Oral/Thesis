@@ -47,18 +47,24 @@
 - [X] Find which model is the fastest in Cursor mcp client configuration. claude-3.5-sonnet = claude-4-sonnet > gpt-4.1 > gpt-4o >deepseek-v3.1 
 - [X] Do some research on how to run local llms faster Quantization method:(https://www.youtube.com/watch?v=K75j8MkwgJ0 &t=10s) Fine tuning:(https://github.com/unslothai/unsloth)
 - [X] Go back to a previous version of Qwen3:4b (the version released on: 07/08/2025) because it was faster and wasn't thinking when calling mcp tools
+- [X] Try Quantization for the models (https://www.youtube.com/watch?v=K75j8MkwgJ0 &t=10s). Quantized model qwen3_cline_roocode tested and performed poorly
+- [X] Try these models other than Qwen3:4b for tool calling:
+   | [?]watt-ai/watt-tool-8B ; [X]phi4-mini:3.8b ; [X]granite3.1-dense:2b ; [X]mistral:7b ; [X]llama3-groq-tool-use:8b ; [?]firefunction-v2:70b (run on uni server) ; [✓]shmily_006/Qw3:latest
+   | following models failled pporly: phi4-mini:3.8b, granite3.1-dense:2b, mistral:7b, llama3-groq-tool-use:8b
+   | by FAR the BEST model is: shmily_006/Qw3:latest which is why it is changed to default
 
 
-
-
-- [] Try these models other than Qwen3:4b for tool calling:
-   | []watt-ai/watt-tool-8B ; []phi4-mini:3.8b ; []granite3.1-dense:2b ; []mistral:7b ; []llama3-groq-tool-use:8b ; []firefunction-v2:70b (run on uni server)
 
 - [] Maybe try to fine tune Qwen3:4b for faster response time with mcp tool calling (   )
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
+- [] Check if the "POST /api/chat HTTP/1.1" 200 OK from LLM is returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
+
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
+
+
+
 
 - [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
 
