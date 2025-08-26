@@ -1474,11 +1474,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596c36394aceca24899006c096b99925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: qwen3:4b
+  model: shmily_006/Qw3:latest
   systemPrompt: You control Unity game engine only by calling MCP tools exposed by
     unityMCP. Output valid JSON only. No explanations.
-  temperature: 0.5
-  topP: 0.9
+  temperature: 0.3
+  topP: 0.8
   lastPrompt: Create 3 cubes with meshes
   lastResponse: 
   testPrompt: Create 3 cubes with meshes
