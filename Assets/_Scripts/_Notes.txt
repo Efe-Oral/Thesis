@@ -45,15 +45,24 @@
    | Tool calling isn't about model being a reasoning model (Chane of Thoughts CoT) but it comes from model's traning data and fine-tuning (exposing the model to function calls, JSON schemas etc.)
 
 - [X] Find which model is the fastest in Cursor mcp client configuration. claude-3.5-sonnet = claude-4-sonnet > gpt-4.1 > gpt-4o >deepseek-v3.1 
-- [X] Do some research on how to run local llms faster 
+- [X] Do some research on how to run local llms faster Quantization method:(https://www.youtube.com/watch?v=K75j8MkwgJ0 &t=10s) Fine tuning:(https://github.com/unslothai/unsloth)
+- [X] Go back to a previous version of Qwen3:4b (the version released on: 07/08/2025) because it was faster and wasn't thinking when calling mcp tools
 
 
 
-- [] Try these models other than Qwen3 for tool calling: watt-tool-8b ; phi4-mini ; granite3-dense ; mistral ; llama3-groq-tool-use:8b ; firefunction-v2 (run on uni server)
 
-- [] Start STT for both "Space" input and "X" button of the left VR controller
+- [] Try these models other than Qwen3:4b for tool calling:
+   | []watt-ai/watt-tool-8B ; []phi4-mini:3.8b ; []granite3.1-dense:2b ; []mistral:7b ; []llama3-groq-tool-use:8b ; []firefunction-v2:70b (run on uni server)
+
+- [] Maybe try to fine tune Qwen3:4b for faster response time with mcp tool calling (   )
+
+- [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
+
+- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
 - [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
+
+- [] Start STT for both "Space" input and "X" button of the left VR controller
 
 - [] Crete a Docker container with all the dependinceis
 
@@ -65,10 +74,6 @@
 - [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
-
-- [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
-
-- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
 - [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
 
