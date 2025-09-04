@@ -1,12 +1,14 @@
 
 
+         ____                                                       __         _     __         
+  ____  / / /___ _____ ___  ____ _      ____ ___  _________        / /_  _____(_)___/ /___ ____ 
+ / __ \/ / / __ `/ __ `__ \/ __ `/_____/ __ `__ \/ ___/ __ \______/ __ \/ ___/ / __  / __ `/ _ \
+/ /_/ / / / /_/ / / / / / / /_/ /_____/ / / / / / /__/ /_/ /_____/ /_/ / /  / / /_/ / /_/ /  __/
+\____/_/_/\__,_/_/ /_/ /_/\__,_/     /_/ /_/ /_/\___/ .___/     /_.___/_/  /_/\__,_/\__, /\___/ 
+                                                   /_/                             /____/       
 
 
-
-
-
-
-
+      
 
 
 
@@ -61,13 +63,16 @@
    | Because: LLMs in Cursor(e.g.: Claude3.5-Sonnet) •Trained on structured tool calling.•Built-in “agent” prompting logic.•Cursor adds extra hidden scaffolding (tool schemas, strict instructions).
    | Whereas in Ollama models(e.g.:shmily_006/Qw3) •Community model, not fine-tuned for tool calling.•No built-in scaffolding, you must supply system prompt + schemas yourself.•Less robust, so JSON/tool calls are less consistent.
 
+- [X] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
 
 
-- [] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
 
 - [] Tye adding local Ollama LLs to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server
 
+- [] Try more Qwen3 bigger no thinking models. e.g: qwen3-coder:30b ; 
+
 - [] Try to find more Qwen3 models which do NOT have thinking mode
+   F̲o̲u̲n̲d̲_i̲n̲_O̲l̲l̲a̲m̲a̲_L̲i̲b̲r̲a̲r̲y̲
    |[✓✓✓] shmily_006/Qw3:latest (The best model)
    |[✓✓] cnshenyang/qwen3-nothink:30b (A good alternative to shmily_006/Qw3:latest )
    |[✓] qwen2.5:3b (can be an okay alternative, not bad not great. But better at "move" commands)
@@ -77,6 +82,7 @@
    |[X] hhao/qwen2.5-coder-tools:3b (Can't use the MCP server)
    |[X] llama2:13b (Does NOT support tools)
 
+   F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲
    |[] katanemo/Arch-Function-Chat-3B
    |[] shawhin/gemma-3-1b-tool-use
    |[] yashsoni78/mcp_tool_model
@@ -85,11 +91,8 @@
    |[] Nexusflow/NexusRaven-V2-13B
 
 
-- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID and then CONVERT THE ID TO A STRING
+- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
-
-
-
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
