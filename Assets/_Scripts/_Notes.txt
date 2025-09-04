@@ -44,7 +44,7 @@
 - [X] Right now the only working Ollama model with tools is Qwen3 (a reasoning model) (https://qwen.readthedocs.io/en/latest/framework/function_call.html). Others give the ERROR: Model doesn't support tools. Fix this problem do some research
    | Tool calling isn't about model being a reasoning model (Chane of Thoughts CoT) but it comes from model's traning data and fine-tuning (exposing the model to function calls, JSON schemas etc.)
 
-- [X] Find which model is the fastest in Cursor mcp client configuration. claude-3.5-sonnet = claude-4-sonnet > gpt-4.1 > gpt-4o >deepseek-v3.1 
+- [X] Find which model is the fastest in Cursor mcp client configuration. claude-3.5-sonnet = claude-4-sonnet > gpt-4.1 > gpt-4o > deepseek-v3.1 
 - [X] Do some research on how to run local llms faster Quantization method:(https://www.youtube.com/watch?v=K75j8MkwgJ0 &t=10s) Fine tuning:(https://github.com/unslothai/unsloth)
 - [X] Go back to a previous version of Qwen3:4b (the version released on: 07/08/2025) because it was faster and wasn't thinking when calling mcp tools
 - [X] Try Quantization for the models (https://www.youtube.com/watch?v=K75j8MkwgJ0 &t=10s). Quantized model qwen3_cline_roocode tested and performed poorly
@@ -54,8 +54,21 @@
    | by FAR the BEST model is: shmily_006/Qw3:latest which is why it is changed to default
 
 
+- [] Add /no_think to the end of the prompt in Qwen3:4b model and see if stops thinking
 
-- [] Maybe try to fine tune Qwen3:4b for faster response time with mcp tool calling (   )
+
+
+- [] Why does shmily_006/Qw3:latest performs poorly compared to Cursor's agent e.g. claude-3.5-sonnet? They both use the same MCP server but claude is better at using the tools, find out why?
+
+- [] Try to use the MCP server with openAI or claude models instead of shmily_006/Qw3:latest, to see if its faster and or better at using MCP tools
+ 
+- [] Pull the models to the uni server. shmily_006/Qw3:latest
+
+- [] Maybe try to fine tune Qwen3:4b or jaahas/qwen3-abliterated:4b model for faster response time with mcp tool calling. Tutorial:https://www.youtube.com/watch?v=pTaSDVz0gok
+
+- [] Try to find more Qwen3 models which do NOT have thinking mode
+   |[] katanemo/Arch-Function-Chat-3B
+   |[] shawhin/gemma-3-1b-tool-use
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
@@ -63,8 +76,9 @@
 
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
+- [] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
 
-
+- [] After choosing the object and before taking the action, create a confirmation button or a confirmation step to acctually manipualte the intended object
 
 - [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
 
