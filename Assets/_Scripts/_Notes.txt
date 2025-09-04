@@ -49,34 +49,55 @@
 - [X] Go back to a previous version of Qwen3:4b (the version released on: 07/08/2025) because it was faster and wasn't thinking when calling mcp tools
 - [X] Try Quantization for the models (https://www.youtube.com/watch?v=K75j8MkwgJ0 &t=10s). Quantized model qwen3_cline_roocode tested and performed poorly
 - [X] Try these models other than Qwen3:4b for tool calling:
-   | [?]watt-ai/watt-tool-8B ; [X]phi4-mini:3.8b ; [X]granite3.1-dense:2b ; [X]mistral:7b ; [X]llama3-groq-tool-use:8b ; [?]firefunction-v2:70b (run on uni server) ; [✓]shmily_006/Qw3:latest
+   | [X]watt-ai/watt-tool-8B ; [X]phi4-mini:3.8b ; [X]granite3.1-dense:2b ; [X]mistral:7b ; [X]llama3-groq-tool-use:8b ; [X]firefunction-v2:70b (run on uni server) ; [✓]shmily_006/Qw3:latest
    | following models failled pporly: phi4-mini:3.8b, granite3.1-dense:2b, mistral:7b, llama3-groq-tool-use:8b
    | by FAR the BEST model is: shmily_006/Qw3:latest which is why it is changed to default
 
+- [X] Add /no_think to the end of the prompt in Qwen3:4b model and see if stops thinking. IT DID NOT WORK, the LLM was still <thinking>
 
-- [] Add /no_think to the end of the prompt in Qwen3:4b model and see if stops thinking
 
 
 
 - [] Why does shmily_006/Qw3:latest performs poorly compared to Cursor's agent e.g. claude-3.5-sonnet? They both use the same MCP server but claude is better at using the tools, find out why?
 
-- [] Try to use the MCP server with openAI or claude models instead of shmily_006/Qw3:latest, to see if its faster and or better at using MCP tools
+- [] Try to use the MCP server with open source LLMs that are like openAI or claude models instead of shmily_006/Qw3:latest, to see if its faster and or better at using MCP tools
  
-- [] Pull the models to the uni server. shmily_006/Qw3:latest
+- [X] Pull the models to the uni server. e.g: shmily_006/Qw3:latest
 
-- [] Maybe try to fine tune Qwen3:4b or jaahas/qwen3-abliterated:4b model for faster response time with mcp tool calling. Tutorial:https://www.youtube.com/watch?v=pTaSDVz0gok
+- [X] Maybe try to fine tune Qwen3:4b for faster response time with mcp tool calling using Unsloth. Tutorials:https://www.youtube.com/watch?v=pTaSDVz0gok AND https://www.youtube.com/watch?v=fAFJYbtTsC0
 
 - [] Try to find more Qwen3 models which do NOT have thinking mode
+   |[✓✓✓] shmily_006/Qw3:latest (The best model)
+   |[✓✓] cnshenyang/qwen3-nothink:30b (A good alternative to shmily_006/Qw3:latest )
+   |[✓] qwen2.5:3b (can be an okay alternative, not bad not great. But better at "move" commands)
+   |[✓] qwen2.5:14b (can be an okay alternative, not bad not great. But better at "move" commands)
+   |[X] SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL (it halucinates about the answer)
+   |[X] firefunction-v2:70b  (cant use the MCP server)
+   |[X] hhao/qwen2.5-coder-tools:3b (Can't use the MCP server)
+   |[X] llama2:13b (Does NOT support tools)
+
    |[] katanemo/Arch-Function-Chat-3B
    |[] shawhin/gemma-3-1b-tool-use
+   |[] yashsoni78/mcp_tool_model
+   |[] mradermacher/qwen3_sft_playwright-GGUF
+   |[] osmosis-ai/osmosis-mcp-4b
+   |[] Nexusflow/NexusRaven-V2-13B
+
+- [] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
+
+- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID and then CONVERT THE ID TO A STRING
+   |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
+
+
+
+
+
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
-- [] Check if the "POST /api/chat HTTP/1.1" 200 OK from LLM is returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
+- [] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
 
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
-
-- [] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
 
 - [] After choosing the object and before taking the action, create a confirmation button or a confirmation step to acctually manipualte the intended object
 
@@ -85,9 +106,6 @@
 - [] Start STT for both "Space" input and "X" button of the left VR controller
 
 - [] Crete a Docker container with all the dependinceis
-
-- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID and then CONVERT THE ID TO A STRING
-   |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
 
 - [] Add undo action for modified assets in game
 

@@ -1481,7 +1481,7 @@ MonoBehaviour:
   topP: 0.8
   lastPrompt: Create 3 cubes with meshes
   lastResponse: 
-  testPrompt: Create 3 cubes with meshes
+  testPrompt: Create 3 cubes with meshes name them red green blue
 --- !u!4 &1395732357
 Transform:
   m_ObjectHideFlags: 0
