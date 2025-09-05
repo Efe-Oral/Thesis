@@ -62,8 +62,9 @@
    | Whereas in Ollama models(e.g.:shmily_006/Qw3) •Community model, not fine-tuned for tool calling.•No built-in scaffolding, you must supply system prompt + schemas yourself.•Less robust, so JSON/tool calls are less consistent.
 
 - [X] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
+- [X] Add a sucess indicator with sound and in game UI text when the LLM returns a true response with MCP tools
 
-
+- [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
 
 - [] Tye adding local Ollama LLs to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server
 
@@ -91,6 +92,10 @@
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
+
+- [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
+
+- [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 

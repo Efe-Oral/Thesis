@@ -12,6 +12,8 @@ public class McpPromptSender : MonoBehaviour
 
     [SerializeField] public GameObject successMessage;
     [SerializeField] private float showSeconds = 2f;
+    [SerializeField] private AudioClip successSound;
+    private AudioSource audioSource;
 
     [Header("Chat config")]
     [SerializeField] private string model = "qwen3:4b";
@@ -72,6 +74,15 @@ public class McpPromptSender : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
+
     private IEnumerator SendCoroutine(string userPrompt)
     {
         lastPrompt = userPrompt;
@@ -114,6 +125,7 @@ public class McpPromptSender : MonoBehaviour
             if (LLMResponse.Contains("\"success\": true"))
             {
                 StartCoroutine(ShowSuccessMessage());
+                audioSource.PlayOneShot(successSound);
             }
         }
     }
