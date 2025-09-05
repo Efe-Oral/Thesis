@@ -10,6 +10,9 @@ public class McpPromptSender : MonoBehaviour
     [Header("Endpoint")]
     private string apiUrl = "http://localhost:8000/api/chat";
 
+    [SerializeField] public GameObject successMessage;
+    [SerializeField] private float showSeconds = 2f;
+
     [Header("Chat config")]
     [SerializeField] private string model = "qwen3:4b";
     [TextArea]
@@ -26,7 +29,7 @@ public class McpPromptSender : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float topP = 0.9f;
 
     [TextArea] public string lastPrompt;
-    [TextArea(17, 10)] public string lastResponse;
+    [TextArea(17, 10)] public string LLMResponse;
 
     [System.Serializable]
     private class Message { public string role; public string content; public Message(string r, string c) { role = r; content = c; } }
@@ -59,6 +62,16 @@ public class McpPromptSender : MonoBehaviour
         StartCoroutine(SendCoroutine(testPrompt));
     }
 
+    private IEnumerator ShowSuccessMessage()
+    {
+        if (successMessage != null)
+        {
+            successMessage.SetActive(true);
+            yield return new WaitForSeconds(showSeconds);
+            successMessage.SetActive(false);
+        }
+    }
+
     private IEnumerator SendCoroutine(string userPrompt)
     {
         lastPrompt = userPrompt;
@@ -86,16 +99,22 @@ public class McpPromptSender : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                lastResponse = $"HTTP {req.responseCode} - {req.error}\n{req.downloadHandler.text}";
-                Debug.LogError(lastResponse);
+                LLMResponse = $"HTTP {req.responseCode} - {req.error}\n{req.downloadHandler.text}";
+                Debug.LogError(LLMResponse);
                 yield break;
             }
 
             var text = req.downloadHandler.text;
             ChatResponse resp = null;
             try { resp = JsonUtility.FromJson<ChatResponse>(text); } catch { }
-            lastResponse = (resp != null && resp.message != null) ? resp.message.content : text;
-            Debug.Log($"MCP response: {lastResponse}");
+            LLMResponse = (resp != null && resp.message != null) ? resp.message.content : text;
+            Debug.Log($"MCP response: {LLMResponse}");
+
+            // Check if response contains success indicator and actiavte success UI
+            if (LLMResponse.Contains("\"success\": true"))
+            {
+                StartCoroutine(ShowSuccessMessage());
+            }
         }
     }
 }
