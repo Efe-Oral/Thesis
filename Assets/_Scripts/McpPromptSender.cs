@@ -11,6 +11,7 @@ public class McpPromptSender : MonoBehaviour
     private string apiUrl = "http://localhost:8000/api/chat";
 
     [SerializeField] public GameObject successMessage;
+    [SerializeField] public GameObject errorMessage;
     [SerializeField] private float showSeconds = 2f;
     [SerializeField] private AudioClip successSound;
     private AudioSource audioSource;
@@ -64,7 +65,7 @@ public class McpPromptSender : MonoBehaviour
         StartCoroutine(SendCoroutine(testPrompt));
     }
 
-    private IEnumerator ShowSuccessMessage()
+    private IEnumerator ShowLLMMessage()
     {
         if (successMessage != null)
         {
@@ -123,7 +124,7 @@ public class McpPromptSender : MonoBehaviour
             // Check if response contains success indicator and actiavte success UI
             if (LLMResponse.Contains("\"success\": true"))
             {
-                StartCoroutine(ShowSuccessMessage());
+                StartCoroutine(ShowLLMMessage());
                 audioSource.PlayOneShot(successSound);
             }
             Debug.Log($"MCP response: {LLMResponse}");

@@ -83,6 +83,12 @@
    |[X] qwen3-coder:30b (Does NOT support tools)
    |[X] dengcao/Qwen3-Reranker-8B:Q5_K_M (Does NOT support tools)
    |[X] rockn/DeepSeek-R1-0528-Qwen3-8B-IQ4_NL:latest (Does NOT support tools)
+   |[X] llama3.1:8b (really bad at using MCP tools, it halucinates)
+   |[X] llama3.2:3b (halucinates)
+   |[X] llama3:70b (Does NOT support tools)
+   |[X] llama3.3:70b (too slow and not working properly)
+   |[X] llama3-chatqa:8b (Does NOT support tools)
+   |[X] glm4:9b (Does NOT support tools)
 
    F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲
    |[] katanemo/Arch-Function-Chat-3B
