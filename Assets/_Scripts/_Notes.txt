@@ -63,23 +63,26 @@
 
 - [X] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
 - [X] Add a sucess indicator with sound and in game UI text when the LLM returns a true response with MCP tools
+- [X] Try more Qwen3 bigger no thinking models.
 
-- [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
 
 - [] Tye adding local Ollama LLs to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server
 
-- [] Try more Qwen3 bigger no thinking models. e.g: qwen3-coder:30b ; 
 
 - [] Try to find more Qwen3 models which do NOT have thinking mode
    F̲o̲u̲n̲d̲_i̲n̲_O̲l̲l̲a̲m̲a̲_L̲i̲b̲r̲a̲r̲y̲
-   |[✓✓✓] shmily_006/Qw3:latest (The best model)
+   |[✓✓✓] shmily_006/Qw3:latest (The best model) (For "Duplicate" tool start the prompt with: create...) (For "move" tool: modify...) (For "scale" tool: modify)
    |[✓✓] cnshenyang/qwen3-nothink:30b (A good alternative to shmily_006/Qw3:latest )
    |[✓] qwen2.5:3b (can be an okay alternative, not bad not great. But better at "move" commands)
    |[✓] qwen2.5:14b (can be an okay alternative, not bad not great. But better at "move" commands)
    |[X] SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL (it halucinates about the answer)
    |[X] firefunction-v2:70b  (cant use the MCP server)
    |[X] hhao/qwen2.5-coder-tools:3b (Can't use the MCP server)
+   |[X] danielsheep/Qwen3-Coder-30B-A3B-Instruct-1M-Unsloth:latest (Very incostitent)
    |[X] llama2:13b (Does NOT support tools)
+   |[X] qwen3-coder:30b (Does NOT support tools)
+   |[X] dengcao/Qwen3-Reranker-8B:Q5_K_M (Does NOT support tools)
+   |[X] rockn/DeepSeek-R1-0528-Qwen3-8B-IQ4_NL:latest (Does NOT support tools)
 
    F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲
    |[] katanemo/Arch-Function-Chat-3B
@@ -90,8 +93,15 @@
    |[] Nexusflow/NexusRaven-V2-13B
 
 
+- [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
+
+- [] Create an indication UI for sucess:false message inside the game. That way user won't wait have to wait and guess if the prompt was sucessfull or not.
+
+- [] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
+
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
+
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
@@ -111,9 +121,7 @@
 
 - [] Crete a Docker container with all the dependinceis
 
-- [] Add undo action for modified assets in game
-
-- [] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
+- [] Add undo/redo action for modified assets in game
 
 - [] Find a way to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
 

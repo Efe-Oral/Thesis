@@ -1713,7 +1713,7 @@ MonoBehaviour:
   topP: 0.8
   lastPrompt: Create 3 cubes with meshes
   LLMResponse: 
-  testPrompt: Create 3 cubes with meshes name them red green blue
+  testPrompt: Create 3 cubes with meshes name them alpha omega beta
 --- !u!4 &1395732357
 Transform:
   m_ObjectHideFlags: 0

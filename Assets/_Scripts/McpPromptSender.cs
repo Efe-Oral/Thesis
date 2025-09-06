@@ -119,7 +119,6 @@ public class McpPromptSender : MonoBehaviour
             ChatResponse resp = null;
             try { resp = JsonUtility.FromJson<ChatResponse>(text); } catch { }
             LLMResponse = (resp != null && resp.message != null) ? resp.message.content : text;
-            Debug.Log($"MCP response: {LLMResponse}");
 
             // Check if response contains success indicator and actiavte success UI
             if (LLMResponse.Contains("\"success\": true"))
@@ -127,6 +126,8 @@ public class McpPromptSender : MonoBehaviour
                 StartCoroutine(ShowSuccessMessage());
                 audioSource.PlayOneShot(successSound);
             }
+            Debug.Log($"MCP response: {LLMResponse}");
+
         }
     }
 }
