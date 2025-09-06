@@ -66,7 +66,7 @@
 - [X] Try more Qwen3 bigger no thinking models.
 
 
-- [] Tye adding local Ollama LLs to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server
+- [] Tye adding local Ollama LLMs (shmily_006/Qw3:latest) to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server.
 
 
 - [] Try to find more Qwen3 models which do NOT have thinking mode
@@ -91,12 +91,14 @@
    |[X] glm4:9b (Does NOT support tools)
 
    F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲
-   |[] katanemo/Arch-Function-Chat-3B
-   |[] shawhin/gemma-3-1b-tool-use
-   |[] yashsoni78/mcp_tool_model
-   |[] mradermacher/qwen3_sft_playwright-GGUF
    |[] osmosis-ai/osmosis-mcp-4b
-   |[] Nexusflow/NexusRaven-V2-13B
+   |[] mradermacher/osmosis-mcp-4b-i1-GGUF:Q4_K_M
+   |[] mradermacher/qwen3_sft_playwright-GGUF:Q6_K
+   |[] mradermacher/MiniCPM4-MCP-i1-GGUF:Q4_K_M
+   |[] mradermacher/osmosis-mcp-4b-GGUF:Q4_K_M
+   |[] Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
+   |[] DevQuasar/openbmb.MiniCPM4-MCP-GGUF:Q4_K_M
+   |[] tensorblock/openbmb_MiniCPM4-MCP-GGUF:Q4_K_M
 
 
 - [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
