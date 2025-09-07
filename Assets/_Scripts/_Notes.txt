@@ -85,7 +85,7 @@
    |[X] llama3-chatqa:8b (Does NOT support tools)
    |[X] glm4:9b (Does NOT support tools)
 
-   F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲
+   F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲ (https://huggingface.co/docs/hub/ollama)
    |[✓✓] Mungert/osmosis-mcp-4b-GGUF:Q4_K_M (could be an alternative to other 2 tick ✓✓ models), contiune testing between them)
    |[✓✓] mradermacher/osmosis-mcp-4b-GGUF:Q4_K_M (could be an alternative to other 2 tick ✓✓ models, contiune testing between them)
    |[✓✓] mradermacher/qwen3_sft_playwright-GGUF:Q6_K (could be an alternative to other 2 tick ✓✓ models, contiuen testing between them)
@@ -95,10 +95,10 @@
    |[X] DevQuasar/openbmb.MiniCPM4-MCP-GGUF:Q4_K_M (Does NOT support tools)
    |[X] tensorblock/openbmb_MiniCPM4-MCP-GGUF:Q4_K_M (Does NOT support tools)
 
+- [X] Tye adding local Ollama LLMs (shmily_006/Qw3:latest) to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server. (https://dev.to/0xkoji/use-local-llm-with-cursor-2h4i)
+    | shmily_006/Qw3:latest has been added to cursor thanks to ngrok. Now I can test the tool calls and see their structure and response within cursor itself
 
-   
 
-- [] Tye adding local Ollama LLMs (shmily_006/Qw3:latest) to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server.
 
 - [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
 
