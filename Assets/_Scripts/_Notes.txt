@@ -64,12 +64,7 @@
 - [X] What are GUID in unity? Research about them and maybe use them to access indivdual uniuqe gameobjects in the scene
 - [X] Add a sucess indicator with sound and in game UI text when the LLM returns a true response with MCP tools
 - [X] Try more Qwen3 bigger no thinking models.
-
-
-- [] Tye adding local Ollama LLMs (shmily_006/Qw3:latest) to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server.
-
-
-- [] Try to find more Qwen3 models which do NOT have thinking mode
+- [X] Try to find more Qwen3 models which do NOT have thinking mode
    F̲o̲u̲n̲d̲_i̲n̲_O̲l̲l̲a̲m̲a̲_L̲i̲b̲r̲a̲r̲y̲
    |[✓✓✓] shmily_006/Qw3:latest (The best model) (For "Duplicate" tool start the prompt with: create...) (For "move" tool: modify...) (For "scale" tool: modify)
    |[✓✓] cnshenyang/qwen3-nothink:30b (A good alternative to shmily_006/Qw3:latest )
@@ -91,15 +86,19 @@
    |[X] glm4:9b (Does NOT support tools)
 
    F̲o̲u̲n̲d̲_i̲n̲_H̲u̲g̲g̲i̲n̲g̲_F̲a̲c̲e̲
-   |[] osmosis-ai/osmosis-mcp-4b
-   |[] mradermacher/osmosis-mcp-4b-i1-GGUF:Q4_K_M
-   |[] mradermacher/qwen3_sft_playwright-GGUF:Q6_K
-   |[] mradermacher/MiniCPM4-MCP-i1-GGUF:Q4_K_M
-   |[] mradermacher/osmosis-mcp-4b-GGUF:Q4_K_M
-   |[] Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
-   |[] DevQuasar/openbmb.MiniCPM4-MCP-GGUF:Q4_K_M
-   |[] tensorblock/openbmb_MiniCPM4-MCP-GGUF:Q4_K_M
+   |[✓✓] Mungert/osmosis-mcp-4b-GGUF:Q4_K_M (could be an alternative to other 2 tick ✓✓ models), contiune testing between them)
+   |[✓✓] mradermacher/osmosis-mcp-4b-GGUF:Q4_K_M (could be an alternative to other 2 tick ✓✓ models, contiune testing between them)
+   |[✓✓] mradermacher/qwen3_sft_playwright-GGUF:Q6_K (could be an alternative to other 2 tick ✓✓ models, contiuen testing between them)
+   |[X] mradermacher/osmosis-mcp-4b-i1-GGUF:Q4_K_M (performs poorly and slow)
+   |[X] osmosis-ai/osmosis-mcp-4b (performs too slow)
+   |[X] mradermacher/MiniCPM4-MCP-i1-GGUF:Q4_K_M (Does NOT support tools)
+   |[X] DevQuasar/openbmb.MiniCPM4-MCP-GGUF:Q4_K_M (Does NOT support tools)
+   |[X] tensorblock/openbmb_MiniCPM4-MCP-GGUF:Q4_K_M (Does NOT support tools)
 
+
+   
+
+- [] Tye adding local Ollama LLMs (shmily_006/Qw3:latest) to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server.
 
 - [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
 
