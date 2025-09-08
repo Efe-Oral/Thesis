@@ -66,7 +66,7 @@
 - [X] Try more Qwen3 bigger no thinking models.
 - [X] Try to find more Qwen3 models which do NOT have thinking mode
    F̲o̲u̲n̲d̲_i̲n̲_O̲l̲l̲a̲m̲a̲_L̲i̲b̲r̲a̲r̲y̲
-   |[✓✓✓] shmily_006/Qw3:latest (The best model) (For "Duplicate" tool start the prompt with: create...) (For "move" tool: modify...) (For "scale" tool: modify)
+   |[✓✓✓] shmily_006/Qw3:latest (The best model) (For "Duplicate" tool start the prompt with: create an isntance...) (For "move" tool: modify...) (For "scale" tool: modify [object]'s scale by 4)
    |[✓✓] cnshenyang/qwen3-nothink:30b (A good alternative to shmily_006/Qw3:latest )
    |[✓] qwen2.5:3b (can be an okay alternative, not bad not great. But better at "move" commands)
    |[✓] qwen2.5:14b (can be an okay alternative, not bad not great. But better at "move" commands)
@@ -99,9 +99,11 @@
     | shmily_006/Qw3:latest has been added to cursor thanks to ngrok. Now I can test the tool calls and see their structure and response within cursor itself
 
 - [X] Create an indication UI for sucess:false message inside the game. That way user won't wait have to wait and guess if the prompt was sucessfull or not.
+- [X] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
 
 
-- [] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
+
+- [] Modify LookAndAttach script so that it attaches a ridigbody component to the object being looked at as well as XRGrabInteractable script.
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
