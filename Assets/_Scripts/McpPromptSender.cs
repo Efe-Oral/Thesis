@@ -11,10 +11,12 @@ public class McpPromptSender : MonoBehaviour
     private string apiUrl = "http://localhost:8000/api/chat";
 
     [SerializeField] public GameObject successMessage;
-    [SerializeField] public GameObject errorMessage;
-    [SerializeField] private float showSeconds = 2f;
     [SerializeField] private AudioClip successSound;
+    [SerializeField] public GameObject errorMessage;
+    [SerializeField] private AudioClip errorSound;
+    [SerializeField] private float showSeconds = 2f;
     private AudioSource audioSource;
+    private bool isSuccessMessageTrue = false;
 
     [Header("Chat config")]
     [SerializeField] private string model = "qwen3:4b";
@@ -67,11 +69,20 @@ public class McpPromptSender : MonoBehaviour
 
     private IEnumerator ShowLLMMessage()
     {
-        if (successMessage != null)
+
+        if (!isSuccessMessageTrue)
+        {
+            errorMessage.SetActive(true);
+            yield return new WaitForSeconds(showSeconds);
+            errorMessage.SetActive(false);
+        }
+
+        if (successMessage != null && isSuccessMessageTrue)
         {
             successMessage.SetActive(true);
             yield return new WaitForSeconds(showSeconds);
             successMessage.SetActive(false);
+            isSuccessMessageTrue = false;
         }
     }
 
@@ -124,9 +135,18 @@ public class McpPromptSender : MonoBehaviour
             // Check if response contains success indicator and actiavte success UI
             if (LLMResponse.Contains("\"success\": true"))
             {
+                isSuccessMessageTrue = true;
                 StartCoroutine(ShowLLMMessage());
                 audioSource.PlayOneShot(successSound);
             }
+
+            else
+            {
+                isSuccessMessageTrue = false;
+                StartCoroutine(ShowLLMMessage());
+                audioSource.PlayOneShot(errorSound);
+            }
+
             Debug.Log($"MCP response: {LLMResponse}");
 
         }

@@ -98,21 +98,21 @@
 - [X] Tye adding local Ollama LLMs (shmily_006/Qw3:latest) to Cursor and test it with Agent chatbox to see if its faster with communcating MCP server. (https://dev.to/0xkoji/use-local-llm-with-cursor-2h4i)
     | shmily_006/Qw3:latest has been added to cursor thanks to ngrok. Now I can test the tool calls and see their structure and response within cursor itself
 
+- [X] Create an indication UI for sucess:false message inside the game. That way user won't wait have to wait and guess if the prompt was sucessfull or not.
 
-
-- [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
-
-- [] Create an indication UI for sucess:false message inside the game. That way user won't wait have to wait and guess if the prompt was sucessfull or not.
 
 - [] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
 
+- [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
+
+- [] Create a UI for user to know the controles/buttons and how to use the MCP tools.
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
