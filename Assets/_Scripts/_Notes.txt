@@ -102,8 +102,9 @@
 - [X] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
 - [X] Start STT for both "Space" input and "B" button of the Right VR controller
 - [X] Modify MyXRGrabInteractable script, e.g.: don't let it go thorugh other objects
-
-- [] Modify LookAndAttach script so that it attaches a ridigbody component to the object being looked at as well as XRGrabInteractable script with the correct properties.
+- [X] Modify LookAndAttach script so that:
+   |[X] it attaches a ridigbody component to the object being looked at (ridigbody made dependincy for XRGrabInteractable script)
+   |[X] as well as XRGrabInteractable script with the correct properties.
 
 
 

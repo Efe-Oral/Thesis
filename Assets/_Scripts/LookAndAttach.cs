@@ -17,11 +17,12 @@ public class LookAndAttach : MonoBehaviour
     }
     void Update()
     {
-        AttachScript();
+        AttachOutlineScript();
         UpdateHighlight(automaticDescriptor.lastLokkedObject);
+        //AttachRigidbody();
     }
 
-    private void AttachScript()
+    private void AttachOutlineScript()
     {
         GameObject target = automaticDescriptor.lastLokkedObject;
 
@@ -50,7 +51,7 @@ public class LookAndAttach : MonoBehaviour
 
         // Disable outline on previously highlighted object
 
-        if (currentOutline is not null)    /*2*/
+        if (currentOutline is not null)
         {
             currentOutline.enabled = false;
             currentlyHighlightedObject = null;
@@ -58,7 +59,7 @@ public class LookAndAttach : MonoBehaviour
         }
 
         // If looking at a new valid object
-        if (target != null)      /*1*/
+        if (target != null)
         {
             Outline outline = target.GetComponent<Outline>();
             if (outline == null)
@@ -69,6 +70,23 @@ public class LookAndAttach : MonoBehaviour
             outline.enabled = true;
             currentlyHighlightedObject = target;
             currentOutline = outline;
+        }
+    }
+
+    private void AttachRigidbody()
+    {
+        if (automaticDescriptor.lastLokkedObject == null) return;
+
+        if (automaticDescriptor.lastLokkedObject.GetComponent<Rigidbody>() != null)
+        {
+            Debug.Log("Egeeee Rigidbody component is already attached to " + automaticDescriptor.lastLokkedObject.name);
+            return;
+        }
+
+        else
+        {
+            Debug.Log("Efeee Adding Ridigbody component to " + automaticDescriptor.lastLokkedObject.gameObject.name);
+            automaticDescriptor.lastLokkedObject.AddComponent<Rigidbody>();
         }
     }
 
