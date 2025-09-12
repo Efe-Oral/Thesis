@@ -126,7 +126,7 @@
 
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
-- [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
+- [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge &  https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.1/manual/input.html
 
 - [] Crete a Docker container with all the dependinceis
 

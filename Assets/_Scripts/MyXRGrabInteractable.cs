@@ -32,6 +32,10 @@ public class MyXRGrabInteractable : XRGrabInteractable
     protected override void Awake()
     {
         base.Awake();
+
+        // Override the default values from the base class
+        useDynamicAttach = true;
+        movementType = MovementType.VelocityTracking;
     }
 
     protected override void OnDestroy()
