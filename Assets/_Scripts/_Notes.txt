@@ -100,13 +100,12 @@
 
 - [X] Create an indication UI for sucess:false message inside the game. That way user won't wait have to wait and guess if the prompt was sucessfull or not.
 - [X] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
+- [X] Start STT for both "Space" input and "B" button of the Right VR controller
 
 
 - [] Modify MyXRGrabInteractable script, e.g.: don't let it go thorugh other objects
 
 - [] Modify LookAndAttach script so that it attaches a ridigbody component to the object being looked at as well as XRGrabInteractable script with the correct properties.
-
-- [] Start STT for both "Space" input and "B" button of the Right VR controller
 
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name

@@ -4,6 +4,7 @@ using UnityEngine;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using UnityEngine.XR;
+using UnityEngine.InputSystem;
 
 public class SpeechRecognition : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class SpeechRecognition : MonoBehaviour
     private AudioSource audioSource;
     private bool isRecognizing = false;
 
+    private bool prevB;
+
     public string recognizedSpeech;
 
     void Start()
@@ -35,10 +38,15 @@ public class SpeechRecognition : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) || (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(CommonUsages.secondaryButton, out bool b) && b))
-        {
-            Debug.Log("VR Controller B button is pressed anannnnnnnnnn");
+        bool space = Input.GetKeyDown(KeyCode.Space);
 
+        bool bNow = false;
+        InputDevices.GetDeviceAtXRNode(XRNode.RightHand).TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bNow);
+
+        bool bDown = bNow && !prevB;
+
+        if (space || bDown)
+        {
             if (isRecognizing)
             {
                 Debug.Log("Speech recognition already in progress...");
@@ -51,6 +59,7 @@ public class SpeechRecognition : MonoBehaviour
                 _ = RecognizeSpeechAsync();
             }
         }
+        prevB = bNow;
     }
 
 
