@@ -102,19 +102,23 @@
 - [X] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
 
 
+- [] Modify MyXRGrabInteractable script, e.g.: don't let it go thorugh other objects
 
-- [] Modify LookAndAttach script so that it attaches a ridigbody component to the object being looked at as well as XRGrabInteractable script.
+- [] Modify LookAndAttach script so that it attaches a ridigbody component to the object being looked at as well as XRGrabInteractable script with the correct properties.
+
+- [] Start STT for both "Space" input and "B" button of the Right VR controller
+
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
-   |-DESIGN CHOICE: after speaking the command a pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
+   |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
 
-- [] Test the other MCP server with 9 tools in the unity test project to see if its better to use 2 MCP servers
+- [] Test the other MCP server with 9 tools(mcp-unity) in the unity test project to see if its better to use 2 MCP servers
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 
-- [] Create a UI for user to know the controles/buttons and how to use the MCP tools.
+- [] Create a UI for user to know the controles/buttons and how to use and interact with the MCP tools.
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
@@ -122,11 +126,7 @@
 
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
-- [] After choosing the object and before taking the action, create a confirmation button or a confirmation step to acctually manipualte the intended object
-
 - [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge
-
-- [] Start STT for both "Space" input and "X" button of the left VR controller
 
 - [] Crete a Docker container with all the dependinceis
 
