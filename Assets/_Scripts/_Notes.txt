@@ -101,15 +101,15 @@
 - [X] Create an indication UI for sucess:false message inside the game. That way user won't wait have to wait and guess if the prompt was sucessfull or not.
 - [X] Add a functionalty to snap the selected object to one of the VR hands to change their location in arms reach situations
 - [X] Start STT for both "Space" input and "B" button of the Right VR controller
-
-
-- [] Modify MyXRGrabInteractable script, e.g.: don't let it go thorugh other objects
+- [X] Modify MyXRGrabInteractable script, e.g.: don't let it go thorugh other objects
 
 - [] Modify LookAndAttach script so that it attaches a ridigbody component to the object being looked at as well as XRGrabInteractable script with the correct properties.
 
 
+
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
+   | Maybe creat a dictinory for the commond words like "THIS", "THAT", "IT" and so on and match them to currentLookedObject.name of the object from the raycast
 
 - [] Test the other MCP server with 9 tools(mcp-unity) in the unity test project to see if its better to use 2 MCP servers
 
