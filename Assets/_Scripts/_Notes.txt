@@ -110,15 +110,25 @@
    | mcp-unity with 9 tools and Unity-MCP with 42 tools tested indivudally and they performed poorly
 
 - [X] Test creating a object from scratch in front of the player with cursor LLM and also test chaging an EXSISTING object's postion to in front of player
+- [X] For "Move" it works when we have the coordinates. If you can't work it with saying in front of an object's name, try to add a coordinate finder raycast in one of the controller that can be turned on/off to tell exactly where you want an object to move.
+    | SOLVED without using the coordinates
 
+- [X] Search method by name, is fixed an made case-INsensitive ( cUbE = cube = CUBE...)
+- [X] Try to remove case sensitive name search when using the tools. Rightnow it throws an error between cube ≠ cube
 
+- [] Add to the manage_gameobject.py and ManageGameObject.cs scripts with parameters and everything; 
+   |[X] "Duplicate" action
+   |[X] "Move" action 
+   |[X] "Scale" action (adjust the scale percentage with the wors like "up" "down" "scale a little"...)
+   |[] "Change Color" action
+   |[] "Rename" tool?
 
-
-- [] Add a "Duplicate" tool and "Move" tool to the manage_gameobject.py script with parameters and everything
+- [] Give a default name when using "create" action, based on the created primative type
+- [] When using "create" action, sometimes parent parameter causes problems, fix it
 - [] Try to improve "#Asset Creation Strategy" prompt located in server.py script
 
 
-- [] For "Move" it works when we have the coordinates. If you can't work it with saying in front of an object's name, try to add a coordinate finder raycast in one of the controller that can be turned on/off to tell exactly where you want an object to move.
+
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
