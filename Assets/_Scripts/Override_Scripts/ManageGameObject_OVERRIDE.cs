@@ -148,6 +148,31 @@ namespace UnityMcpBridge.Editor.Tools
                     case "scale":
                         return ScaleGameObject(@params, targetToken, searchMethod);
 
+                    case "rename":
+                        GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
+                        if (targetGo == null)
+                        {
+                            return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                        }
+
+                        string newName = @params["name"]?.ToString();
+                        if (string.IsNullOrEmpty(newName))
+                        {
+                            return Response.Error("'name' parameter is required for rename action.");
+                        }
+
+                        // Record for undo
+                        Undo.RecordObject(targetGo, "Rename GameObject");
+
+                        // Set the new name
+                        targetGo.name = newName;
+
+                        EditorUtility.SetDirty(targetGo);
+                        return Response.Success(
+                            $"GameObject renamed to '{newName}'.",
+                            Helpers.GameObjectSerializer.GetGameObjectData(targetGo)
+                        );
+
                     default:
                         return Response.Error($"Unknown action: '{action}'.");
                 }

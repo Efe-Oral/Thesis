@@ -127,7 +127,7 @@
    |[X] "Move" action 
    |[X] "Scale" action (adjust the scale percentage with the wors like "up" "down" "scale a little"...)
    |[] "Change Color" action
-   |[] "Rename" tool?
+   |[X] "Rename" tool? (was not sure but decided to add)
 
 - [] When using "create" action, sometimes parent parameter causes problems, fix it
 
