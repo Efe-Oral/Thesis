@@ -115,6 +115,8 @@
 
 - [X] Search method by name, is fixed an made case-INsensitive ( cUbE = cube = CUBE...)
 - [X] Try to remove case sensitive name search when using the tools. Rightnow it throws an error between cube ≠ cube
+- [X] Give a default name when using "create" action, based on the created primative type
+
 
 - [] Add to the manage_gameobject.py and ManageGameObject.cs scripts with parameters and everything; 
    |[X] "Duplicate" action
@@ -123,12 +125,11 @@
    |[] "Change Color" action
    |[] "Rename" tool?
 
-- [] Give a default name when using "create" action, based on the created primative type
 - [] When using "create" action, sometimes parent parameter causes problems, fix it
 - [] Try to improve "#Asset Creation Strategy" prompt located in server.py script
 
 
-
+- [] Create a LaTeX file in Cursor with necesarry extentions to track your thesis with git source control (https://www.youtube.com/watch?v=Mty0vHb0knI)
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
