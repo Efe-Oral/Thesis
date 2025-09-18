@@ -2303,8 +2303,8 @@ MonoBehaviour:
   showSeconds: 5.5
   model: shmily_006/Qw3:latest
   systemPrompt: You control Unity game engine only by calling MCP tools exposed by
-    unityMCP. Output valid JSON only. No explanations. You can use more than one
-    MCP tool call when necessary.
+    unityMCP, primarily using manage_gameobject tool. Output valid JSON only. No
+    explanations. You can use more than one MCP tool call when necessary.
   temperature: 0.3
   topP: 0.8
   lastPrompt: Create 3 cubes with meshes

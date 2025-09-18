@@ -116,6 +116,10 @@
 - [X] Search method by name, is fixed an made case-INsensitive ( cUbE = cube = CUBE...)
 - [X] Try to remove case sensitive name search when using the tools. Rightnow it throws an error between cube ≠ cube
 - [X] Give a default name when using "create" action, based on the created primative type
+- [X] Try to improve "#Asset Creation Strategy" prompt located in server.py script
+    | system prompt modified from this: You control Unity game engine only by calling MCP tools exposed by unityMCP. Output valid JSON only. No explanations. You can use more than one MCP tool call when necessary.
+    | to this: You control Unity game engine only by calling MCP tools exposed by unityMCP, <primarily using manage_gameobject tool>. Output valid JSON only. No explanations. You can use more than one MCP tool call when necessary.
+
 
 
 - [] Add to the manage_gameobject.py and ManageGameObject.cs scripts with parameters and everything; 
@@ -126,7 +130,6 @@
    |[] "Rename" tool?
 
 - [] When using "create" action, sometimes parent parameter causes problems, fix it
-- [] Try to improve "#Asset Creation Strategy" prompt located in server.py script
 
 
 - [] Create a LaTeX file in Cursor with necesarry extentions to track your thesis with git source control (https://www.youtube.com/watch?v=Mty0vHb0knI)
