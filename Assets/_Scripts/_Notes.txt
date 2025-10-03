@@ -138,7 +138,7 @@
 
 - [] Find a way to add an option to save the changes in gameplay mode, so when it returns to scene mode, the changes stay. Optioanlly if the recognized speech is "Save the changes", save it as well.
    | [X] https://assetstore.unity.com/packages/tools/utilities/play-mode-saver-104836#reviews
-   | [] https://assetstore.unity.com/packages/tools/utilities/persistent-components-59009
+   | [X] https://assetstore.unity.com/packages/tools/utilities/persistent-components-59009
    | [] https://assetstore.unity.com/packages/tools/gui/inspector-gadgets-lite-82896?aid=1100l8ah5
    | [] https://github.com/inkle/Unity-Save-Play-Mode-Changes
    | [] https://assetstore.unity.com/packages/tools/utilities/play-mode-save-177452?srsltid=AfmBOorVADRJ4NMH_2RzV_vfEI-BMVkqCano8KCGoBF1T6m25vsyDFiC
