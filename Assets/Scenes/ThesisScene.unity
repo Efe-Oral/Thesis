@@ -915,6 +915,36 @@ MonoBehaviour:
   rayLength: 10
   lastLokkedObject: {fileID: 0}
   rayCameraDistance: {x: 0, y: 0, z: 1}
+--- !u!1 &441087509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5895826684305351068, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087510 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2449787133337329437, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087511 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8748500131873809389, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087512 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000662906955510728, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087513 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1842862291474320369, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 393207239731357619, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &441087515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,6 +957,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2331ae56573f890469943cab1b811f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &441087516 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9173983156334026967, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087517 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1319746308, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087518 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1763277165867629938, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087519 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3929596498127475894, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087520 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4065709321064247272, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087521 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2633365042866799530, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &441087522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5944131804917401860, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 441087506}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &523155344
 GameObject:
   m_ObjectHideFlags: 0
@@ -3416,6 +3481,94 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c566671d3af51ed4cac8a479c80bbae6, type: 3}
+--- !u!1 &1969869546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7762551662034755979, guid: c566671d3af51ed4cac8a479c80bbae6, type: 3}
+  m_PrefabInstance: {fileID: 1969869545}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2001435189
+GameObject:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2001435191}
+  - component: {fileID: 2001435190}
+  m_Layer: 0
+  m_Name: Prefab Indexer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2001435190
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001435189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a7c62fccbafd342991629222351294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scenePrefabInstances:
+  - _gameObject: {fileID: 441087507}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/XR
+      Origin (XR Rig).prefab
+  - _gameObject: {fileID: 441087522}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Gaze
+      Interactor.prefab
+  - _gameObject: {fileID: 441087521}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Poke
+      Interactor.prefab
+  - _gameObject: {fileID: 441087520}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Models/Pinch_Pointer_LOD0.fbx
+  - _gameObject: {fileID: 441087519}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Affordances/PokePointerAffordance.prefab
+  - _gameObject: {fileID: 441087518}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Left_NearFarInteractor.prefab
+  - _gameObject: {fileID: 441087517}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Teleport
+      Interactor.prefab
+  - _gameObject: {fileID: 441087516}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Controllers/XR
+      Controller Left.prefab
+  - _gameObject: {fileID: 441087514}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Poke
+      Interactor.prefab
+  - _gameObject: {fileID: 441087513}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Models/Pinch_Pointer_LOD0.fbx
+  - _gameObject: {fileID: 441087512}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Affordances/PokePointerAffordance.prefab
+  - _gameObject: {fileID: 441087511}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Right_NearFarInteractor.prefab
+  - _gameObject: {fileID: 441087510}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Interactors/Teleport
+      Interactor.prefab
+  - _gameObject: {fileID: 441087509}
+    _prefab: Assets/Samples/XR Interaction Toolkit/3.1.1/Starter Assets/Prefabs/Controllers/XR
+      Controller Right.prefab
+  - _gameObject: {fileID: 1969869546}
+    _prefab: Assets/STT/Speech-to-Text.prefab
+--- !u!4 &2001435191
+Transform:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001435189}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2092139007
 GameObject:
   m_ObjectHideFlags: 0
@@ -4246,3 +4399,4 @@ SceneRoots:
   - {fileID: 1679171915}
   - {fileID: 601731080}
   - {fileID: 1906794632}
+  - {fileID: 2001435191}
