@@ -163,6 +163,8 @@
 
 - [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
+- [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
+
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera

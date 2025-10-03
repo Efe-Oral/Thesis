@@ -3,25 +3,52 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections.Generic;
 using Framework.Utils.Editor;
+using UnityEngine.XR;
 
 [InitializeOnLoad]
 public class PlayModeSaveShortcut : Editor
 {
     private static HashSet<int> existingObjectIds = new HashSet<int>();
     private static bool initialized = false;
+    private static bool wasXButtonPressed = false;
 
     static PlayModeSaveShortcut()
     {
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        EditorApplication.update += CheckControllerInput;
+    }
+
+    private static void CheckControllerInput()
+    {
+        if (!Application.isPlaying) return;
+
+        var leftHandDevices = new List<InputDevice>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftHandDevices);
+
+        foreach (var device in leftHandDevices)
+        {
+            bool xButtonValue;
+            if (device.TryGetFeatureValue(CommonUsages.primaryButton, out xButtonValue))
+            {
+                // Check for button press
+                if (xButtonValue && !wasXButtonPressed)
+                {
+                    SaveAllNewObjects();
+                }
+                wasXButtonPressed = xButtonValue;
+                break;
+            }
+        }
     }
 
     private static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
         if (state == PlayModeStateChange.EnteredPlayMode)
         {
-            // Store all existing object IDs when entering play mode
+            // Storeing all existing object IDs when entering play mode
             StoreExistingObjects();
             initialized = true;
+            wasXButtonPressed = false;
         }
         else if (state == PlayModeStateChange.ExitingPlayMode)
         {
@@ -175,5 +202,11 @@ public class PlayModeSaveShortcut : Editor
         }
 
         return savedCount;
+    }
+
+    private void OnDisable()
+    {
+        // Clean up
+        EditorApplication.update -= CheckControllerInput;
     }
 }
