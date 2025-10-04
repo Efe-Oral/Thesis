@@ -148,6 +148,31 @@ namespace UnityMcpBridge.Editor.Tools
                     case "scale":
                         return ScaleGameObject(@params, targetToken, searchMethod);
 
+                    case "rename":
+                        GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
+                        if (targetGo == null)
+                        {
+                            return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                        }
+
+                        string newName = @params["name"]?.ToString();
+                        if (string.IsNullOrEmpty(newName))
+                        {
+                            return Response.Error("'name' parameter is required for rename action.");
+                        }
+
+                        // Record for undo
+                        Undo.RecordObject(targetGo, "Rename GameObject");
+
+                        // Set the new name
+                        targetGo.name = newName;
+
+                        EditorUtility.SetDirty(targetGo);
+                        return Response.Success(
+                            $"GameObject renamed to '{newName}'.",
+                            Helpers.GameObjectSerializer.GetGameObjectData(targetGo)
+                        );
+
                     default:
                         return Response.Error($"Unknown action: '{action}'.");
                 }
@@ -164,17 +189,42 @@ namespace UnityMcpBridge.Editor.Tools
         private static object CreateGameObject(JObject @params)
         {
             string name = @params["name"]?.ToString();
-            if (string.IsNullOrEmpty(name))
+            string primitiveType = @params["primitiveType"]?.ToString(); // Get primitive type first for default name
+
+            // Only enforce name requirement if it's not a primitive type or if saving as prefab
+            bool saveAsPrefab = @params["saveAsPrefab"]?.ToObject<bool>() ?? false;
+            if (string.IsNullOrEmpty(name) && (string.IsNullOrEmpty(primitiveType) || saveAsPrefab))
             {
-                return Response.Error("'name' parameter is required for 'create' action.");
+                return Response.Error("'name' parameter is required for non-primitive objects or when saving as prefab.");
             }
 
             // Get prefab creation parameters
-            bool saveAsPrefab = @params["saveAsPrefab"]?.ToObject<bool>() ?? false;
             string prefabPath = @params["prefabPath"]?.ToString();
             string tag = @params["tag"]?.ToString(); // Get tag for creation
-            string primitiveType = @params["primitiveType"]?.ToString(); // Keep primitiveType check
             GameObject newGo = null; // Initialize as null
+
+            // Generate default name for primitives if name not provided
+            if (string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(primitiveType))
+            {
+                // Find existing objects with similar names to avoid duplicates
+                var existingObjects = GetAllSceneObjects(true)
+                    .Where(go => go.name.StartsWith(primitiveType, StringComparison.OrdinalIgnoreCase))
+                    .Select(go => go.name)
+                    .ToList();
+
+                int counter = 1;
+                string baseName = char.ToUpper(primitiveType[0]) + primitiveType.Substring(1).ToLower();
+                name = baseName;
+
+                // Keep incrementing counter until we find a unique name
+                while (existingObjects.Contains(name))
+                {
+                    name = $"{baseName} {counter}";
+                    counter++;
+                }
+
+                Debug.Log($"[ManageGameObject.Create] Generated default name '{name}' for primitive type '{primitiveType}'");
+            }
 
             // --- Try Instantiating Prefab First ---
             string originalPrefabPath = prefabPath; // Keep original for messages
@@ -289,12 +339,31 @@ namespace UnityMcpBridge.Editor.Tools
                             Enum.Parse(typeof(PrimitiveType), primitiveType, true);
                         newGo = GameObject.CreatePrimitive(type);
                         // Set name *after* creation for primitives
-                        if (!string.IsNullOrEmpty(name))
-                            newGo.name = name;
-                        else
-                            return Response.Error(
-                                "'name' parameter is required when creating a primitive."
-                            ); // Name is essential
+                        // Generate default name for primitives if name not provided
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            // Find existing objects with similar names to avoid duplicates
+                            var existingObjects = GetAllSceneObjects(true)
+                                .Where(go => go.name.StartsWith(primitiveType, StringComparison.OrdinalIgnoreCase))
+                                .Select(go => go.name)
+                                .ToList();
+
+                            int counter = 1;
+                            string baseName = char.ToUpper(primitiveType[0]) + primitiveType.Substring(1).ToLower();
+                            name = baseName;
+
+                            // Keep incrementing counter until we find a unique name
+                            while (existingObjects.Contains(name))
+                            {
+                                name = $"{baseName} {counter}";
+                                counter++;
+                            }
+
+                            Debug.Log($"[ManageGameObject.Create] Generated default name '{name}' for primitive type '{primitiveType}'");
+                        }
+
+                        // Set the name (either provided or generated)
+                        newGo.name = name;
                         createdNewObject = true;
                     }
                     catch (ArgumentException)

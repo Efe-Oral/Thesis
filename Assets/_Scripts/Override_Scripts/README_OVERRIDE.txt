@@ -2,7 +2,7 @@
 
 
 We need to replace these 2 scripts(manage_gameobject.py and ManageGameObject.cs) manually. Because they are modified versions of https://github.com/CoderGamester/mcp-unity.git package.
-So when you clone it from a different repo (e.g.Efe-Oral), the modified overriden scripts won't be used but the default scripts from the above package will be used. This is not we want because I extended the functionality of the above package, but in order to get the extended functionality we have to change the content of the default downloaded package scripts.
+So when you clone it from a different repo (i.e., Efe-Oral), the modified overriden scripts won't be used but the default scripts from the above package will be used. This is not we want because I extended the functionality of the above package, but in order to get the extended functionality we have to change the content of the default downloaded package scripts.
 
 
 

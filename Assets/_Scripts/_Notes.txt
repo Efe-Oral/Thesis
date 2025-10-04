@@ -115,50 +115,75 @@
 
 - [X] Search method by name, is fixed an made case-INsensitive ( cUbE = cube = CUBE...)
 - [X] Try to remove case sensitive name search when using the tools. Rightnow it throws an error between cube ≠ cube
+- [X] Give a default name when using "create" action, based on the created primative type
+- [X] Try to improve "#Asset Creation Strategy" prompt located in server.py script
+    | system prompt modified from this: You control Unity game engine only by calling MCP tools exposed by unityMCP. Output valid JSON only. No explanations. You can use more than one MCP tool call when necessary.
+    | to this: You control Unity game engine only by calling MCP tools exposed by unityMCP, <primarily using manage_gameobject tool>. Output valid JSON only. No explanations. You can use more than one MCP tool call when necessary.
 
-- [] Add to the manage_gameobject.py and ManageGameObject.cs scripts with parameters and everything; 
+- [X] Create a LaTeX file in Cursor with necesarry extentions to track your thesis with git source control (https://www.youtube.com/watch?v=Mty0vHb0knI)
+    |Decided to use overleaf
+
+- [X] Add to the manage_gameobject.py and ManageGameObject.cs scripts with parameters and everything; 
    |[X] "Duplicate" action
    |[X] "Move" action 
    |[X] "Scale" action (adjust the scale percentage with the wors like "up" "down" "scale a little"...)
-   |[] "Change Color" action
-   |[] "Rename" tool?
+   |[X] "Rename" tool? (was not sure but decided to add)
+   |[LATER] "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool)
 
-- [] Give a default name when using "create" action, based on the created primative type
-- [] When using "create" action, sometimes parent parameter causes problems, fix it
-- [] Try to improve "#Asset Creation Strategy" prompt located in server.py script
+- [X] When using "create" action, sometimes parent parameter causes problems, fix it
+    | SOLUTION: Correct prompting
+
+- [X] Find a way to add an option to save the changes in gameplay mode, so when it returns to scene mode, the changes stay. Optioanlly if the recognized speech is "Save the changes", save it as well.
+   | [✓✓✓✓] https://assetstore.unity.com/packages/tools/utilities/play-mode-saver-104836#reviews
+   | [✓✓] https://assetstore.unity.com/packages/tools/gui/inspector-gadgets-lite-82896?aid=1100l8ah5
+   | [X] https://assetstore.unity.com/packages/tools/utilities/persistent-components-59009
+   | [X] https://github.com/inkle/Unity-Save-Play-Mode-Changes
+   | [?] https://assetstore.unity.com/packages/tools/utilities/play-mode-save-177452?srsltid=AfmBOorVADRJ4NMH_2RzV_vfEI-BMVkqCano8KCGoBF1T6m25vsyDFiC
+       | coudlnt test because its 10€
+
+- [X] Create a UI button and Left controller X button to save play mode changes
+- [X] Add "Rotate" action maybe? because we can already manipulate the rotation of the object so maybe an overkill move
+    | Decided not to do it, unnecesarry overkill
 
 
 
+
+
+- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
    | Maybe creat a dictinory for the commond words like "THIS", "THAT", "IT" and so on and match them to currentLookedObject.name of the object from the raycast
 
-- [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
-
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
-
-- [] Create a UI for user to know the controles/buttons and how to use and interact with the MCP tools.
-
-- [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
-
-- [] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
-
-- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
-
-- [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge &  https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.1/manual/input.html
-
-- [] Crete a Docker container with all the dependinceis
-
-- [] Create a test scene room with objects to test the Grab interaction and MCP tools
 
 - [] Add undo/redo action for modified assets in game
 
-- [] Find a way to add an option to save the changes in gameplay mode, so when it returns to scene mode, the changes stay
+- [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
+
+- [] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool)
+
+- [] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
+
+- [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 
 - [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
+
+- [] Make the error text canvas more informative, e.g., print LLM responce for why tool calling failed to the screen canvas
+
+- [] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
+
+- [] Create a test scene room with objects to test the Grab interaction and MCP tools
+
+- [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
+
+- [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
+
+- [] Crete a Docker container with all the dependinceis
+
+- [] Find a way to add the following repos dependinceis to the Thesis project and push it to your own repo. https://github.com/justinpbarnett/unity-mcp & https://github.com/jonigl/ollama-mcp-bridge &  https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.1/manual/input.html
 
 - [] Make Hunyuan3D asset generator work in API modes with text prompts, not just img inputs
    |-Check this text to 3d model creation repo, write its owner (https://github.com/Scriptwonder/Unity-Text2Model)
