@@ -9,6 +9,7 @@ public class McpPromptSender : MonoBehaviour
 
     [Header("Endpoint")]
     private string apiUrl = "http://localhost:8000/api/chat";
+    private float requestTimeout = 30f; // Timeout in seconds
 
     [SerializeField] public GameObject successMessage;
     [SerializeField] private AudioClip successSound;
@@ -35,6 +36,10 @@ public class McpPromptSender : MonoBehaviour
 
     [TextArea] public string lastPrompt;
     [TextArea(17, 10)] public string LLMResponse;
+
+    // convarsation history for context
+    private List<string> conversationHistory = new List<string>();
+    private const int maxHistory = 6; // 6 back and forth interactions = 3 dialogs
 
     [System.Serializable]
     private class Message { public string role; public string content; public Message(string r, string c) { role = r; content = c; } }
@@ -99,12 +104,27 @@ public class McpPromptSender : MonoBehaviour
     {
         lastPrompt = userPrompt;
 
+        // Add user message to history
+        conversationHistory.Add("User: " + userPrompt);
+
+        // Limit history size
+        if (conversationHistory.Count > maxHistory)
+        {
+            conversationHistory.RemoveAt(0);
+        }
+
+        // Build context from history, but only include relevant parts
+        var recentHistory = conversationHistory.Count > 4 ?
+            conversationHistory.GetRange(conversationHistory.Count - 4, 4) :
+            conversationHistory;
+        string context = string.Join("\n", recentHistory);
+
         var payload = new ChatRequest
         {
             model = model,
             messages = new List<Message> {
                 new Message("system", systemPrompt),
-                new Message("user", userPrompt)
+                new Message("user", context)
             },
             think = think,
             stream = stream,
@@ -132,6 +152,16 @@ public class McpPromptSender : MonoBehaviour
             try { resp = JsonUtility.FromJson<ChatResponse>(text); } catch { }
             LLMResponse = (resp != null && resp.message != null) ? resp.message.content : text;
 
+            // Add llm response to history
+            if (resp != null && resp.message != null)
+            {
+                conversationHistory.Add("Assistant: " + resp.message.content);
+                if (conversationHistory.Count > maxHistory)
+                {
+                    conversationHistory.RemoveAt(0);
+                }
+            }
+
             // Check if response contains success indicator and actiavte success UI
             if (LLMResponse.Contains("\"success\": true"))
             {
@@ -150,5 +180,12 @@ public class McpPromptSender : MonoBehaviour
             Debug.Log($"MCP response: {LLMResponse}");
 
         }
+    }
+
+    // Clear conversation history if needes
+    public void ClearConversationHistory()
+    {
+        conversationHistory.Clear();
+        Debug.Log("Conversation history cleared");
     }
 }

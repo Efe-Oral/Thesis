@@ -145,23 +145,27 @@
 - [X] Add "Rotate" action maybe? because we can already manipulate the rotation of the object so maybe an overkill move
     | Decided not to do it, unnecesarry overkill
 
+- [X] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
 
 
 
-- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
    | Maybe creat a dictinory for the commond words like "THIS", "THAT", "IT" and so on and match them to currentLookedObject.name of the object from the raycast
 
+- [] Save changes in play mode only saves the changes on the newly created objects. If you move an already exsitning object, it doesnt save the component chnages (e.g.: transform position). Fix this problem
+
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
+
+- [] make the default creation place is in front of the main camera and not at origin
 
 - [] Add undo/redo action for modified assets in game
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
-- [] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool)
+- [] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool and set_component_property action)
 
 - [] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
 
