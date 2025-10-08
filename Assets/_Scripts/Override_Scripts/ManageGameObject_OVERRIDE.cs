@@ -19,6 +19,11 @@ namespace UnityMcpBridge.Editor.Tools
     /// </summary>
     public static class ManageGameObject
     {
+        // Keep track of the last creation position and count
+        private static Vector3 lastCreationPosition = Vector3.zero;
+        private static int creationCount = 0;
+        private static float objectSpacing = 1f; // Space between objects
+
         // --- Main Handler ---
 
         public static object HandleCommand(JObject @params)
@@ -406,7 +411,8 @@ namespace UnityMcpBridge.Editor.Tools
             // Only set position if it wasn't explicitly provided in params otherwise default is thee in front of main camera
             if (!@params.ContainsKey("position"))
             {
-                Vector3 defaultPosition = Vector3.zero;
+                Vector3 basePosition = Vector3.zero;
+                Vector3 rightOffset = Vector3.zero;
 
                 // Check if we're in play mode
                 if (Application.isPlaying)
@@ -414,10 +420,12 @@ namespace UnityMcpBridge.Editor.Tools
                     Camera mainCamera = Camera.main;
                     if (mainCamera != null)
                     {
-                        // Position the object 2 units in front of the camera for camera offsettgi
+                        // Position the object 4 units in front of the camera for camera offsetting
                         Vector3 cameraPosition = mainCamera.transform.position;
                         Vector3 cameraForward = mainCamera.transform.forward;
-                        defaultPosition = cameraPosition + (cameraForward * 2f);
+                        Vector3 cameraRight = mainCamera.transform.right;
+                        basePosition = cameraPosition + (cameraForward * 4f);
+                        rightOffset = cameraRight * objectSpacing;
                     }
                 }
                 else
@@ -426,13 +434,37 @@ namespace UnityMcpBridge.Editor.Tools
                     var sceneView = UnityEditor.SceneView.lastActiveSceneView;
                     if (sceneView != null)
                     {
-                        defaultPosition = sceneView.camera.transform.position +
-                                        (sceneView.camera.transform.forward * 2f);
+                        basePosition = sceneView.camera.transform.position +
+                                     (sceneView.camera.transform.forward * 2f);
+                        rightOffset = sceneView.camera.transform.right * objectSpacing;
                     }
                 }
 
+                // Calculate final position with offset based on creation count
+                Vector3 finalPosition;
+                if (creationCount == 0 || Vector3.Distance(lastCreationPosition, basePosition) > 5f)
+                {
+                    // First object or camera has moved significantly - reset count and position at base
+                    finalPosition = basePosition;
+                    creationCount = 1;
+                }
+                else
+                {
+                    // Offset to the right for subsequent objects
+                    finalPosition = basePosition + (rightOffset * creationCount);
+                    creationCount++;
+                }
+
+                // Reset count after a certain number to prevent objects from going too far
+                if (creationCount > 5)
+                {
+                    creationCount = 0;
+                }
+
+                lastCreationPosition = basePosition;
+
                 Undo.RecordObject(newGo.transform, "Set GameObject Transform");
-                newGo.transform.position = defaultPosition;
+                newGo.transform.position = finalPosition;
             }
 
             // Record potential changes to the existing prefab instance or the new GO

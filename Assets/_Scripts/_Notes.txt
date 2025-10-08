@@ -147,12 +147,12 @@
 
 - [X] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 - [X] make the default creation place is in front of the main camera and not at origin
+- [X] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
 
 
 
 
 
-- [] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
 
 
 
