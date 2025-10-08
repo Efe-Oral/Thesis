@@ -403,6 +403,38 @@ namespace UnityMcpBridge.Editor.Tools
                 return Response.Error("Failed to create or instantiate the GameObject.");
             }
 
+            // Only set position if it wasn't explicitly provided in params otherwise default is thee in front of main camera
+            if (!@params.ContainsKey("position"))
+            {
+                Vector3 defaultPosition = Vector3.zero;
+
+                // Check if we're in play mode
+                if (Application.isPlaying)
+                {
+                    Camera mainCamera = Camera.main;
+                    if (mainCamera != null)
+                    {
+                        // Position the object 2 units in front of the camera for camera offsettgi
+                        Vector3 cameraPosition = mainCamera.transform.position;
+                        Vector3 cameraForward = mainCamera.transform.forward;
+                        defaultPosition = cameraPosition + (cameraForward * 2f);
+                    }
+                }
+                else
+                {
+                    // In editor mode, use scene view camera
+                    var sceneView = UnityEditor.SceneView.lastActiveSceneView;
+                    if (sceneView != null)
+                    {
+                        defaultPosition = sceneView.camera.transform.position +
+                                        (sceneView.camera.transform.forward * 2f);
+                    }
+                }
+
+                Undo.RecordObject(newGo.transform, "Set GameObject Transform");
+                newGo.transform.position = defaultPosition;
+            }
+
             // Record potential changes to the existing prefab instance or the new GO
             // Record transform separately in case parent changes affect it
             Undo.RecordObject(newGo.transform, "Set GameObject Transform");

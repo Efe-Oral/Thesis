@@ -146,7 +146,13 @@
     | Decided not to do it, unnecesarry overkill
 
 - [X] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
+- [X] make the default creation place is in front of the main camera and not at origin
 
+
+
+
+
+- [] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
 
 
 
@@ -159,15 +165,13 @@
 
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 
-- [] make the default creation place is in front of the main camera and not at origin
+- [] There is a delay between llm taking action inside unity, and responding with 200 OK. Why is there a delay? The tool action happens much faster but the responce comes afterwards.
 
 - [] Add undo/redo action for modified assets in game
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
 - [] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool and set_component_property action)
-
-- [] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
@@ -184,6 +188,8 @@
 - [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
 
 - [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
+
+- [] Imrpve system prompt being sent from unity. Include things like JSON schemas and Tool calling schemeas as well as avialable actions
 
 - [] Crete a Docker container with all the dependinceis
 
