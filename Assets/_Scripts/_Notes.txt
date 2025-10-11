@@ -148,6 +148,16 @@
 - [X] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
 - [X] make the default creation place is in front of the main camera and not at origin
 - [X] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
+- [X] There is a delay between llm taking action inside unity, and responding with 200 OK. Why is there a delay? The tool action happens much faster but the responce comes afterwards.
+
+
+
+
+- [] Save changes in play mode only saves the changes on the newly created objects. If you move an already exsitning object, it doesnt save the component chnages (e.g.: transform position). Fix this problem
+
+- [] Add undo/redo action for modified assets in game
+
+- [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
 
 
 
@@ -156,18 +166,22 @@
 
 
 
+
+
+
+- [] Fix the Parent related error.
+    result: Error executing tool manage_gameobject: 2 validation errors for manage_gameobjectArguments
+      parent
+         Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]
+         For further information visit https://errors.pydantic.dev/2.10/v/string_type
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
    | Maybe creat a dictinory for the commond words like "THIS", "THAT", "IT" and so on and match them to currentLookedObject.name of the object from the raycast
 
-- [] Save changes in play mode only saves the changes on the newly created objects. If you move an already exsitning object, it doesnt save the component chnages (e.g.: transform position). Fix this problem
-
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 
-- [] There is a delay between llm taking action inside unity, and responding with 200 OK. Why is there a delay? The tool action happens much faster but the responce comes afterwards.
-
-- [] Add undo/redo action for modified assets in game
+- [] Try this new Ollama model for MCP tool calling: ollama pull granite4:micro-h (https://ollama.com/library/granite4)
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 
@@ -176,8 +190,6 @@
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
-
-- [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
 
 - [] Make the error text canvas more informative, e.g., print LLM responce for why tool calling failed to the screen canvas
 

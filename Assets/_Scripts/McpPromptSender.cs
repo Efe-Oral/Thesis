@@ -152,37 +152,41 @@ public class McpPromptSender : MonoBehaviour
             try { resp = JsonUtility.FromJson<ChatResponse>(text); } catch { }
             LLMResponse = (resp != null && resp.message != null) ? resp.message.content : text;
 
-            // Add llm response to history
+            // Handle UI feedback based on response
+            bool isSuccess = LLMResponse.Contains("\"success\": true");
+            isSuccessMessageTrue = isSuccess;
+
+            // Start UI and audio feedback asycnhronously
+            StartCoroutine(HandleFeedback(isSuccess));
+
+            // Updateing conversation history asynchronously
             if (resp != null && resp.message != null)
             {
-                conversationHistory.Add("Assistant: " + resp.message.content);
-                if (conversationHistory.Count > maxHistory)
-                {
-                    conversationHistory.RemoveAt(0);
-                }
-            }
-
-            // Check if response contains success indicator and actiavte success UI
-            if (LLMResponse.Contains("\"success\": true"))
-            {
-                isSuccessMessageTrue = true;
-                StartCoroutine(ShowLLMMessage());
-                audioSource.PlayOneShot(successSound);
-            }
-
-            else
-            {
-                isSuccessMessageTrue = false;
-                StartCoroutine(ShowLLMMessage());
-                audioSource.PlayOneShot(errorSound);
+                StartCoroutine(UpdateConversationHistory(resp.message.content));
             }
 
             Debug.Log($"MCP response: {LLMResponse}");
-
         }
     }
 
-    // Clear conversation history if needes
+    private IEnumerator HandleFeedback(bool isSuccess)
+    {
+        StartCoroutine(ShowLLMMessage());
+        audioSource.PlayOneShot(isSuccess ? successSound : errorSound);
+        yield break;
+    }
+
+    private IEnumerator UpdateConversationHistory(string content)
+    {
+        conversationHistory.Add("Assistant: " + content);
+        if (conversationHistory.Count > maxHistory)
+        {
+            conversationHistory.RemoveAt(0);
+        }
+        yield break;
+    }
+
+    // Clear conversation history if needed
     public void ClearConversationHistory()
     {
         conversationHistory.Clear();
