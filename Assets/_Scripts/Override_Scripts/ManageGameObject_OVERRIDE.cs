@@ -153,6 +153,9 @@ namespace UnityMcpBridge.Editor.Tools
                     case "scale":
                         return ScaleGameObject(@params, targetToken, searchMethod);
 
+                    case "change_color":
+                        return ChangeGameObjectColor(@params, targetToken, searchMethod);
+
                     case "rename":
                         GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
                         if (targetGo == null)
@@ -2610,6 +2613,154 @@ namespace UnityMcpBridge.Editor.Tools
                 }
             }
             return null;
+        }
+
+        private static object ChangeGameObjectColor(JObject @params, JToken targetToken, string searchMethod)
+        {
+            GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
+            if (targetGo == null)
+            {
+                return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+            }
+
+            try
+            {
+                // Geting renderer component
+                Renderer renderer = targetGo.GetComponent<Renderer>();
+                if (renderer == null)
+                {
+                    return Response.Error($"GameObject '{targetGo.name}' does not have a Renderer component. Cannot change color.");
+                }
+
+                Color newColor = Color.white;
+                bool colorSet = false;
+
+                // Try color name first
+                string colorName = @params["colorName"]?.ToString()?.ToLower();
+                if (!string.IsNullOrEmpty(colorName))
+                {
+                    colorSet = TryParseColorName(colorName, out newColor);
+                    if (!colorSet)
+                    {
+                        return Response.Error($"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey.");
+                    }
+                }
+                else
+                {
+                    // Try RGB/RGBA array
+                    JArray colorArray = @params["color"] as JArray;
+                    if (colorArray != null && (colorArray.Count == 3 || colorArray.Count == 4))
+                    {
+                        try
+                        {
+                            float r = colorArray[0].ToObject<float>();
+                            float g = colorArray[1].ToObject<float>();
+                            float b = colorArray[2].ToObject<float>();
+                            float a = colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
+
+                            // Clamp values to 0-1 range
+                            r = Mathf.Clamp01(r);
+                            g = Mathf.Clamp01(g);
+                            b = Mathf.Clamp01(b);
+                            a = Mathf.Clamp01(a);
+
+                            newColor = new Color(r, g, b, a);
+                            colorSet = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            return Response.Error($"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1.");
+                        }
+                    }
+                }
+
+                if (!colorSet)
+                {
+                    return Response.Error("Color must be specified as either 'color' array [r,g,b] or [r,g,b,a] (values 0-1) OR 'colorName' string.");
+                }
+
+                // Record for undo
+                Undo.RecordObject(renderer, "Change GameObject Color");
+
+                // Create new material instance if using shared material to avoid affecting other objects
+                if (renderer.sharedMaterial != null)
+                {
+                    // Create material instance to avoid affecting other objects using the same material
+                    renderer.material = new Material(renderer.sharedMaterial);
+                }
+                else
+                {
+                    // Create default material if none exists
+                    renderer.material = new Material(Shader.Find("Standard"));
+                }
+
+                // Set the color
+                renderer.material.color = newColor;
+
+                // Mark as dirty
+                EditorUtility.SetDirty(renderer);
+                EditorUtility.SetDirty(targetGo);
+
+                string colorDescription = string.IsNullOrEmpty(colorName)
+                    ? $"RGBA({newColor.r:F2}, {newColor.g:F2}, {newColor.b:F2}, {newColor.a:F2})"
+                    : colorName;
+
+                return Response.Success(
+                    $"GameObject '{targetGo.name}' color changed to {colorDescription}.",
+                    Helpers.GameObjectSerializer.GetGameObjectData(targetGo)
+                );
+            }
+            catch (Exception e)
+            {
+                return Response.Error($"Error changing color for GameObject '{targetGo.name}': {e.Message}");
+            }
+        }
+
+        private static bool TryParseColorName(string colorName, out Color color)
+        {
+            color = Color.white;
+            switch (colorName)
+            {
+                case "red":
+                    color = Color.red;
+                    return true;
+                case "green":
+                    color = Color.green;
+                    return true;
+                case "blue":
+                    color = Color.blue;
+                    return true;
+                case "yellow":
+                    color = Color.yellow;
+                    return true;
+                case "orange":
+                    color = new Color(1f, 0.647f, 0f); // Orange
+                    return true;
+                case "cyan":
+                    color = Color.cyan;
+                    return true;
+                case "magenta":
+                    color = Color.magenta;
+                    return true;
+                case "pink":
+                    color = new Color(1f, 0.753f, 0.796f); //pink
+                    return true;
+                case "gold":
+                    color = new Color(1f, 0.843f, 0f); // Gold color
+                    return true;
+                case "white":
+                    color = Color.white;
+                    return true;
+                case "black":
+                    color = Color.black;
+                    return true;
+                case "gray":
+                case "grey":
+                    color = Color.gray;
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         // Removed GetGameObjectData, GetComponentData, and related private helpers/caching/serializer setup.
