@@ -1,13 +1,16 @@
 
 
-    __    __    __  ___      ______            __             ____         __      __  _____________     _____                               
-   / /   / /   /  |/  /     / ____/___  ____  / /__________  / / /__  ____/ /     /  |/  / ____/ __ \   / ___/___  ______   _____  __________
-  / /   / /   / /|_/ /_____/ /   / __ \/ __ \/ __/ ___/ __ \/ / / _ \/ __  /_____/ /|_/ / /   / /_/ /   \__ \/ _ \/ ___/ | / / _ \/ ___/ ___/
- / /___/ /___/ /  / /_____/ /___/ /_/ / / / / /_/ /  / /_/ / / /  __/ /_/ /_____/ /  / / /___/ ____/   ___/ /  __/ /   | |/ /  __/ /  (__  ) 
-/_____/_____/_/  /_/      \____/\____/_/ /_/\__/_/   \____/_/_/\___/\__,_/     /_/  /_/\____/_/       /____/\___/_/    |___/\___/_/  /____/  
+
+
+
+    __    __    __  ___      ______            __             ____         __      __  __      _ __             _____                    
+   / /   / /   /  |/  /     / ____/___  ____  / /__________  / / /__  ____/ /     / / / /___  (_) /___  __     / ___/________  ____  ___ 
+  / /   / /   / /|_/ /_____/ /   / __ \/ __ \/ __/ ___/ __ \/ / / _ \/ __  /_____/ / / / __ \/ / __/ / / /_____\__ \/ ___/ _ \/ __ \/ _ \
+ / /___/ /___/ /  / /_____/ /___/ /_/ / / / / /_/ /  / /_/ / / /  __/ /_/ /_____/ /_/ / / / / / /_/ /_/ /_____/__/ / /__/  __/ / / /  __/
+/_____/_____/_/  /_/      \____/\____/_/ /_/\__/_/   \____/_/_/\___/\__,_/      \____/_/ /_/_/\__/\__, /     /____/\___/\___/_/ /_/\___/ 
+                                                                                                 /____/                                                                               
                                                                                                                                              
       
-
 
 
 
@@ -145,11 +148,38 @@
 - [X] Add "Rotate" action maybe? because we can already manipulate the rotation of the object so maybe an overkill move
     | Decided not to do it, unnecesarry overkill
 
+- [X] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
+- [X] make the default creation place is in front of the main camera and not at origin
+- [X] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
+- [X] There is a delay between llm taking action inside unity, and responding with 200 OK. Why is there a delay? The tool action happens much faster but the responce comes afterwards.
+- [X] Save changes in play mode only saves the changes on the newly created objects. If you move an already exsitning object, it doesnt save the component chnages (e.g.: transform position). Fix this problem
+- [X] Fix the Parent related error.
+    result: Error executing tool manage_gameobject: 2 validation errors for manage_gameobjectArguments
+      parent
+         Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]
+         For further information visit https://errors.pydantic.dev/2.10/v/string_type
+
+   2025-12-08 15:58:30.652 | DEBUG    | ollama_mcp_bridge.proxy_service:_handle_tool_calls:130 - Tool unityMCP.manage_gameobject called 
+   with args {'action': 'create', 'layer': 'default', 'name': 'beta', 'parent': 'default', 'primitive_type': 'Cube', 'tag': 'default'}, 
+   result: {"success": false, "message": "Parent specified ('default') but not found."}
+
+- [X] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
+- [X] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool and set_component_property action)
+      (FINAL IMPLEMENTED IDEA: DIRECTLY CREATE AND ASIGN THE MATERAIL ON THE GAMEOBJECT)
 
 
 
 
-- [] Right now every conversation with Ollama model is a different session, log the conversation history and send it with each prompt for context
+
+- [] Auto add the "XR Grab Interactable" script to the newly created objects
+
+- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
+
+- [] Create a test scene room with objects to test the Grab interaction and MCP tools
+
+- [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
+
+- [] Create a shader for when the user presses left controller Y button to save changes to an exisitng object, a green shader scans the object as an indicator to show its been saved
 
 - [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
@@ -157,29 +187,21 @@
 
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 
-- [] Add undo/redo action for modified assets in game
+- [] Try this new Ollama model for MCP tool calling: ollama pull granite4:micro-h (https://ollama.com/library/granite4)
 
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
-
-- [] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool)
-
-- [] make some offsett when using "create" action because right now sometimes multiple objects are created at the excat same spot, it is hard to see them
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 
-- [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
-
 - [] Make the error text canvas more informative, e.g., print LLM responce for why tool calling failed to the screen canvas
 
 - [] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
 
-- [] Create a test scene room with objects to test the Grab interaction and MCP tools
-
-- [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
-
 - [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
+
+- [] Imrpve system prompt being sent from unity. Include things like JSON schemas and Tool calling schemeas as well as avialable actions
 
 - [] Crete a Docker container with all the dependinceis
 

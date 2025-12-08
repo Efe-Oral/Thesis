@@ -42,6 +42,10 @@ def register_manage_gameobject_tools(mcp: FastMCP):
         scale_command: str = None,  # Natural language command for scaling (e.g., "make bigger", "make smaller")
         multiplier: float = None,    # Multiplier for scaling operations (e.g., 2 for double size)
 
+        # --- Color Change Parameters ---
+        color: List[float] = None,  # RGB [r, g, b] or RGBA [r, g, b, a] values (0-1 range)
+        color_name: str = None,  # Named colors: "red", "green", "blue", "yellow", "orange", "pink", "gold", "cyan", "magenta", "white", "black", "gray"
+
         components_to_add: List[str] = None,  # List of component names to add
 
         primitive_type: str = None,
@@ -91,7 +95,7 @@ def register_manage_gameobject_tools(mcp: FastMCP):
 
         Args:
 
-            action: Operation (e.g., 'create', 'modify', 'find', 'duplicate', 'move', 'scale', 'add_component', 'remove_component', 'set_component_property').
+            action: Operation (e.g., 'create', 'modify', 'find', 'duplicate', 'move', 'scale', 'change_color', 'add_component', 'remove_component', 'set_component_property').
 
             target: GameObject identifier (name or path string) for modify/delete/component actions.
 
@@ -142,6 +146,13 @@ def register_manage_gameobject_tools(mcp: FastMCP):
                                   - Exact scale: action="scale", target="Object", scale=[2.0, 2.0, 2.0]
                                   - Supported commands: bigger/larger/increase, smaller/decrease/half, reset/normal/original
 
+                                  Example change color:
+                                  
+                                  - RGB array: action="change_color", target="Cube", color=[1.0, 0.0, 0.0]
+                                  - RGBA array: action="change_color", target="Sphere", color=[0.0, 0.0, 1.0, 0.5]
+                                  - Named color: action="change_color", target="Capsule", color_name="green"
+                                  - Supported color names: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray
+
             components_to_add: List of component names to add.
 
             Action-specific arguments (e.g., position, rotation, scale for create/modify;
@@ -182,6 +193,13 @@ def register_manage_gameobject_tools(mcp: FastMCP):
                 if not relative_position:
                     relative_position = "next"  # Default to placing next to the target
 
+            # --- Handle change_color specific logic ---
+            if action == "change_color":
+                if not target:
+                    return {"success": False, "message": "Target GameObject must be specified for change_color operation."}
+                if not color and not color_name:
+                    return {"success": False, "message": "Either 'color' array or 'color_name' must be specified for change_color operation."}
+
 
             # Prepare parameters, removing None values
 
@@ -206,6 +224,10 @@ def register_manage_gameobject_tools(mcp: FastMCP):
                 "scale": scale,
                 "scaleCommand": scale_command,
                 "multiplier": multiplier,
+
+                # Color parameters
+                "color": color,
+                "colorName": color_name,
 
                 "componentsToAdd": components_to_add,
 

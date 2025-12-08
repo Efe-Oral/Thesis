@@ -19,6 +19,11 @@ namespace UnityMcpBridge.Editor.Tools
     /// </summary>
     public static class ManageGameObject
     {
+        // Keep track of the last creation position and count
+        private static Vector3 lastCreationPosition = Vector3.zero;
+        private static int creationCount = 0;
+        private static float objectSpacing = 1f; // Space between objects
+
         // --- Main Handler ---
 
         public static object HandleCommand(JObject @params)
@@ -147,6 +152,9 @@ namespace UnityMcpBridge.Editor.Tools
 
                     case "scale":
                         return ScaleGameObject(@params, targetToken, searchMethod);
+
+                    case "change_color":
+                        return ChangeGameObjectColor(@params, targetToken, searchMethod);
 
                     case "rename":
                         GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
@@ -403,6 +411,65 @@ namespace UnityMcpBridge.Editor.Tools
                 return Response.Error("Failed to create or instantiate the GameObject.");
             }
 
+            // Only set position if it wasn't explicitly provided in params otherwise default is thee in front of main camera
+            if (!@params.ContainsKey("position"))
+            {
+                Vector3 basePosition = Vector3.zero;
+                Vector3 rightOffset = Vector3.zero;
+
+                // Check if we're in play mode
+                if (Application.isPlaying)
+                {
+                    Camera mainCamera = Camera.main;
+                    if (mainCamera != null)
+                    {
+                        // Position the object 4 units in front of the camera for camera offsetting
+                        Vector3 cameraPosition = mainCamera.transform.position;
+                        Vector3 cameraForward = mainCamera.transform.forward;
+                        Vector3 cameraRight = mainCamera.transform.right;
+                        basePosition = cameraPosition + (cameraForward * 4f);
+                        rightOffset = cameraRight * objectSpacing;
+                    }
+                }
+                else
+                {
+                    // In editor mode, use scene view camera
+                    var sceneView = UnityEditor.SceneView.lastActiveSceneView;
+                    if (sceneView != null)
+                    {
+                        basePosition = sceneView.camera.transform.position +
+                                     (sceneView.camera.transform.forward * 2f);
+                        rightOffset = sceneView.camera.transform.right * objectSpacing;
+                    }
+                }
+
+                // Calculate final position with offset based on creation count
+                Vector3 finalPosition;
+                if (creationCount == 0 || Vector3.Distance(lastCreationPosition, basePosition) > 5f)
+                {
+                    // First object or camera has moved significantly - reset count and position at base
+                    finalPosition = basePosition;
+                    creationCount = 1;
+                }
+                else
+                {
+                    // Offset to the right for subsequent objects
+                    finalPosition = basePosition + (rightOffset * creationCount);
+                    creationCount++;
+                }
+
+                // Reset count after a certain number to prevent objects from going too far
+                if (creationCount > 5)
+                {
+                    creationCount = 0;
+                }
+
+                lastCreationPosition = basePosition;
+
+                Undo.RecordObject(newGo.transform, "Set GameObject Transform");
+                newGo.transform.position = finalPosition;
+            }
+
             // Record potential changes to the existing prefab instance or the new GO
             // Record transform separately in case parent changes affect it
             Undo.RecordObject(newGo.transform, "Set GameObject Transform");
@@ -410,15 +477,22 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Set Parent
             JToken parentToken = @params["parent"];
-            if (parentToken != null)
+            if (parentToken != null && parentToken.Type != JTokenType.Null)
             {
-                GameObject parentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path"); // Flexible parent finding
-                if (parentGo == null)
+                string parentStr = parentToken.ToString().Trim();
+                // Treatingh default, empty string, or none as "no parent specified"
+                if (!string.IsNullOrEmpty(parentStr) &&
+                    !parentStr.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                    !parentStr.Equals("none", StringComparison.OrdinalIgnoreCase))
                 {
-                    UnityEngine.Object.DestroyImmediate(newGo); // Clean up created object
-                    return Response.Error($"Parent specified ('{parentToken}') but not found.");
+                    GameObject parentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path"); // find with name or path in the scene
+                    if (parentGo == null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(newGo);
+                        return Response.Error($"Parent specified ('{parentToken}') but not found.");
+                    }
+                    newGo.transform.SetParent(parentGo.transform, true);
                 }
-                newGo.transform.SetParent(parentGo.transform, true); // worldPositionStays = true
             }
 
             // Set Transform
@@ -434,10 +508,12 @@ namespace UnityMcpBridge.Editor.Tools
                 newGo.transform.localScale = scale.Value;
 
             // Set Tag (added for create action)
-            if (!string.IsNullOrEmpty(tag))
+            if (!string.IsNullOrEmpty(tag) &&
+                !tag.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !tag.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 // Similar logic as in ModifyGameObject for setting/creating tags
-                string tagToSet = string.IsNullOrEmpty(tag) ? "Untagged" : tag;
+                string tagToSet = tag;
                 try
                 {
                     newGo.tag = tagToSet;
@@ -477,7 +553,9 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Set Layer (new for create action)
             string layerName = @params["layer"]?.ToString();
-            if (!string.IsNullOrEmpty(layerName))
+            if (!string.IsNullOrEmpty(layerName) &&
+                !layerName.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !layerName.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 int layerId = LayerMask.NameToLayer(layerName);
                 if (layerId != -1)
@@ -869,27 +947,30 @@ namespace UnityMcpBridge.Editor.Tools
             JToken parentToken = @params["parent"];
             if (parentToken != null)
             {
-                GameObject newParentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path");
-                // Check for hierarchy loops
-                if (
-                    newParentGo == null
-                    && !(
-                        parentToken.Type == JTokenType.Null
-                        || (
-                            parentToken.Type == JTokenType.String
-                            && string.IsNullOrEmpty(parentToken.ToString())
-                        )
-                    )
-                )
+                string parentStr = parentToken.ToString().Trim();
+                // Treat "default", empty string, or "none" as no parent
+                bool shouldClearParent = string.IsNullOrEmpty(parentStr) ||
+                                        parentStr.Equals("default", StringComparison.OrdinalIgnoreCase) ||
+                                        parentStr.Equals("none", StringComparison.OrdinalIgnoreCase) ||
+                                        parentToken.Type == JTokenType.Null;
+
+                GameObject newParentGo = null;
+
+                if (!shouldClearParent)
                 {
-                    return Response.Error($"New parent ('{parentToken}') not found.");
+                    newParentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path");
+                    if (newParentGo == null)
+                    {
+                        return Response.Error($"New parent ('{parentToken}') not found.");
+                    }
+                    if (newParentGo.transform.IsChildOf(targetGo.transform))
+                    {
+                        return Response.Error(
+                            $"Cannot parent '{targetGo.name}' to '{newParentGo.name}', as it would create a hierarchy loop."
+                        );
+                    }
                 }
-                if (newParentGo != null && newParentGo.transform.IsChildOf(targetGo.transform))
-                {
-                    return Response.Error(
-                        $"Cannot parent '{targetGo.name}' to '{newParentGo.name}', as it would create a hierarchy loop."
-                    );
-                }
+
                 if (targetGo.transform.parent != (newParentGo?.transform))
                 {
                     targetGo.transform.SetParent(newParentGo?.transform, true); // worldPositionStays = true
@@ -908,8 +989,10 @@ namespace UnityMcpBridge.Editor.Tools
             // Change Tag (using consolidated 'tag' parameter)
             string tag = @params["tag"]?.ToString();
             // Only attempt to change tag if a non-null tag is provided and it's different from the current one.
-            // Allow setting an empty string to remove the tag (Unity uses "Untagged").
-            if (tag != null && targetGo.tag != tag)
+            // Treat "default" or "none" as "skip tag change" basically tag is optional
+            if (tag != null && targetGo.tag != tag &&
+                !tag.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !tag.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 // Ensure the tag is not empty, if empty, it means "Untagged" implicitly
                 string tagToSet = string.IsNullOrEmpty(tag) ? "Untagged" : tag;
@@ -961,10 +1044,12 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Change Layer (using consolidated 'layer' parameter)
             string layerName = @params["layer"]?.ToString();
-            if (!string.IsNullOrEmpty(layerName))
+            if (!string.IsNullOrEmpty(layerName) &&
+                !layerName.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !layerName.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 int layerId = LayerMask.NameToLayer(layerName);
-                if (layerId == -1 && layerName != "Default")
+                if (layerId == -1 && !layerName.Equals("Default", StringComparison.OrdinalIgnoreCase))
                 {
                     return Response.Error(
                         $"Invalid layer specified: '{layerName}'. Use a valid layer name."
@@ -2528,6 +2613,154 @@ namespace UnityMcpBridge.Editor.Tools
                 }
             }
             return null;
+        }
+
+        private static object ChangeGameObjectColor(JObject @params, JToken targetToken, string searchMethod)
+        {
+            GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
+            if (targetGo == null)
+            {
+                return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+            }
+
+            try
+            {
+                // Geting renderer component
+                Renderer renderer = targetGo.GetComponent<Renderer>();
+                if (renderer == null)
+                {
+                    return Response.Error($"GameObject '{targetGo.name}' does not have a Renderer component. Cannot change color.");
+                }
+
+                Color newColor = Color.white;
+                bool colorSet = false;
+
+                // Try color name first
+                string colorName = @params["colorName"]?.ToString()?.ToLower();
+                if (!string.IsNullOrEmpty(colorName))
+                {
+                    colorSet = TryParseColorName(colorName, out newColor);
+                    if (!colorSet)
+                    {
+                        return Response.Error($"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey.");
+                    }
+                }
+                else
+                {
+                    // Try RGB/RGBA array
+                    JArray colorArray = @params["color"] as JArray;
+                    if (colorArray != null && (colorArray.Count == 3 || colorArray.Count == 4))
+                    {
+                        try
+                        {
+                            float r = colorArray[0].ToObject<float>();
+                            float g = colorArray[1].ToObject<float>();
+                            float b = colorArray[2].ToObject<float>();
+                            float a = colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
+
+                            // Clamp values to 0-1 range
+                            r = Mathf.Clamp01(r);
+                            g = Mathf.Clamp01(g);
+                            b = Mathf.Clamp01(b);
+                            a = Mathf.Clamp01(a);
+
+                            newColor = new Color(r, g, b, a);
+                            colorSet = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            return Response.Error($"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1.");
+                        }
+                    }
+                }
+
+                if (!colorSet)
+                {
+                    return Response.Error("Color must be specified as either 'color' array [r,g,b] or [r,g,b,a] (values 0-1) OR 'colorName' string.");
+                }
+
+                // Record for undo
+                Undo.RecordObject(renderer, "Change GameObject Color");
+
+                // Create new material instance if using shared material to avoid affecting other objects
+                if (renderer.sharedMaterial != null)
+                {
+                    // Create material instance to avoid affecting other objects using the same material
+                    renderer.material = new Material(renderer.sharedMaterial);
+                }
+                else
+                {
+                    // Create default material if none exists
+                    renderer.material = new Material(Shader.Find("Standard"));
+                }
+
+                // Set the color
+                renderer.material.color = newColor;
+
+                // Mark as dirty
+                EditorUtility.SetDirty(renderer);
+                EditorUtility.SetDirty(targetGo);
+
+                string colorDescription = string.IsNullOrEmpty(colorName)
+                    ? $"RGBA({newColor.r:F2}, {newColor.g:F2}, {newColor.b:F2}, {newColor.a:F2})"
+                    : colorName;
+
+                return Response.Success(
+                    $"GameObject '{targetGo.name}' color changed to {colorDescription}.",
+                    Helpers.GameObjectSerializer.GetGameObjectData(targetGo)
+                );
+            }
+            catch (Exception e)
+            {
+                return Response.Error($"Error changing color for GameObject '{targetGo.name}': {e.Message}");
+            }
+        }
+
+        private static bool TryParseColorName(string colorName, out Color color)
+        {
+            color = Color.white;
+            switch (colorName)
+            {
+                case "red":
+                    color = Color.red;
+                    return true;
+                case "green":
+                    color = Color.green;
+                    return true;
+                case "blue":
+                    color = Color.blue;
+                    return true;
+                case "yellow":
+                    color = Color.yellow;
+                    return true;
+                case "orange":
+                    color = new Color(1f, 0.647f, 0f); // Orange
+                    return true;
+                case "cyan":
+                    color = Color.cyan;
+                    return true;
+                case "magenta":
+                    color = Color.magenta;
+                    return true;
+                case "pink":
+                    color = new Color(1f, 0.753f, 0.796f); //pink
+                    return true;
+                case "gold":
+                    color = new Color(1f, 0.843f, 0f); // Gold color
+                    return true;
+                case "white":
+                    color = Color.white;
+                    return true;
+                case "black":
+                    color = Color.black;
+                    return true;
+                case "gray":
+                case "grey":
+                    color = Color.gray;
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         // Removed GetGameObjectData, GetComponentData, and related private helpers/caching/serializer setup.

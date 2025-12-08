@@ -209,4 +209,32 @@ public class PlayModeSaveShortcut : Editor
         // Clean up
         EditorApplication.update -= CheckControllerInput;
     }
+
+    // This method will be called from PlayModeManuelSaver
+    public void SaveObjectFromRuntime(GameObject obj)
+    {
+        if (!Application.isPlaying)
+            return;
+
+        if (!UnityPlayModeSaver.IsObjectRegistered(obj, out _))
+        {
+            UnityPlayModeSaver.RegisterSavedObject(obj);
+            UnityPlayModeSaverWindow.Open(false);
+            Debug.Log($"Successfully saved object: {obj.name}");
+        }
+    }
+
+    // calls manuelsaver left controller Y button press
+    public static void SaveObjectFromRuntimeStatic(GameObject obj)
+    {
+        if (!Application.isPlaying)
+            return;
+
+        if (!UnityPlayModeSaver.IsObjectRegistered(obj, out _))
+        {
+            UnityPlayModeSaver.RegisterSavedObject(obj);
+            UnityPlayModeSaverWindow.Open(false);
+            Debug.Log($"Successfully saved object: {obj.name}");
+        }
+    }
 }
