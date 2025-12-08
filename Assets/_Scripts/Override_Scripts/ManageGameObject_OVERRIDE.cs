@@ -24,6 +24,10 @@ namespace UnityMcpBridge.Editor.Tools
         private static int creationCount = 0;
         private static float objectSpacing = 1f; // Space between objects
 
+
+        private static Type _cachedXRGrabType = null;
+        private static bool _xrGrabTypeSearched = false;
+
         // --- Main Handler ---
 
         public static object HandleCommand(JObject @params)
@@ -604,6 +608,43 @@ namespace UnityMcpBridge.Editor.Tools
                         );
                     }
                 }
+            }
+
+            // Auto-add MyXRGrabInteractable for VR interaction on newly created objects
+            // Uses cached type lookup for better performance
+            if (!_xrGrabTypeSearched)
+            {
+                // Try MyXRGrabInteractable first (custom script in Assets folder)
+                _cachedXRGrabType = FindType("MyXRGrabInteractable");
+
+                // If not found, try the base XRGrabInteractable with full namespace
+                if (_cachedXRGrabType == null)
+                {
+                    _cachedXRGrabType = FindType("UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable");
+                }
+                _xrGrabTypeSearched = true;
+
+                if (_cachedXRGrabType != null)
+                {
+                    Debug.Log($"[ManageGameObject] Cached XR Grab type: {_cachedXRGrabType.FullName}");
+                }
+            }
+
+            if (_cachedXRGrabType != null && newGo.GetComponent(_cachedXRGrabType) == null)
+            {
+                var addResult = AddComponentInternal(newGo, _cachedXRGrabType.FullName ?? _cachedXRGrabType.Name, null);
+                if (addResult == null) // null means success
+                {
+                    Debug.Log($"[ManageGameObject.Create] Added {_cachedXRGrabType.Name} to '{newGo.name}'");
+                }
+                else
+                {
+                    Debug.LogWarning($"[ManageGameObject.Create] Failed to add XR Grab component to '{newGo.name}': {addResult}");
+                }
+            }
+            else if (_cachedXRGrabType == null && _xrGrabTypeSearched)
+            {
+                Debug.LogWarning($"[ManageGameObject.Create] Could not find MyXRGrabInteractable or XRGrabInteractable type. VR grab not added to '{newGo.name}'.");
             }
 
             // Save as Prefab ONLY if we *created* a new object AND saveAsPrefab is true
@@ -2476,12 +2517,18 @@ namespace UnityMcpBridge.Editor.Tools
 
             // If not found, search all loaded assemblies (slower, last resort)
             // Prioritize assemblies likely to contain game/editor types
-            Assembly[] priorityAssemblies = {
-                 Assembly.Load("Assembly-CSharp"), // Main game scripts
-                 Assembly.Load("Assembly-CSharp-Editor"), // Main editor scripts
-                 // Add other important project assemblies if known
-             };
-            foreach (var assembly in priorityAssemblies.Where(a => a != null))
+            List<Assembly> priorityAssemblies = new List<Assembly>();
+            foreach (var assemblyName in new[] { "Assembly-CSharp", "Assembly-CSharp-Editor" })
+            {
+                try
+                {
+                    var asm = Assembly.Load(assemblyName);
+                    if (asm != null) priorityAssemblies.Add(asm);
+                }
+                catch { /* Assembly doesn't exist, skip it */ }
+            }
+
+            foreach (var assembly in priorityAssemblies)
             {
                 type = assembly.GetType(typeName) ?? assembly.GetType("UnityEngine." + typeName) ?? assembly.GetType("UnityEditor." + typeName);
                 if (type != null) return type;
@@ -2767,4 +2814,5 @@ namespace UnityMcpBridge.Editor.Tools
         // They are now in Helpers.GameObjectSerializer
     }
 }
+
 

@@ -172,14 +172,15 @@
 
 
 
-- [] Auto add the "XR Grab Interactable" script to the newly created objects
+- [X] Auto add the "XR Grab Interactable" script to the newly created objects to control them with VR controllers
 - [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
 - [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 - [] Create a test scene room with objects to test the Grab interaction and MCP tools
 
 
-
+- [] Create a cancel request button
+- [] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
 
 
 
@@ -200,8 +201,6 @@
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 
 - [] Make the error text canvas more informative, e.g., print LLM responce for why tool calling failed to the screen canvas
-
-- [] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
 
 - [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
 
