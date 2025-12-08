@@ -163,6 +163,7 @@
    with args {'action': 'create', 'layer': 'default', 'name': 'beta', 'parent': 'default', 'primitive_type': 'Cube', 'tag': 'default'}, 
    result: {"success": false, "message": "Parent specified ('default') but not found."}
 
+- [X] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
 
 
 
@@ -174,8 +175,6 @@
 
 
 - [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
-
-- [] Find a way to restart and kill all the processes of Ollama and clear the port 11434. Because by default there are no commands to restart Ollama, find a git repo that does that (e.g. a powershell script)
 
 - [] Add "Change Color" action (will add later. Implementation plan is 1st create the material with ManageAsset.cs script, then assign it to the object using ManageGameObject.cs script tool and set_component_property action)
 
