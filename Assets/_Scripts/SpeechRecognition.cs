@@ -90,6 +90,9 @@ public class SpeechRecognition : MonoBehaviour
             Debug.Log("Recognized: " + recognizedSpeech);
             if (mcpPromptSender != null)
             {
+                // Show user prompt on screen
+                mcpPromptSender.ShowUserPrompt(recognizedSpeech);
+
                 // Sending recognized speech to MCP bridge
                 mcpPromptSender.testPrompt = recognizedSpeech;
                 mcpPromptSender.Send(recognizedSpeech);

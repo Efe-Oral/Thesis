@@ -420,17 +420,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247783896}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -7.53}
-  m_LocalScale: {x: 0.005, y: 0.005, z: 0.60402}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.9403288, y: 4.563039, z: 5.156234}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 665289782}
-  m_Father: {fileID: 1726206531}
+  m_Children: []
+  m_Father: {fileID: 665289782}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -371.93, y: -223.04999}
+  m_AnchoredPosition: {x: 26.000854, y: 83.50137}
   m_SizeDelta: {x: 415.5479, y: 22.0449}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &247783898
@@ -1526,7 +1525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &665289782
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1535,16 +1534,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 665289781}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.51537657, y: 0.2191522, z: 0.19394}
+  m_LocalPosition: {x: 0, y: 0, z: -7.53}
+  m_LocalScale: {x: 0.0025768827, y: 0.001095761, z: 0.11714364}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 247783897}
+  m_Children:
+  - {fileID: 247783897}
+  m_Father: {fileID: 1726206531}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -13.4, y: -18.3}
-  m_SizeDelta: {x: 430, y: 371.2}
+  m_AnchoredPosition: {x: -371.99698, y: -223.1415}
+  m_SizeDelta: {x: 102.74786, y: -56.755096}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &665289783
 MonoBehaviour:
@@ -2665,11 +2665,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596c36394aceca24899006c096b99925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userPromptMessage: {fileID: 665289781}
+  userPromptText: {fileID: 247783898}
   successMessage: {fileID: 115495761}
   successSound: {fileID: 8300000, guid: a77b142d2d2eb7444af8e01e87c01a54, type: 3}
   errorMessage: {fileID: 397767639}
   errorSound: {fileID: 8300000, guid: 74e601ebad1e29c4abd9725424a58380, type: 3}
-  showSeconds: 5.5
+  showSeconds: 4.5
   model: shmily_006/Qw3:latest
   systemPrompt: You control Unity game engine only by calling MCP tools exposed by
     unityMCP, primarily using manage_gameobject tool. Output valid JSON only. No
@@ -3352,9 +3354,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 665289782}
   - {fileID: 115495762}
   - {fileID: 397767640}
-  - {fileID: 247783897}
   m_Father: {fileID: 1817673581}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 public class McpPromptSender : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class McpPromptSender : MonoBehaviour
     private string apiUrl = "http://localhost:8000/api/chat";
     private float requestTimeout = 30f; // Timeout in seconds
 
+    [SerializeField] public GameObject userPromptMessage;
+    [SerializeField] public TextMeshProUGUI userPromptText;
     [SerializeField] public GameObject successMessage;
     [SerializeField] private AudioClip successSound;
     [SerializeField] public GameObject errorMessage;
@@ -70,6 +73,27 @@ public class McpPromptSender : MonoBehaviour
     public void SendFromInspector()
     {
         StartCoroutine(SendCoroutine(testPrompt));
+    }
+
+    // Public method to show user prompt from SpeechRecognition
+    public void ShowUserPrompt(string promptText)
+    {
+        StartCoroutine(ShowUserPromptMessage(promptText));
+    }
+
+    private IEnumerator ShowUserPromptMessage(string promptText)
+    {
+        if (userPromptMessage != null)
+        {
+            if (userPromptText != null)
+            {
+                userPromptText.text = "User: " + promptText;
+            }
+
+            userPromptMessage.SetActive(true);
+            yield return new WaitForSeconds(showSeconds);
+            userPromptMessage.SetActive(false);
+        }
     }
 
     private IEnumerator ShowLLMMessage()
