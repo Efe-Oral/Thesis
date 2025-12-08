@@ -474,15 +474,22 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Set Parent
             JToken parentToken = @params["parent"];
-            if (parentToken != null)
+            if (parentToken != null && parentToken.Type != JTokenType.Null)
             {
-                GameObject parentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path"); // Flexible parent finding
-                if (parentGo == null)
+                string parentStr = parentToken.ToString().Trim();
+                // Treatingh default, empty string, or none as "no parent specified"
+                if (!string.IsNullOrEmpty(parentStr) &&
+                    !parentStr.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                    !parentStr.Equals("none", StringComparison.OrdinalIgnoreCase))
                 {
-                    UnityEngine.Object.DestroyImmediate(newGo); // Clean up created object
-                    return Response.Error($"Parent specified ('{parentToken}') but not found.");
+                    GameObject parentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path"); // find with name or path in the scene
+                    if (parentGo == null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(newGo);
+                        return Response.Error($"Parent specified ('{parentToken}') but not found.");
+                    }
+                    newGo.transform.SetParent(parentGo.transform, true);
                 }
-                newGo.transform.SetParent(parentGo.transform, true); // worldPositionStays = true
             }
 
             // Set Transform
@@ -498,10 +505,12 @@ namespace UnityMcpBridge.Editor.Tools
                 newGo.transform.localScale = scale.Value;
 
             // Set Tag (added for create action)
-            if (!string.IsNullOrEmpty(tag))
+            if (!string.IsNullOrEmpty(tag) &&
+                !tag.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !tag.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 // Similar logic as in ModifyGameObject for setting/creating tags
-                string tagToSet = string.IsNullOrEmpty(tag) ? "Untagged" : tag;
+                string tagToSet = tag;
                 try
                 {
                     newGo.tag = tagToSet;
@@ -541,7 +550,9 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Set Layer (new for create action)
             string layerName = @params["layer"]?.ToString();
-            if (!string.IsNullOrEmpty(layerName))
+            if (!string.IsNullOrEmpty(layerName) &&
+                !layerName.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !layerName.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 int layerId = LayerMask.NameToLayer(layerName);
                 if (layerId != -1)
@@ -933,27 +944,30 @@ namespace UnityMcpBridge.Editor.Tools
             JToken parentToken = @params["parent"];
             if (parentToken != null)
             {
-                GameObject newParentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path");
-                // Check for hierarchy loops
-                if (
-                    newParentGo == null
-                    && !(
-                        parentToken.Type == JTokenType.Null
-                        || (
-                            parentToken.Type == JTokenType.String
-                            && string.IsNullOrEmpty(parentToken.ToString())
-                        )
-                    )
-                )
+                string parentStr = parentToken.ToString().Trim();
+                // Treat "default", empty string, or "none" as no parent
+                bool shouldClearParent = string.IsNullOrEmpty(parentStr) ||
+                                        parentStr.Equals("default", StringComparison.OrdinalIgnoreCase) ||
+                                        parentStr.Equals("none", StringComparison.OrdinalIgnoreCase) ||
+                                        parentToken.Type == JTokenType.Null;
+
+                GameObject newParentGo = null;
+
+                if (!shouldClearParent)
                 {
-                    return Response.Error($"New parent ('{parentToken}') not found.");
+                    newParentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path");
+                    if (newParentGo == null)
+                    {
+                        return Response.Error($"New parent ('{parentToken}') not found.");
+                    }
+                    if (newParentGo.transform.IsChildOf(targetGo.transform))
+                    {
+                        return Response.Error(
+                            $"Cannot parent '{targetGo.name}' to '{newParentGo.name}', as it would create a hierarchy loop."
+                        );
+                    }
                 }
-                if (newParentGo != null && newParentGo.transform.IsChildOf(targetGo.transform))
-                {
-                    return Response.Error(
-                        $"Cannot parent '{targetGo.name}' to '{newParentGo.name}', as it would create a hierarchy loop."
-                    );
-                }
+
                 if (targetGo.transform.parent != (newParentGo?.transform))
                 {
                     targetGo.transform.SetParent(newParentGo?.transform, true); // worldPositionStays = true
@@ -972,8 +986,10 @@ namespace UnityMcpBridge.Editor.Tools
             // Change Tag (using consolidated 'tag' parameter)
             string tag = @params["tag"]?.ToString();
             // Only attempt to change tag if a non-null tag is provided and it's different from the current one.
-            // Allow setting an empty string to remove the tag (Unity uses "Untagged").
-            if (tag != null && targetGo.tag != tag)
+            // Treat "default" or "none" as "skip tag change" basically tag is optional
+            if (tag != null && targetGo.tag != tag &&
+                !tag.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !tag.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 // Ensure the tag is not empty, if empty, it means "Untagged" implicitly
                 string tagToSet = string.IsNullOrEmpty(tag) ? "Untagged" : tag;
@@ -1025,10 +1041,12 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Change Layer (using consolidated 'layer' parameter)
             string layerName = @params["layer"]?.ToString();
-            if (!string.IsNullOrEmpty(layerName))
+            if (!string.IsNullOrEmpty(layerName) &&
+                !layerName.Equals("default", StringComparison.OrdinalIgnoreCase) &&
+                !layerName.Equals("none", StringComparison.OrdinalIgnoreCase))
             {
                 int layerId = LayerMask.NameToLayer(layerName);
-                if (layerId == -1 && layerName != "Default")
+                if (layerId == -1 && !layerName.Equals("Default", StringComparison.OrdinalIgnoreCase))
                 {
                     return Response.Error(
                         $"Invalid layer specified: '{layerName}'. Use a valid layer name."
