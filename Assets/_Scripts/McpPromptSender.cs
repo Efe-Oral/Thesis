@@ -44,6 +44,8 @@ public class McpPromptSender : MonoBehaviour
     private List<string> conversationHistory = new List<string>();
     private const int maxHistory = 6; // 6 back and forth interactions = 3 dialogs
 
+    public bool IsBusy { get; private set; }
+
     [System.Serializable]
     private class Message { public string role; public string content; public Message(string r, string c) { role = r; content = c; } }
 
@@ -126,6 +128,10 @@ public class McpPromptSender : MonoBehaviour
 
     private IEnumerator SendCoroutine(string userPrompt)
     {
+        if (IsBusy)
+            yield break;
+
+        IsBusy = true;
         lastPrompt = userPrompt;
 
         // Add user message to history
@@ -168,6 +174,7 @@ public class McpPromptSender : MonoBehaviour
             {
                 LLMResponse = $"HTTP {req.responseCode} - {req.error}\n{req.downloadHandler.text}";
                 Debug.LogError(LLMResponse);
+                IsBusy = false;
                 yield break;
             }
 
@@ -191,6 +198,8 @@ public class McpPromptSender : MonoBehaviour
 
             Debug.Log($"MCP response: {LLMResponse}");
         }
+
+        IsBusy = false;
     }
 
     private IEnumerator HandleFeedback(bool isSuccess)

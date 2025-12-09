@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using Microsoft.CognitiveServices.Speech;
@@ -10,6 +11,10 @@ public class SpeechRecognition : MonoBehaviour
 {
     [Header("MCP Prompt Sender")]
     [SerializeField] private McpPromptSender mcpPromptSender;
+
+    [Header("Input Busy UI")]
+    [SerializeField] private GameObject busyPanel;
+    [SerializeField] private float busyShowSeconds = 1.0f;
 
     [Header("Azure Speech Settings")]
     [SerializeField] private string speechKey = "DuTF9airVdsZZpxpgaQBj0TgJbQtkxGW22Cwrb014SyboVhXoziOJQQJ99BCACPV0roXJ3w3AAAYACOGBSBH";
@@ -24,6 +29,8 @@ public class SpeechRecognition : MonoBehaviour
     private bool isRecognizing = false;
 
     private bool prevB;
+
+    private Coroutine busyPanelCoroutine;
 
     public string recognizedSpeech;
 
@@ -51,6 +58,12 @@ public class SpeechRecognition : MonoBehaviour
             {
                 Debug.Log("Speech recognition already in progress...");
                 PlaySound(buzzSound);
+            }
+            // Block new input while MCP request is being proccesed
+            else if (mcpPromptSender != null && mcpPromptSender.IsBusy)
+            {
+                Debug.Log("MCP busy, please wait for previous response...");
+                ShowBusyBlocked();
             }
             else
             {
@@ -115,5 +128,25 @@ public class SpeechRecognition : MonoBehaviour
         {
             audioSource.PlayOneShot(clip);
         }
+    }
+
+    private void ShowBusyBlocked()
+    {
+        PlaySound(buzzSound);
+        if (busyPanel == null)
+            return;
+
+        if (busyPanelCoroutine != null)
+            StopCoroutine(busyPanelCoroutine);
+
+        busyPanelCoroutine = StartCoroutine(ShowBusyPanel());
+    }
+
+    private IEnumerator ShowBusyPanel()
+    {
+        busyPanel.SetActive(true);
+        yield return new WaitForSeconds(busyShowSeconds);
+        busyPanel.SetActive(false);
+        busyPanelCoroutine = null;
     }
 }
