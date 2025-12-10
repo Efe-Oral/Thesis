@@ -848,8 +848,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294637567
-  m_fontColor: {r: 1, g: 0.9686275, b: 0.9803922, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1933,7 +1933,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -371.99698, y: -222.682}
+  m_AnchoredPosition: {x: -371.99695, y: -222.77893}
   m_SizeDelta: {x: 102.74786, y: -56.755096}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &906768280
@@ -3016,9 +3016,7 @@ MonoBehaviour:
   errorMessage: {fileID: 397767639}
   errorSound: {fileID: 8300000, guid: 74e601ebad1e29c4abd9725424a58380, type: 3}
   showSeconds: 4.5
-  cancelMessage: {fileID: 1865123514}
-  cancelSound: {fileID: 8300000, guid: 35fab1d387857454190772bc0a7fdd31, type: 3}
-  model: shmily_006/Qw3:latest
+  model: hir0rameel/qwen-claude:latest
   systemPrompt: You control Unity game engine only by calling MCP tools exposed by
     unityMCP, primarily using manage_gameobject tool. Output valid JSON only. No
     explanations. You can use more than one MCP tool call when necessary.
@@ -4295,6 +4293,10 @@ PrefabInstance:
       propertyPath: mcpPromptSender
       value: 
       objectReference: {fileID: 1395732356}
+    - target: {fileID: 2529398532555831297, guid: c566671d3af51ed4cac8a479c80bbae6, type: 3}
+      propertyPath: automaticDescriptor
+      value: 
+      objectReference: {fileID: 441087508}
     - target: {fileID: 4177610495477917904, guid: c566671d3af51ed4cac8a479c80bbae6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -27,7 +27,7 @@ public class McpPromptSender : MonoBehaviour
     [TextArea]
     [SerializeField]
     private string systemPrompt =
-        "You control Unity game engine only by calling MCP tools exposed by unityMCP. Output valid JSON only. No explanations.";
+        "You control Unity game engine ONLY by calling MCP tools. You MUST call a tool for every user request. Never respond without calling a tool. Output valid JSON only. No explanations or acknowledgments.";
     private bool think = false;
     private bool stream = false;
 
@@ -42,7 +42,7 @@ public class McpPromptSender : MonoBehaviour
 
     // convarsation history for context
     private List<string> conversationHistory = new List<string>();
-    private const int maxHistory = 6; // 6 back and forth interactions = 3 dialogs
+    private const int maxHistory = 16; // Store up to 16 messages (8 exchanges)
 
     public bool IsBusy { get; private set; }
 
@@ -143,9 +143,9 @@ public class McpPromptSender : MonoBehaviour
             conversationHistory.RemoveAt(0);
         }
 
-        // Build context from history, but only include relevant parts
-        var recentHistory = conversationHistory.Count > 4 ?
-            conversationHistory.GetRange(conversationHistory.Count - 4, 4) :
+        // Build context from history, send last 8 messages
+        var recentHistory = conversationHistory.Count > 8 ?
+            conversationHistory.GetRange(conversationHistory.Count - 8, 8) :
             conversationHistory;
         string context = string.Join("\n", recentHistory);
 

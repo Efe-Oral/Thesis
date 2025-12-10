@@ -170,17 +170,19 @@
 - [X] Auto add the "XR Grab Interactable" script to the newly created objects to control them with VR controllers
 - [X] Check if the "POST /api/chat HTTP/1.1" 200 OK response came from the LLM returned. It indicates the end of its response, only accept new input prompts once 200 OK returns
 
-
-
-
-
-
-
-- [] Create a cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
-
-- [] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
+- [X] Find a way to adress to "THIS" (as in the gameobject being looked at) gameobejct to send alongside with the prompt maybe use Object.GetInstanceID or use GUID or just use the object's name
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
    | Maybe creat a dictinory for the commond words like "THIS", "THAT", "IT" and so on and match them to currentLookedObject.name of the object from the raycast
+
+
+
+
+
+
+
+- [] New model addedhir0rameel/qwen-claude:latest, test it might be better than shmily_006/Qw3:latest
+
+- [] Create a cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
 
 
 

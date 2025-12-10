@@ -12,6 +12,9 @@ public class SpeechRecognition : MonoBehaviour
     [Header("MCP Prompt Sender")]
     [SerializeField] private McpPromptSender mcpPromptSender;
 
+    [Header("Look Detection")]
+    [SerializeField] private AutomaticDescriptor automaticDescriptor;
+
     [Header("Input Busy UI")]
     [SerializeField] private GameObject busyPanel;
     [SerializeField] private float busyShowSeconds = 1.0f;
@@ -101,14 +104,17 @@ public class SpeechRecognition : MonoBehaviour
         {
             recognizedSpeech = result.Text;
             Debug.Log("Recognized: " + recognizedSpeech);
+
+            string processedSpeech = ReplacePronounsWithObjectName(recognizedSpeech);
+
             if (mcpPromptSender != null)
             {
                 // Show user prompt on screen
-                mcpPromptSender.ShowUserPrompt(recognizedSpeech);
+                mcpPromptSender.ShowUserPrompt(processedSpeech);
 
                 // Sending recognized speech to MCP bridge
-                mcpPromptSender.testPrompt = recognizedSpeech;
-                mcpPromptSender.Send(recognizedSpeech);
+                mcpPromptSender.testPrompt = processedSpeech;
+                mcpPromptSender.Send(processedSpeech);
 
             }
             else
@@ -148,5 +154,31 @@ public class SpeechRecognition : MonoBehaviour
         yield return new WaitForSeconds(busyShowSeconds);
         busyPanel.SetActive(false);
         busyPanelCoroutine = null;
+    }
+
+    private string ReplacePronounsWithObjectName(string speech)
+    {
+        if (automaticDescriptor == null || automaticDescriptor.lastLokkedObject == null)
+        {
+            return speech;
+        }
+
+        string objectName = automaticDescriptor.lastLokkedObject.name;
+        string modified = speech;
+
+        // Replace "this" and "that" with object name if looking at something
+
+        if (modified.ToLower().Contains("this"))
+        {
+            modified = System.Text.RegularExpressions.Regex.Replace(modified, @"\bthis\b", objectName, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            Debug.Log($"Replaced 'this' with '{objectName}': {modified}");
+        }
+        if (modified.ToLower().Contains("that"))
+        {
+            modified = System.Text.RegularExpressions.Regex.Replace(modified, @"\bthat\b", objectName, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            Debug.Log($"Replaced 'that' with '{objectName}': {modified}");
+        }
+
+        return modified;
     }
 }
