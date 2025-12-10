@@ -1463,6 +1463,7 @@ namespace UnityMcpBridge.Editor.Tools
             string searchMethod
         )
         {
+            // Use the same approach as 'modify' action for set_component_property action
             GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
             if (targetGo == null)
             {
@@ -1471,38 +1472,39 @@ namespace UnityMcpBridge.Editor.Tools
                 );
             }
 
-            string compName = @params["componentName"]?.ToString();
-            JObject propertiesToSet = null;
-
-            if (!string.IsNullOrEmpty(compName))
+            // Iterate through componentProperties just like 'modify' action does
+            if (@params["componentProperties"] is JObject componentPropertiesObj)
             {
-                // Properties might be directly under componentProperties or nested under the component name
-                if (@params["componentProperties"] is JObject compProps)
+                bool anySuccess = false;
+                foreach (var prop in componentPropertiesObj.Properties())
                 {
-                    propertiesToSet = compProps[compName] as JObject ?? compProps; // Allow flat or nested structure
+                    string compName = prop.Name;
+                    JObject propertiesToSet = prop.Value as JObject;
+                    if (propertiesToSet != null)
+                    {
+                        var setResult = SetComponentPropertiesInternal(
+                            targetGo,
+                            compName,
+                            propertiesToSet
+                        );
+                        if (setResult != null)
+                            return setResult; // Return error
+                        anySuccess = true;
+                    }
+                }
+
+                if (anySuccess)
+                {
+                    EditorUtility.SetDirty(targetGo);
+                    return Response.Success(
+                        $"Component properties updated on '{targetGo.name}'.",
+                        Helpers.GameObjectSerializer.GetGameObjectData(targetGo)
+                    );
                 }
             }
-            else
-            {
-                return Response.Error("'componentName' parameter is required.");
-            }
 
-            if (propertiesToSet == null || !propertiesToSet.HasValues)
-            {
-                return Response.Error(
-                    "'componentProperties' dictionary for the specified component is required and cannot be empty."
-                );
-            }
-
-            var setResult = SetComponentPropertiesInternal(targetGo, compName, propertiesToSet);
-            if (setResult != null)
-                return setResult; // Return error
-
-            EditorUtility.SetDirty(targetGo);
-            // Use the new serializer helper
-            return Response.Success(
-                $"Properties set for component '{compName}' on '{targetGo.name}'.",
-                Helpers.GameObjectSerializer.GetGameObjectData(targetGo)
+            return Response.Error(
+                "'componentProperties' dictionary is required (e.g., {'Rigidbody': {'useGravity': false}})."
             );
         }
 

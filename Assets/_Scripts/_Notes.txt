@@ -179,13 +179,34 @@
    | NEW DEFAULT MODEL IS addedhir0rameel/qwen-claude:latest
 
 - [X] Try this new Ollama model for MCP tool calling: ollama pull granite4:micro-h (https://ollama.com/library/granite4)
+- [X] Modifyng gravity feature is problamatic, fix that
+
+
+
+
+
+- [] Create a TRUE cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
+- [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
+- [] pop-up window after recognziing speech to confirm that captured speech is correct (can be an option to disable from the main menu)
+- [] make a command to clear LLM history to use it in main menu
+- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
 
 
 
 
 
 
-- [] Create a cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
+
+
+
+
+
+
+
+- [] Create a test scene room with objects to test the Grab interaction and MCP tools
+- [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
+- [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
+- [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
 
 - [] Test new LLMs;
    | [] rnj-1:8b
@@ -195,28 +216,15 @@
    | [] qwen3:8b
    | [] qwen3:32b
 
+- [] create a main menu with the options: clear LLM history;save every change the current state of the game; enable/disable confirmation pop-up window; restart the scene; controller layout image
 
-- [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
-- [] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
-- [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
-- [] Create a test scene room with objects to test the Grab interaction and MCP tools
-
-
-
-
-
-- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
+- [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
 
 - [] Create a shader for when the user presses left controller Y button to save changes to an exisitng object, a green shader scans the object as an indicator to show its been saved
-
-
-- [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 
 - [] Make the error text canvas more informative, e.g., print LLM responce for why tool calling failed to the screen canvas
-
-- [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
 
 - [] Imrpve system prompt being sent from unity. Include things like JSON schemas and Tool calling schemeas as well as avialable actions
 

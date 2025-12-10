@@ -23,7 +23,7 @@ public class McpPromptSender : MonoBehaviour
     private bool isSuccessMessageTrue = false;
 
     [Header("Chat config")]
-    [SerializeField] private string model = "qwen3:4b";
+    [SerializeField] private string model = "hir0rameel/qwen-claude:latest";
     [TextArea]
     [SerializeField]
     private string systemPrompt =
