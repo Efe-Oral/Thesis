@@ -174,13 +174,15 @@
    |-DESIGN CHOICE: after speaking the command a confirmation pop-up will appear to confirm the action OR assign one of the controllers to actiave raycast and when not using the controller, disable raycast
    | Maybe creat a dictinory for the commond words like "THIS", "THAT", "IT" and so on and match them to currentLookedObject.name of the object from the raycast
 
+- [X] New model addedhir0rameel/qwen-claude:latest, test it might be better than shmily_006/Qw3:latest
+   | addedhir0rameel/qwen-claude:latest >>>>> shmily_006/Qw3:latest
+   | NEW DEFAULT MODEL IS addedhir0rameel/qwen-claude:latest
 
 
 
 
 
 
-- [] New model addedhir0rameel/qwen-claude:latest, test it might be better than shmily_006/Qw3:latest
 
 - [] Create a cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
 

@@ -3017,9 +3017,9 @@ MonoBehaviour:
   errorSound: {fileID: 8300000, guid: 74e601ebad1e29c4abd9725424a58380, type: 3}
   showSeconds: 4.5
   model: hir0rameel/qwen-claude:latest
-  systemPrompt: You control Unity game engine only by calling MCP tools exposed by
-    unityMCP, primarily using manage_gameobject tool. Output valid JSON only. No
-    explanations. You can use more than one MCP tool call when necessary.
+  systemPrompt: You control Unity game engine ONLY by calling MCP tools. You MUST
+    call a tool for every user request. Never respond without calling a tool. Output
+    valid JSON only. No explanations or acknowledgments.
   temperature: 0.3
   topP: 0.8
   lastPrompt: Create 3 cubes with meshes
