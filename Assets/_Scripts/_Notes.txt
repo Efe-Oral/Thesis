@@ -178,6 +178,7 @@
    | addedhir0rameel/qwen-claude:latest >>>>> shmily_006/Qw3:latest
    | NEW DEFAULT MODEL IS addedhir0rameel/qwen-claude:latest
 
+- [X] Try this new Ollama model for MCP tool calling: ollama pull granite4:micro-h (https://ollama.com/library/granite4)
 
 
 
@@ -186,7 +187,13 @@
 
 - [] Create a cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
 
-
+- [] Test new LLMs;
+   | [] rnj-1:8b
+   | [] qwen3-next:80b
+   | [] ministral-3:14b
+   | [] ministral-3:8b
+   | [] qwen3:8b
+   | [] qwen3:32b
 
 
 - [] Send haptic feedback to the quest 2 controllers when a create action, play moe save action etc. occurs
@@ -202,7 +209,6 @@
 
 - [] Create a shader for when the user presses left controller Y button to save changes to an exisitng object, a green shader scans the object as an indicator to show its been saved
 
-- [] Try this new Ollama model for MCP tool calling: ollama pull granite4:micro-h (https://ollama.com/library/granite4)
 
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
 
