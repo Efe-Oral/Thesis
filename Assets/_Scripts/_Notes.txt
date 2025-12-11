@@ -200,12 +200,15 @@
 
 
 
+- [] pop-up window after recognziing speech to confirm that captured speech is correct (can be an option to disable from the main menu)
+- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
+
+
+
 
 - [] Create a TRUE cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script)
 - [] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests
-- [] pop-up window after recognziing speech to confirm that captured speech is correct (can be an option to disable from the main menu)
 - [] make a command to clear LLM history to use it in main menu
-- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
 
 
 
