@@ -45,6 +45,9 @@ public class McpPromptSender : MonoBehaviour
     private const int maxHistory = 16; // Store up to 16 messages (8 exchanges)
 
     public bool IsBusy { get; private set; }
+    public bool IsWaitingForConfirmation { get; private set; }
+
+    private Coroutine userPromptCoroutine;
 
     [System.Serializable]
     private class Message { public string role; public string content; public Message(string r, string c) { role = r; content = c; } }
@@ -219,12 +222,70 @@ public class McpPromptSender : MonoBehaviour
         yield break;
     }
 
-    // Clear conversation history if needed
-    public void ClearConversationHistory()
+    public void ShowUserPromptForConfirmation(string promptText)
     {
-        conversationHistory.Clear();
-        Debug.Log("Conversation history cleared");
+        // pauses processes until confirmation
+        if (userPromptCoroutine != null)
+        {
+            StopCoroutine(userPromptCoroutine);
+            userPromptCoroutine = null;
+        }
+
+        IsWaitingForConfirmation = true;
+
+        if (userPromptMessage != null)
+        {
+            if (userPromptText != null)
+            {
+                userPromptText.text = "User: " + promptText;
+            }
+
+            userPromptMessage.SetActive(true);
+            Debug.Log("Showing confirmation prompt. Waiting for user to confirm or re-record...");
+        }
     }
+
+    public void SendConfirmedPrompt(string promptText)
+    {
+        IsWaitingForConfirmation = false;
+
+        // Hide the prompt panel after showSeconds 
+        if (userPromptMessage != null)
+        {
+            userPromptCoroutine = StartCoroutine(HideUserPromptAfterDelay());
+        }
+
+        // Send to server
+        Send(promptText);
+    }
+
+    public void HideUserPrompt()
+    {
+        IsWaitingForConfirmation = false;
+
+        if (userPromptCoroutine != null)
+        {
+            StopCoroutine(userPromptCoroutine);
+            userPromptCoroutine = null;
+        }
+
+        if (userPromptMessage != null)
+        {
+            userPromptMessage.SetActive(false);
+        }
+    }
+
+    private IEnumerator HideUserPromptAfterDelay()
+    {
+        yield return new WaitForSeconds(showSeconds);
+        if (userPromptMessage != null)
+        {
+            userPromptMessage.SetActive(false);
+        }
+        userPromptCoroutine = null;
+    }
+
+
 }
 
 /* AFTER IMPROVMENTS 2

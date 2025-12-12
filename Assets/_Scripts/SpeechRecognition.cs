@@ -6,11 +6,18 @@ using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using UnityEngine.XR;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class SpeechRecognition : MonoBehaviour
 {
     [Header("MCP Prompt Sender")]
     [SerializeField] private McpPromptSender mcpPromptSender;
+
+    [Header("Confirmation Buttons")]
+    [SerializeField] private Button confirmButton;
+    [SerializeField] private Button recordAgainButton;
+    [SerializeField] private AudioClip confirmSound;
+    [SerializeField] private AudioClip cancelSound;
 
     [Header("Look Detection")]
     [SerializeField] private AutomaticDescriptor automaticDescriptor;
@@ -30,12 +37,11 @@ public class SpeechRecognition : MonoBehaviour
 
     private AudioSource audioSource;
     private bool isRecognizing = false;
-
     private bool prevB;
-
     private Coroutine busyPanelCoroutine;
 
     public string recognizedSpeech;
+    private string pendingProcessedSpeech; // Storinge processed speech waiting for confirmation from the user
 
     void Start()
     {
@@ -43,6 +49,15 @@ public class SpeechRecognition : MonoBehaviour
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        if (confirmButton != null)
+        {
+            confirmButton.onClick.AddListener(OnConfirmButtonClicked);
+        }
+        if (recordAgainButton != null)
+        {
+            recordAgainButton.onClick.AddListener(OnRecordAgainButtonClicked);
         }
     }
 
@@ -60,6 +75,12 @@ public class SpeechRecognition : MonoBehaviour
             if (isRecognizing)
             {
                 Debug.Log("Speech recognition already in progress...");
+                PlaySound(buzzSound);
+            }
+            // Block new input while waiting for user confirmation
+            else if (mcpPromptSender != null && mcpPromptSender.IsWaitingForConfirmation)
+            {
+                //Debug.Log("Please confirm or re-record the current speech first...");
                 PlaySound(buzzSound);
             }
             // Block new input while MCP request is being proccesed
@@ -107,15 +128,13 @@ public class SpeechRecognition : MonoBehaviour
 
             string processedSpeech = ReplacePronounsWithObjectName(recognizedSpeech);
 
+            // Store the processed speech for confirmation
+            pendingProcessedSpeech = processedSpeech;
+
             if (mcpPromptSender != null)
             {
-                // Show user prompt on screen
-                mcpPromptSender.ShowUserPrompt(processedSpeech);
-
-                // Sending recognized speech to MCP bridge
-                mcpPromptSender.testPrompt = processedSpeech;
-                mcpPromptSender.Send(processedSpeech);
-
+                // Showing captured input but doesn't send it yet, waits for confirmation
+                mcpPromptSender.ShowUserPromptForConfirmation(processedSpeech);
             }
             else
             {
@@ -126,6 +145,32 @@ public class SpeechRecognition : MonoBehaviour
         {
             Debug.Log("Speech not recognized.");
         }
+    }
+
+    private void OnConfirmButtonClicked()
+    {
+        //Debug.Log("User confirmed the recognized text");
+        PlaySound(confirmSound);
+
+        if (mcpPromptSender != null)
+        {
+            // Send the confirmed speech to MCP
+            mcpPromptSender.testPrompt = pendingProcessedSpeech;
+            mcpPromptSender.SendConfirmedPrompt(pendingProcessedSpeech);
+        }
+    }
+
+    private void OnRecordAgainButtonClicked()
+    {
+        //Debug.Log("User cancelled the recognized text");
+        PlaySound(cancelSound);
+
+        if (mcpPromptSender != null)
+        {
+            mcpPromptSender.HideUserPrompt();
+        }
+
+        Debug.Log("Ready for new recording. Press Space or B button to start.");
     }
 
     private void PlaySound(AudioClip clip)
