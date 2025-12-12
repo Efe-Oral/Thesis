@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.XR;
 using TMPro;
 
 public class McpPromptSender : MonoBehaviour
@@ -43,6 +44,10 @@ public class McpPromptSender : MonoBehaviour
     // convarsation history for context
     private List<string> conversationHistory = new List<string>();
     private const int maxHistory = 16; // Store up to 16 messages (8 exchanges)
+
+    // for haptic feedback
+    private InputDevice leftController;
+    private InputDevice rightController;
 
     public bool IsBusy { get; private set; }
     public bool IsWaitingForConfirmation { get; private set; }
@@ -107,6 +112,7 @@ public class McpPromptSender : MonoBehaviour
         if (!isSuccessMessageTrue)
         {
             errorMessage.SetActive(true);
+            SendHapticFeedback(0.7f, 0.4f); // Haptic for error message
             yield return new WaitForSeconds(showSeconds);
             errorMessage.SetActive(false);
         }
@@ -114,6 +120,7 @@ public class McpPromptSender : MonoBehaviour
         if (successMessage != null && isSuccessMessageTrue)
         {
             successMessage.SetActive(true);
+            SendHapticFeedback(0.4f, 0.2f); // Haptic for success message
             yield return new WaitForSeconds(showSeconds);
             successMessage.SetActive(false);
             isSuccessMessageTrue = false;
@@ -127,6 +134,7 @@ public class McpPromptSender : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+        InitializeControllers();
     }
 
     private IEnumerator SendCoroutine(string userPrompt)
@@ -285,6 +293,33 @@ public class McpPromptSender : MonoBehaviour
         userPromptCoroutine = null;
     }
 
+    private void InitializeControllers()
+    {
+        var leftDevices = new List<InputDevice>();
+        var rightDevices = new List<InputDevice>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftDevices);
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Right | InputDeviceCharacteristics.Controller, rightDevices);
+
+        if (leftDevices.Count > 0) leftController = leftDevices[0];
+        if (rightDevices.Count > 0) rightController = rightDevices[0];
+    }
+
+    private void SendHapticFeedback(float amplitude = 0.5f, float duration = 0.2f)
+    {
+        if (!leftController.isValid || !rightController.isValid)
+        {
+            InitializeControllers();
+        }
+
+        if (leftController.isValid)
+        {
+            leftController.SendHapticImpulse(0, amplitude, duration);
+        }
+        if (rightController.isValid)
+        {
+            rightController.SendHapticImpulse(0, amplitude, duration);
+        }
+    }
 
 }
 

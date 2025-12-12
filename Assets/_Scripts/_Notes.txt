@@ -202,6 +202,7 @@
 - [X] Create a TRUE cancel/kill request button (Add a server (ollama) side cancellation thats the most important thign. To do that, modify server.py script) (NEW LLMs DON'T HAVE THIS PROBLEM)
 - [X] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests (NEW LLMs DON'T HAVE THIS PROBLEM)
 - [X] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
+- [X] Send haptic feedback to the quest 2 controllers when a create action, play mod save action etc. occurs
 
 
 
@@ -214,13 +215,11 @@
 
 
 - [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
-- [] Send haptic feedback to the quest 2 controllers when a create action, play mod save action etc. occurs
 - [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
+
+
+
 - [] make a command to clear LLM history to use it in main menu
-
-
-
-
 
 - [] create a main menu with the options: clear LLM history;save every change the current state of the game; enable/disable confirmation pop-up window; restart the scene; controller layout image
 

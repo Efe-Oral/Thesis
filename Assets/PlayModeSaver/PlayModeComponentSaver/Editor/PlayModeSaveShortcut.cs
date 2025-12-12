@@ -11,6 +11,7 @@ public class PlayModeSaveShortcut : Editor
     private static HashSet<int> existingObjectIds = new HashSet<int>();
     private static bool initialized = false;
     private static bool wasXButtonPressed = false;
+    private static InputDevice leftController;
 
     static PlayModeSaveShortcut()
     {
@@ -34,10 +35,32 @@ public class PlayModeSaveShortcut : Editor
                 if (xButtonValue && !wasXButtonPressed)
                 {
                     SaveAllNewObjects();
+                    SendHapticFeedback(0.5f, 0.25f); // Haptic for manual save with X button (individual saving)
                 }
                 wasXButtonPressed = xButtonValue;
                 break;
             }
+        }
+    }
+
+    private static void InitializeControllers()
+    {
+        var leftDevices = new List<InputDevice>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftDevices);
+
+        if (leftDevices.Count > 0) leftController = leftDevices[0];
+    }
+
+    private static void SendHapticFeedback(float amplitude, float duration)
+    {
+        if (!leftController.isValid)
+        {
+            InitializeControllers();
+        }
+
+        if (leftController.isValid)
+        {
+            leftController.SendHapticImpulse(0, amplitude, duration);
         }
     }
 

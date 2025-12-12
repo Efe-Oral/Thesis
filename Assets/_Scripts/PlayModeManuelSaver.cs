@@ -17,6 +17,10 @@ public class PlayModeManuelSaver : MonoBehaviour
     [SerializeField] private bool showDebugRay = true;
     [SerializeField] private Color rayColor = Color.blue;
 
+    [Header("Haptic Feedback Settings")]
+    [SerializeField, Range(0f, 1f)] private float hapticAmplitude = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float hapticDuration = 0.25f;
+
     private bool wasYButtonPressed = false;
     private InputDevice leftHandDevice;
     private LineRenderer lineRenderer;
@@ -98,7 +102,21 @@ public class PlayModeManuelSaver : MonoBehaviour
 
         // Call the static method directly
         PlayModeSaveShortcut.SaveObjectFromRuntimeStatic(hitObject);
+        SendHapticFeedback(hapticAmplitude, hapticDuration); // Haptic for manual saving gameobj
         Debug.Log($"Attempting to save object: {hitObject.name}");
 #endif
+    }
+
+    private void SendHapticFeedback(float amplitude = 0.5f, float duration = 0.2f)
+    {
+        if (!leftHandDevice.isValid)
+        {
+            GetLeftController();
+        }
+
+        if (leftHandDevice.isValid)
+        {
+            leftHandDevice.SendHapticImpulse(0, amplitude, duration);
+        }
     }
 }
