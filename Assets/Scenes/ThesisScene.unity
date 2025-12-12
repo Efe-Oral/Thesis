@@ -1719,7 +1719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayLength: 10
   lastLokkedObject: {fileID: 0}
-  rayCameraDistance: {x: 0, y: 0, z: 1}
+  rayCameraDistance: {x: 0, y: 0.11, z: 0.05}
 --- !u!1 &441087509 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5895826684305351068, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

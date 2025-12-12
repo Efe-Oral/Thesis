@@ -38,7 +38,7 @@ public class AutomaticDescriptor : MonoBehaviour
     private void UpdateRaycast()
     {
         if (mainCamera == null) return;
-        Vector3 origin = rayCameraDistance + mainCamera.transform.position;
+        Vector3 origin = mainCamera.transform.position + mainCamera.transform.TransformDirection(rayCameraDistance);
         Vector3 direction = mainCamera.transform.forward;
         Ray ray = new Ray(origin, direction);
         RaycastHit hit;
