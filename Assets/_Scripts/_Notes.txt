@@ -203,29 +203,28 @@
 - [X] Add a session timeout for the ollama mcp bridge, some request takes too much time or doesn't process at all. Add a timeout to clear the state and make place for new requests (NEW LLMs DON'T HAVE THIS PROBLEM)
 - [X] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 - [X] Send haptic feedback to the quest 2 controllers when a create action, play mod save action etc. occurs
+- [X] Import assets to create a test scene
 
 
 
 
 
 
-
-
-
-
-
-- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
-- [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
-
-
-
-- [] make a command to clear LLM history to use it in main menu
-
-- [] create a main menu with the options: clear LLM history;save every change the current state of the game; enable/disable confirmation pop-up window; restart the scene; controller layout image
-
-- [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
 
 - [] Create a shader for when the user presses left controller Y button to save changes to an exisitng object, a green shader scans the object as an indicator to show its been saved
+
+- [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
+
+
+
+
+
+
+- [] Fix the gameobject's labes stuck in behind problem. Put them in a separete layer that it alwats visible to the camera
+
+- [] create a main menu with the options: clear LLM chat/contex history;save every change the current state of the game; enable/disable confirmation pop-up window; restart the scene; controller layout image
+
+- [] Create a Tutorial UI for user to know the controles/buttons and how to use and interact with the MCP tools.
 
 - [] Combine the scripts: BezierCurve, Callout and LazyFollow into 1 FloatingUI script
 
