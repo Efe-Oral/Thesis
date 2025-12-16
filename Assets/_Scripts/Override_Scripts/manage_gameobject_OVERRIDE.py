@@ -46,6 +46,12 @@ def register_manage_gameobject_tools(mcp: FastMCP):
         color: List[float] = None,  # RGB [r, g, b] or RGBA [r, g, b, a] values (0-1 range)
         color_name: str = None,  # Named colors: "red", "green", "blue", "yellow", "orange", "pink", "gold", "cyan", "magenta", "white", "black", "gray"
 
+        # --- Light Caster Parameters ---
+        light_type: str = None,  # Light type: "directional", "point", "spot", "area"
+        intensity: float = None,  # Light intensity (brightness)
+        range: float = None,  # Light range (for point and spot lights)
+        spot_angle: float = None,  # Spotlight cone angle in degrees (for spot lights)
+
         components_to_add: List[str] = None,  # List of component names to add
 
         primitive_type: str = None,
@@ -95,7 +101,7 @@ def register_manage_gameobject_tools(mcp: FastMCP):
 
         Args:
 
-            action: Operation (e.g., 'create', 'modify', 'find', 'duplicate', 'move', 'scale', 'change_color', 'add_component', 'remove_component', 'set_component_property').
+            action: Operation (e.g., 'create', 'modify', 'find', 'duplicate', 'move', 'scale', 'change_color', 'light_caster', 'add_component', 'remove_component', 'set_component_property').
 
             target: GameObject identifier (name or path string) for modify/delete/component actions.
 
@@ -152,6 +158,13 @@ def register_manage_gameobject_tools(mcp: FastMCP):
                                   - RGBA array: action="change_color", target="Sphere", color=[0.0, 0.0, 1.0, 0.5]
                                   - Named color: action="change_color", target="Capsule", color_name="green"
                                   - Supported color names: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray
+
+                                  Example light_caster:
+                                  
+                                  - Create point light: action="light_caster", name="PointLight1", light_type="point", intensity=2.0, color=[1, 1, 1]
+                                  - Create directional light: action="light_caster", name="Sun", light_type="directional", intensity=1.5, color_name="yellow"
+                                  - Create spotlight: action="light_caster", name="Spot1", light_type="spot", intensity=3.0, range=15.0, spot_angle=45.0, color=[1, 0, 0]
+                                  - Create area light: action="light_caster", name="AreaLight", light_type="area", intensity=1.0, color_name="white"
 
             components_to_add: List of component names to add.
 
@@ -228,6 +241,12 @@ def register_manage_gameobject_tools(mcp: FastMCP):
                 # Color parameters
                 "color": color,
                 "colorName": color_name,
+
+                # Light caster parameters
+                "lightType": light_type,
+                "intensity": intensity,
+                "range": range,
+                "spotAngle": spot_angle,
 
                 "componentsToAdd": components_to_add,
 

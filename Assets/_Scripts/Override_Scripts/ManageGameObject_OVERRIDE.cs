@@ -160,6 +160,9 @@ namespace UnityMcpBridge.Editor.Tools
                     case "change_color":
                         return ChangeGameObjectColor(@params, targetToken, searchMethod);
 
+                    case "light_caster":
+                        return CreateLightCaster(@params);
+
                     case "rename":
                         GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
                         if (targetGo == null)
@@ -2809,6 +2812,162 @@ namespace UnityMcpBridge.Editor.Tools
                     return true;
                 default:
                     return false;
+            }
+        }
+
+        private static object CreateLightCaster(JObject @params)
+        {
+            try
+            {
+                // Get light parameters
+                string name = @params["name"]?.ToString();
+                string lightType = @params["lightType"]?.ToString()?.ToLower() ?? "point";
+                float intensity = @params["intensity"]?.ToObject<float>() ?? 1.0f;
+                float range = @params["range"]?.ToObject<float>() ?? 10.0f;
+                float spotAngle = @params["spotAngle"]?.ToObject<float>() ?? 30.0f;
+
+                // applying color
+                Color lightColor = Color.white;
+                string colorName = @params["colorName"]?.ToString()?.ToLower();
+                if (!string.IsNullOrEmpty(colorName))
+                {
+                    if (!TryParseColorName(colorName, out lightColor))
+                    {
+                        return Response.Error($"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey.");
+                    }
+                }
+                else
+                {
+                    // Try RGB/RGBA array
+                    JArray colorArray = @params["color"] as JArray;
+                    if (colorArray != null && (colorArray.Count == 3 || colorArray.Count == 4))
+                    {
+                        try
+                        {
+                            float r = colorArray[0].ToObject<float>();
+                            float g = colorArray[1].ToObject<float>();
+                            float b = colorArray[2].ToObject<float>();
+                            float a = colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
+
+                            // Clamp values to 0-1 range
+                            r = Mathf.Clamp01(r);
+                            g = Mathf.Clamp01(g);
+                            b = Mathf.Clamp01(b);
+                            a = Mathf.Clamp01(a);
+
+                            lightColor = new Color(r, g, b, a);
+                        }
+                        catch (Exception ex)
+                        {
+                            return Response.Error($"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1.");
+                        }
+                    }
+                }
+
+                // change position
+                Vector3 position = Vector3.zero;
+                Vector3? parsedPosition = ParseVector3(@params["position"] as JArray);
+                if (parsedPosition.HasValue)
+                {
+                    position = parsedPosition.Value;
+                }
+                else
+                {
+                    // Auto-position by default
+                    position = lastCreationPosition + new Vector3(creationCount * objectSpacing, 0, 0);
+                    creationCount++;
+                }
+
+                // apply rotation
+                Vector3 rotation = new Vector3(90, 0, 0); // Default rotation for directional light pointing down
+                Vector3? parsedRotation = ParseVector3(@params["rotation"] as JArray);
+                if (parsedRotation.HasValue)
+                {
+                    rotation = parsedRotation.Value;
+                }
+
+                // apply LightType
+                LightType unityLightType = LightType.Point;
+                switch (lightType)
+                {
+                    case "directional":
+                        unityLightType = LightType.Directional;
+                        break;
+                    case "point":
+                        unityLightType = LightType.Point;
+                        break;
+                    case "spot":
+                        unityLightType = LightType.Spot;
+                        break;
+                    case "area":
+                        unityLightType = LightType.Rectangle;
+                        break;
+                    default:
+                        return Response.Error($"Invalid light type: '{lightType}'. Supported types: directional, point, spot, area.");
+                }
+
+                // Create GameObject
+                GameObject lightGo = new GameObject(string.IsNullOrEmpty(name) ? $"{lightType}Light" : name);
+
+                //  undo possiblity
+                Undo.RegisterCreatedObjectUndo(lightGo, "Create Light");
+
+                // Setting position and rotation
+                lightGo.transform.position = position;
+                lightGo.transform.eulerAngles = rotation;
+
+                // attach Light component
+                Light lightComponent = lightGo.AddComponent<Light>();
+                lightComponent.type = unityLightType;
+                lightComponent.color = lightColor;
+                lightComponent.intensity = intensity;
+
+                // Set range for point and spot lights
+                if (unityLightType == LightType.Point || unityLightType == LightType.Spot)
+                {
+                    lightComponent.range = range;
+                }
+
+                // Set spot angle for spot lights
+                if (unityLightType == LightType.Spot)
+                {
+                    lightComponent.spotAngle = spotAngle;
+                }
+
+                JToken parentToken = @params["parent"];
+                if (parentToken != null)
+                {
+                    GameObject parentGo = FindObjectInternal(parentToken, null);
+                    if (parentGo != null)
+                    {
+                        Undo.SetTransformParent(lightGo.transform, parentGo.transform, "Set Light Parent");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Parent GameObject not found: {parentToken}. Light created without parent.");
+                    }
+                }
+
+                EditorUtility.SetDirty(lightGo);
+
+                string lightDescription = $"{lightType} light '{lightGo.name}' with color {lightColor}, intensity {intensity}";
+                if (unityLightType == LightType.Point || unityLightType == LightType.Spot)
+                {
+                    lightDescription += $", range {range}";
+                }
+                if (unityLightType == LightType.Spot)
+                {
+                    lightDescription += $", spot angle {spotAngle}";
+                }
+
+                return Response.Success(
+                    $"Created {lightDescription} at position {position}.",
+                    Helpers.GameObjectSerializer.GetGameObjectData(lightGo)
+                );
+            }
+            catch (Exception e)
+            {
+                return Response.Error($"Error creating light: {e.Message}");
             }
         }
 

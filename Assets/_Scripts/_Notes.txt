@@ -204,7 +204,7 @@
 - [X] Fix the problem with Raycast on top of the user, when the user turns the raycast also rotates because its a child to the camera
 - [X] Send haptic feedback to the quest 2 controllers when a create action, play mod save action etc. occurs
 - [X] Import assets to create a test scene
-
+- [X] Crea an action to add ligh source to the scene
 
 
 
