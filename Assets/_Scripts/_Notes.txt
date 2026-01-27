@@ -205,17 +205,16 @@
 - [X] Send haptic feedback to the quest 2 controllers when a create action, play mod save action etc. occurs
 - [X] Import assets to create a test scene
 - [X] Crea an action to add ligh source to the scene
+- [X] Try this new model olmo-3.1:32b (DOES NOT SUPPORT TOOLs)
 
 
 
 
-
-
-- [] Create a shader for when the user presses left controller Y button to save changes to an exisitng object, a green shader scans the object as an indicator to show its been saved
+- [] Create a enum (dropbox) for best LLMs
 
 - [] Add undo/redo action for modified assets in game (https://assetstore.unity.com/packages/tools/level-design/rundo-runtime-editor-inspector-hierarchy-undo-225257)
 
-
+- [] Create a shader for when the user presses left controller Y button to save changes to an exisitng object, a green shader scans the object as an indicator to show its been saved
 
 
 
