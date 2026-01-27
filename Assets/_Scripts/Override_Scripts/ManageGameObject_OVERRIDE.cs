@@ -2890,9 +2890,6 @@ namespace UnityMcpBridge.Editor.Tools
                 LightType unityLightType = LightType.Point;
                 switch (lightType)
                 {
-                    case "directional":
-                        unityLightType = LightType.Directional;
-                        break;
                     case "point":
                         unityLightType = LightType.Point;
                         break;
@@ -2903,7 +2900,7 @@ namespace UnityMcpBridge.Editor.Tools
                         unityLightType = LightType.Rectangle;
                         break;
                     default:
-                        return Response.Error($"Invalid light type: '{lightType}'. Supported types: directional, point, spot, area.");
+                        return Response.Error($"Invalid light type: '{lightType}'. Supported types: point, spot, area.");
                 }
 
                 // Create GameObject

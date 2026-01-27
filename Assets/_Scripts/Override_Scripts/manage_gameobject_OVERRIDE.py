@@ -47,7 +47,7 @@ def register_manage_gameobject_tools(mcp: FastMCP):
         color_name: str = None,  # Named colors: "red", "green", "blue", "yellow", "orange", "pink", "gold", "cyan", "magenta", "white", "black", "gray"
 
         # --- Light Caster Parameters ---
-        light_type: str = None,  # Light type: "directional", "point", "spot", "area"
+        light_type: str = None,  # Light type: "point", "spot", "area"
         intensity: float = None,  # Light intensity (brightness)
         range: float = None,  # Light range (for point and spot lights)
         spot_angle: float = None,  # Spotlight cone angle in degrees (for spot lights)
@@ -162,7 +162,6 @@ def register_manage_gameobject_tools(mcp: FastMCP):
                                   Example light_caster:
                                   
                                   - Create point light: action="light_caster", name="PointLight1", light_type="point", intensity=2.0, color=[1, 1, 1]
-                                  - Create directional light: action="light_caster", name="Sun", light_type="directional", intensity=1.5, color_name="yellow"
                                   - Create spotlight: action="light_caster", name="Spot1", light_type="spot", intensity=3.0, range=15.0, spot_angle=45.0, color=[1, 0, 0]
                                   - Create area light: action="light_caster", name="AreaLight", light_type="area", intensity=1.0, color_name="white"
 
