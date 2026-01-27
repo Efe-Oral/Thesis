@@ -3,65 +3,16 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using System.Collections.Generic;
 using Framework.Utils.Editor;
-using UnityEngine.XR;
 
 [InitializeOnLoad]
 public class PlayModeSaveShortcut : Editor
 {
     private static HashSet<int> existingObjectIds = new HashSet<int>();
     private static bool initialized = false;
-    private static bool wasXButtonPressed = false;
-    private static InputDevice leftController;
 
     static PlayModeSaveShortcut()
     {
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-        EditorApplication.update += CheckControllerInput;
-    }
-
-    private static void CheckControllerInput()
-    {
-        if (!Application.isPlaying) return;
-
-        var leftHandDevices = new List<InputDevice>();
-        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftHandDevices);
-
-        foreach (var device in leftHandDevices)
-        {
-            bool xButtonValue;
-            if (device.TryGetFeatureValue(CommonUsages.primaryButton, out xButtonValue))
-            {
-                // Check for button press
-                if (xButtonValue && !wasXButtonPressed)
-                {
-                    SaveAllNewObjects();
-                    SendHapticFeedback(0.5f, 0.25f); // Haptic for manual save with X button (individual saving)
-                }
-                wasXButtonPressed = xButtonValue;
-                break;
-            }
-        }
-    }
-
-    private static void InitializeControllers()
-    {
-        var leftDevices = new List<InputDevice>();
-        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.Left | InputDeviceCharacteristics.Controller, leftDevices);
-
-        if (leftDevices.Count > 0) leftController = leftDevices[0];
-    }
-
-    private static void SendHapticFeedback(float amplitude, float duration)
-    {
-        if (!leftController.isValid)
-        {
-            InitializeControllers();
-        }
-
-        if (leftController.isValid)
-        {
-            leftController.SendHapticImpulse(0, amplitude, duration);
-        }
     }
 
     private static void OnPlayModeStateChanged(PlayModeStateChange state)
@@ -71,7 +22,6 @@ public class PlayModeSaveShortcut : Editor
             // Storeing all existing object IDs when entering play mode
             StoreExistingObjects();
             initialized = true;
-            wasXButtonPressed = false;
         }
         else if (state == PlayModeStateChange.ExitingPlayMode)
         {
@@ -108,7 +58,7 @@ public class PlayModeSaveShortcut : Editor
     }
 
     [MenuItem("Tools/Save All New Objects #o")] // Shift + O
-    private static void SaveAllNewObjects()
+    public static void SaveAllNewObjects()
     {
         if (!Application.isPlaying)
         {
@@ -227,13 +177,7 @@ public class PlayModeSaveShortcut : Editor
         return savedCount;
     }
 
-    private void OnDisable()
-    {
-        // Clean up
-        EditorApplication.update -= CheckControllerInput;
-    }
-
-    // This method will be called from PlayModeManuelSaver
+    // This method is called from PlayModeManuelSaver
     public void SaveObjectFromRuntime(GameObject obj)
     {
         if (!Application.isPlaying)

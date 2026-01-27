@@ -207,13 +207,13 @@
 - [X] Crea an action to add ligh source to the scene
 - [X] Try this new model olmo-3.1:32b (DOES NOT SUPPORT TOOLs)
 - [X] Change the deafult light_caster light to point light
+- [X] Create a UI for save everything button (left controller Y)
+- [X] Create a UI for save individual object button (left controller X)
 
 
 
 
-- [] Create a UI for save everything button (left controller Y)
 
-- [] Create a UI for save individual object button (left controller X)
 
 
 
