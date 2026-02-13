@@ -215,9 +215,9 @@
 
 
 
+- [] Upload the thesis pdf to the repo
 
-
-
+- [] Implement a "spatial search" method based on the main camera
 
 - [] Create a enum (dropbox) for best LLMs
 
