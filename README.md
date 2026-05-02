@@ -1,6 +1,6 @@
 <img width="1395" height="170" alt="thesis-ascii-art" src="https://github.com/user-attachments/assets/fba50dcd-2c52-4728-a6e8-2c394b71de94" />
 
-> **LLM-powered voice interaction in Virtual Reality**. A Unity-based master thesis project that connects a VR environment through a local or remote Ollama LLM via the Model Context Protocol (MCP), enabling natural-language voice commands to control the scene in near real-time.
+> **LLM-powered voice interaction in Virtual Reality**. A Unity-based master thesis project that connects a VR environment through a local or remote Ollama LLM via the Model Context Protocol (MCP), enabling natural-language voice commands to control the scene in near real-time. Complete master's thesis white paper can be found in this repo at [thesis whie paper.](thesis_white_paper.pdf)
 
 
 ## Requirements
@@ -143,6 +143,7 @@ Alternatively, for manual testing without voice input:
 
 ---
 
-Please feel free to reach out with questions, bug reports, or feedback.
+If you find this project interesting and want to learn more about technical background, related work, methodology, and benchmarks, please refer to [thesis whie paper.](thesis_white_paper.pdf) <br />
+Also, please feel free to reach out with questions, bug reports, or feedback.
 
 **Efe Oral** - efeoral@gmail.com
