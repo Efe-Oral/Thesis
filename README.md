@@ -143,7 +143,7 @@ Alternatively, for manual testing without voice input:
 
 ---
 
-If you find this project interesting and want to learn more about technical background, related work, methodology, and benchmarks, please refer to [thesis whie paper.](thesis_white_paper.pdf) <br />
+If you find this project interesting and want to learn more about technical background, related work, methodology, and benchmarks, please refer to [thesis white paper.](thesis_white_paper.pdf) <br />
 Also, please feel free to reach out with questions, bug reports, or feedback.
 
 **Efe Oral** - efeoral@gmail.com
