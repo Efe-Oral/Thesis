@@ -25,7 +25,7 @@ public class LightMarker : MonoBehaviour
     [SerializeField] private float highlightSeconds = 3f;
 
     [Tooltip("Hide the marker after the highlight ends. Off = the marker stays visible.")]
-    [SerializeField] private bool hideAfterHighlight = false;
+    [SerializeField] private bool hideAfterHighlight = true;
 
     private const int RingSegments = 40;
 

@@ -28,7 +28,9 @@ public class McpPromptSender : MonoBehaviour
     [TextArea]
     [SerializeField]
     private string systemPrompt =
-        "You control Unity game engine ONLY by calling MCP tools. You MUST call a tool for every user request. Never respond without calling a tool. Output valid JSON only. No explanations or acknowledgments.";
+        "You control Unity game engine by calling MCP tools. For each user request, call the needed tool exactly once. " +
+        "When a tool result says success, the request is done: do not call any tool again, just reply with that tool result as valid JSON only. " +
+        "If a tool returns an error, do not retry; reply with the error as JSON. No explanations or acknowledgments.";
     private bool think = false;
     private bool stream = false;
 

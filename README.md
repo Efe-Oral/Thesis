@@ -84,7 +84,7 @@ Unity starts the MCP server itself (HTTP on port 8080). Replace the contents of 
 }
 ```
 
-Start the bridge through `Tools/start_bridge.py` (step 6) instead of the plain `ollama-mcp-bridge` command. The bridge normally renames every tool to `unityMCP.<tool>`, and with many tools the local model writes the built-in tool names without that prefix, so Ollama silently drops the call. The launcher keeps the original tool names and limits tool rounds to 3, so a failing call cannot loop.
+Start the bridge through `Tools/start_bridge.py` (step 6) instead of the plain `ollama-mcp-bridge` command. The bridge normally renames every tool to `unityMCP.<tool>`, and with many tools the local model writes the built-in tool names without that prefix, so Ollama silently drops the call. The launcher keeps the original tool names.
 
 <br>
 
@@ -126,8 +126,10 @@ python "<path-to-Thesis>/Tools/start_bridge.py" --config mcp-servers-config/mcp-
 Also set the **System Prompt** on the `MCP Prompt Sender` GameObject so the model prefers the thesis tools:
 
 ```
-You control Unity game engine ONLY by calling MCP tools. For lights always use light_caster. For creating, duplicating, placing, scaling, recoloring or deleting objects always use thesis_gameobject. Use the other tools only for anything else. For each user request, call the needed tool once. If a tool returns an error, do not retry the same call. After the tool calls, output the last tool result as valid JSON only. No explanations or acknowledgments.
+You control Unity game engine by calling MCP tools. For lights always use light_caster. For creating, duplicating, placing, scaling, recoloring or deleting objects always use thesis_gameobject. Use the other tools only for anything else. For each user request, call the needed tool exactly once. When a tool result says success, the request is done: do not call any tool again, just reply with that tool result as valid JSON only. If a tool returns an error, do not retry; reply with the error as JSON. No explanations or acknowledgments.
 ```
+
+Do not tell the model to "never respond without calling a tool": the bridge keeps offering the tools after every call, so the model would call the tool again and again.
 
 </details>
 

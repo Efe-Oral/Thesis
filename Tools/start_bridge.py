@@ -11,16 +11,10 @@ It assumes a single MCP server in the config (tool names must be unique).
 
 Usage (from the ollama-mcp-bridge folder, same arguments as ollama-mcp-bridge):
     python "D:\\Unity Projects\\Thesis\\Tools\\start_bridge.py" --config mcp-servers-config/mcp-config.json --ollama-url http://10.85.8.40:11434
-
-If --max-tool-rounds is not given, it defaults to 3 so a failing tool call cannot loop forever.
 """
-import sys
-
 from loguru import logger
 from ollama_mcp_bridge import mcp_manager
 from ollama_mcp_bridge.main import main
-
-DEFAULT_MAX_TOOL_ROUNDS = "3"
 
 _original_connect = mcp_manager.MCPManager._connect_server
 
@@ -42,6 +36,4 @@ async def _connect_server_unprefixed(self, name, config):
 mcp_manager.MCPManager._connect_server = _connect_server_unprefixed
 
 if __name__ == "__main__":
-    if not any(arg.startswith("--max-tool-rounds") for arg in sys.argv[1:]):
-        sys.argv += ["--max-tool-rounds", DEFAULT_MAX_TOOL_ROUNDS]
     main()
