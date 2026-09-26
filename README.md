@@ -54,21 +54,37 @@ Load the scene: `ThesisScene`
 
 <br>
 
-### 4. Apply override scripts
+### 4. Custom MCP tools (no manual step needed)
 
-Copy the override scripts from `Assets/_Scripts/Override_Scripts/` to their targets.
-See `README_OVERRIDE` in the same folder for details.
+The thesis-specific MCP tools live in `Assets/_Scripts/Editor/MCP/` and are registered automatically by [MCP for Unity](https://github.com/CoplayDev/unity-mcp) when the project loads:
+
+| Tool | What it does |
+|:-----|:-------------|
+| `thesis_gameobject` | `create` (spawns in front of the user, auto-named, VR-grabbable), `place` (on / below / next to another object using real sizes), `scale` (bigger / smaller / reset / multiplier), `color`, `duplicate` (works in Play mode), `delete` (refuses the VR rig and voice pipeline objects) |
+| `light_caster` | Creates a point, spot or area light in one call (color, intensity, range, spot angle) |
+
+In **Window → MCP for Unity → Toggle MCP Window** (`Ctrl+Shift+M`), under **Tools**, turn **Project-Scoped Tools** off so these appear to the LLM as regular tools rather than only through `execute_custom_tool`.
+
+> The MCP server must run on **Python 3.13** (MCP for Unity 10.2.0 cannot register custom tools on Python 3.14). Run `uv python install 3.13` and set the user environment variable `UV_PYTHON=3.13`, then restart Unity Hub and Unity.
 
 <br>
 
 
 ### 5. Configure the MCP bridge
 
-Open and edit `mcp-config.json` file under: `ollama-mcp-bridge/mcp-servers-config/mcp-config.json` folder cloned from **ollama-mcp-bridge** repository. 
+Unity starts the MCP server itself (HTTP on port 8080). Replace the contents of `ollama-mcp-bridge/mcp-servers-config/mcp-config.json` with:
 
-Update the JSON path to match your system:
+```json
+{
+  "mcpServers": {
+    "unityMCP": {
+      "url": "http://127.0.0.1:8080/mcp"
+    }
+  }
+}
+```
 
-![ezgif-85c67d2359e51008](https://github.com/user-attachments/assets/20e427f3-05e9-4258-ae9f-5851c74f09c9)
+Start the bridge through `Tools/start_bridge.py` (step 6) instead of the plain `ollama-mcp-bridge` command. The bridge normally renames every tool to `unityMCP.<tool>`, and with many tools the local model writes the built-in tool names without that prefix, so Ollama silently drops the call. The launcher keeps the original tool names and limits tool rounds to 3, so a failing call cannot loop.
 
 <br>
 
@@ -93,7 +109,7 @@ Then, open a new terminal inside `ollama-mcp-bridge` folder and start the bridge
 
 
 ```bash
-ollama-mcp-bridge --config mcp-servers-config/mcp-config.json
+python "<path-to-Thesis>/Tools/start_bridge.py" --config mcp-servers-config/mcp-config.json
 ```
 </details>
 
@@ -104,7 +120,13 @@ ollama-mcp-bridge --config mcp-servers-config/mcp-config.json
 2. Open a new terminal inside `ollama-mcp-bridge` folder:
 
 ```bash
-ollama-mcp-bridge --config mcp-servers-config/mcp-config.json --ollama-url http://10.85.8.40:11434
+python "<path-to-Thesis>/Tools/start_bridge.py" --config mcp-servers-config/mcp-config.json --ollama-url http://10.85.8.40:11434
+```
+
+Also set the **System Prompt** on the `MCP Prompt Sender` GameObject so the model prefers the thesis tools:
+
+```
+You control Unity game engine ONLY by calling MCP tools. For lights always use light_caster. For creating, duplicating, placing, scaling, recoloring or deleting objects always use thesis_gameobject. Use the other tools only for anything else. For each user request, call the needed tool once. If a tool returns an error, do not retry the same call. After the tool calls, output the last tool result as valid JSON only. No explanations or acknowledgments.
 ```
 
 </details>

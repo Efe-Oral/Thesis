@@ -27,7 +27,8 @@ public class SpeechRecognition : MonoBehaviour
     [SerializeField] private float busyShowSeconds = 1.0f;
 
     [Header("Azure Speech Settings")]
-    [SerializeField] private string speechKey = "DuTF9airVdsZZpxpgaQBj0TgJbQtkxGW22Cwrb014SyboVhXoziOJQQJ99BCACPV0roXJ3w3AAAYACOGBSBH";
+    [Tooltip("Leave empty. The key is read from the AZURE_SPEECH_KEY environment variable or SpeechKey.local.txt in the project root (git-ignored).")]
+    [SerializeField] private string speechKey = "";
     [SerializeField] private string speechRegion = "germanywestcentral"; // e.g. "germanywestcentral"
 
     [Header("Audio Feedback")]
@@ -100,31 +101,79 @@ public class SpeechRecognition : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// The key is kept out of source control: Inspector field (if set locally) → AZURE_SPEECH_KEY env var → SpeechKey.local.txt.
+    /// </summary>
+    private string ResolveSpeechKey()
+    {
+        if (!string.IsNullOrWhiteSpace(speechKey))
+            return speechKey.Trim();
+
+        string fromEnv = Environment.GetEnvironmentVariable("AZURE_SPEECH_KEY");
+        if (!string.IsNullOrWhiteSpace(fromEnv))
+            return fromEnv.Trim();
+
+        string keyFile = System.IO.Path.Combine(Application.dataPath, "..", "SpeechKey.local.txt");
+        if (System.IO.File.Exists(keyFile))
+            return System.IO.File.ReadAllText(keyFile).Trim();
+
+        return null;
+    }
+
     private async Task RecognizeSpeechAsync()
     {
         isRecognizing = true;
 
-        var speechConfig = SpeechConfig.FromSubscription(speechKey, speechRegion);
-        speechConfig.SpeechRecognitionLanguage = "en-US";
+        try
+        {
+            string key = ResolveSpeechKey();
+            if (string.IsNullOrEmpty(key))
+            {
+                Debug.LogError("[Speech] No Azure Speech key found. Set the AZURE_SPEECH_KEY environment variable " +
+                               "or put the key in SpeechKey.local.txt in the project root.");
+                PlaySound(buzzSound);
+                return;
+            }
 
-        using var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
-        using var speechRecognizer = new SpeechRecognizer(speechConfig, audioConfig);
+            var speechConfig = SpeechConfig.FromSubscription(key, speechRegion);
+            speechConfig.SpeechRecognitionLanguage = "en-US";
 
-        Debug.Log("Listening...");
-        var result = await speechRecognizer.RecognizeOnceAsync();
+            Debug.Log($"[Speech] Config initialized. Region='{speechRegion}', Language='{speechConfig.SpeechRecognitionLanguage}'.");
 
-        PlaySound(endSound);
-        ProcessSpeechResult(result);
+            using var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+            Debug.Log("[Speech] Using default microphone input device.");
 
-        isRecognizing = false;
+            using var speechRecognizer = new SpeechRecognizer(speechConfig, audioConfig);
+
+            Debug.Log("Listening...");
+            var result = await speechRecognizer.RecognizeOnceAsync();
+
+            Debug.Log($"[Speech] Recognition completed. Reason={result.Reason}, ResultId={result.ResultId}, Duration={result.Duration}.");
+            PlaySound(endSound);
+            ProcessSpeechResult(result);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Speech] Exception during recognition: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
+        }
+        finally
+        {
+            isRecognizing = false;
+        }
     }
 
     private void ProcessSpeechResult(SpeechRecognitionResult result)
     {
+        if (result == null)
+        {
+            Debug.LogError("[Speech] Result is null.");
+            return;
+        }
+
         if (result.Reason == ResultReason.RecognizedSpeech)
         {
             recognizedSpeech = result.Text;
-            Debug.Log("Recognized: " + recognizedSpeech);
+            Debug.Log($"[Speech] Recognized: '{recognizedSpeech}'");
 
             string processedSpeech = ReplacePronounsWithObjectName(recognizedSpeech);
 
@@ -141,8 +190,22 @@ public class SpeechRecognition : MonoBehaviour
                 Debug.LogError("MCP Prompt Sender script is NOT assigned!");
             }
         }
+        else if (result.Reason == ResultReason.NoMatch)
+        {
+            var noMatch = NoMatchDetails.FromResult(result);
+            Debug.LogWarning($"[Speech] NoMatch. Reason={noMatch.Reason}, Json={result.Properties.GetProperty(PropertyId.SpeechServiceResponse_JsonResult)}");
+            Debug.Log("Speech not recognized.");
+        }
+        else if (result.Reason == ResultReason.Canceled)
+        {
+            var cancel = CancellationDetails.FromResult(result);
+            Debug.LogError($"[Speech] Canceled. CancellationReason={cancel.Reason}, ErrorCode={cancel.ErrorCode}, ErrorDetails={cancel.ErrorDetails}");
+            Debug.LogError($"[Speech] Cancellation JSON: {result.Properties.GetProperty(PropertyId.SpeechServiceResponse_JsonResult)}");
+            Debug.Log("Speech not recognized.");
+        }
         else
         {
+            Debug.LogWarning($"[Speech] Unhandled recognition reason: {result.Reason}. Text='{result.Text}'");
             Debug.Log("Speech not recognized.");
         }
     }

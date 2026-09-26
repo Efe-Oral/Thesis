@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f5937fb175c1d4ab3099c8fe1c9803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speechKey: DuTF9airVdsZZpxpgaQBj0TgJbQtkxGW22Cwrb014SyboVhXoziOJQQJ99BCACPV0roXJ3w3AAAYACOGBSBH
+  speechKey: 
   speechRegion: germanywestcentral
   startSound: {fileID: 8300000, guid: df8849ebc6d67df49b72a9b9dfe4155b, type: 3}
   endSound: {fileID: 8300000, guid: 57a37ab78e387ce43bfc9132376cf173, type: 3}

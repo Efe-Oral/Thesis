@@ -24,7 +24,6 @@ namespace UnityMcpBridge.Editor.Tools
         private static int creationCount = 0;
         private static float objectSpacing = 1f; // Space between objects
 
-
         private static Type _cachedXRGrabType = null;
         private static bool _xrGrabTypeSearched = false;
 
@@ -32,7 +31,6 @@ namespace UnityMcpBridge.Editor.Tools
 
         public static object HandleCommand(JObject @params)
         {
-
             string action = @params["action"]?.ToString().ToLower();
             if (string.IsNullOrEmpty(action))
             {
@@ -50,7 +48,8 @@ namespace UnityMcpBridge.Editor.Tools
             JToken parentToken = @params["parent"];
 
             // --- Add parameter for controlling non-public field inclusion ---
-            bool includeNonPublicSerialized = @params["includeNonPublicSerialized"]?.ToObject<bool>() ?? true; // Default to true
+            bool includeNonPublicSerialized =
+                @params["includeNonPublicSerialized"]?.ToObject<bool>() ?? true; // Default to true
             // --- End add parameter ---
 
             // --- Prefab Redirection Check ---
@@ -146,7 +145,11 @@ namespace UnityMcpBridge.Editor.Tools
                                 "'target' parameter required for get_components."
                             );
                         // Pass the includeNonPublicSerialized flag here
-                        return GetComponentsFromTarget(getCompTarget, searchMethod, includeNonPublicSerialized);
+                        return GetComponentsFromTarget(
+                            getCompTarget,
+                            searchMethod,
+                            includeNonPublicSerialized
+                        );
                     case "add_component":
                         return AddComponentToTarget(@params, targetToken, searchMethod);
                     case "remove_component":
@@ -167,13 +170,17 @@ namespace UnityMcpBridge.Editor.Tools
                         GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
                         if (targetGo == null)
                         {
-                            return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                            return Response.Error(
+                                $"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'."
+                            );
                         }
 
                         string newName = @params["name"]?.ToString();
                         if (string.IsNullOrEmpty(newName))
                         {
-                            return Response.Error("'name' parameter is required for rename action.");
+                            return Response.Error(
+                                "'name' parameter is required for rename action."
+                            );
                         }
 
                         // Record for undo
@@ -210,7 +217,9 @@ namespace UnityMcpBridge.Editor.Tools
             bool saveAsPrefab = @params["saveAsPrefab"]?.ToObject<bool>() ?? false;
             if (string.IsNullOrEmpty(name) && (string.IsNullOrEmpty(primitiveType) || saveAsPrefab))
             {
-                return Response.Error("'name' parameter is required for non-primitive objects or when saving as prefab.");
+                return Response.Error(
+                    "'name' parameter is required for non-primitive objects or when saving as prefab."
+                );
             }
 
             // Get prefab creation parameters
@@ -223,12 +232,15 @@ namespace UnityMcpBridge.Editor.Tools
             {
                 // Find existing objects with similar names to avoid duplicates
                 var existingObjects = GetAllSceneObjects(true)
-                    .Where(go => go.name.StartsWith(primitiveType, StringComparison.OrdinalIgnoreCase))
+                    .Where(go =>
+                        go.name.StartsWith(primitiveType, StringComparison.OrdinalIgnoreCase)
+                    )
                     .Select(go => go.name)
                     .ToList();
 
                 int counter = 1;
-                string baseName = char.ToUpper(primitiveType[0]) + primitiveType.Substring(1).ToLower();
+                string baseName =
+                    char.ToUpper(primitiveType[0]) + primitiveType.Substring(1).ToLower();
                 name = baseName;
 
                 // Keep incrementing counter until we find a unique name
@@ -238,7 +250,9 @@ namespace UnityMcpBridge.Editor.Tools
                     counter++;
                 }
 
-                Debug.Log($"[ManageGameObject.Create] Generated default name '{name}' for primitive type '{primitiveType}'");
+                Debug.Log(
+                    $"[ManageGameObject.Create] Generated default name '{name}' for primitive type '{primitiveType}'"
+                );
             }
 
             // --- Try Instantiating Prefab First ---
@@ -359,12 +373,19 @@ namespace UnityMcpBridge.Editor.Tools
                         {
                             // Find existing objects with similar names to avoid duplicates
                             var existingObjects = GetAllSceneObjects(true)
-                                .Where(go => go.name.StartsWith(primitiveType, StringComparison.OrdinalIgnoreCase))
+                                .Where(go =>
+                                    go.name.StartsWith(
+                                        primitiveType,
+                                        StringComparison.OrdinalIgnoreCase
+                                    )
+                                )
                                 .Select(go => go.name)
                                 .ToList();
 
                             int counter = 1;
-                            string baseName = char.ToUpper(primitiveType[0]) + primitiveType.Substring(1).ToLower();
+                            string baseName =
+                                char.ToUpper(primitiveType[0])
+                                + primitiveType.Substring(1).ToLower();
                             name = baseName;
 
                             // Keep incrementing counter until we find a unique name
@@ -374,7 +395,9 @@ namespace UnityMcpBridge.Editor.Tools
                                 counter++;
                             }
 
-                            Debug.Log($"[ManageGameObject.Create] Generated default name '{name}' for primitive type '{primitiveType}'");
+                            Debug.Log(
+                                $"[ManageGameObject.Create] Generated default name '{name}' for primitive type '{primitiveType}'"
+                            );
                         }
 
                         // Set the name (either provided or generated)
@@ -444,8 +467,9 @@ namespace UnityMcpBridge.Editor.Tools
                     var sceneView = UnityEditor.SceneView.lastActiveSceneView;
                     if (sceneView != null)
                     {
-                        basePosition = sceneView.camera.transform.position +
-                                     (sceneView.camera.transform.forward * 2f);
+                        basePosition =
+                            sceneView.camera.transform.position
+                            + (sceneView.camera.transform.forward * 2f);
                         rightOffset = sceneView.camera.transform.right * objectSpacing;
                     }
                 }
@@ -488,9 +512,11 @@ namespace UnityMcpBridge.Editor.Tools
             {
                 string parentStr = parentToken.ToString().Trim();
                 // Treatingh default, empty string, or none as "no parent specified"
-                if (!string.IsNullOrEmpty(parentStr) &&
-                    !parentStr.Equals("default", StringComparison.OrdinalIgnoreCase) &&
-                    !parentStr.Equals("none", StringComparison.OrdinalIgnoreCase))
+                if (
+                    !string.IsNullOrEmpty(parentStr)
+                    && !parentStr.Equals("default", StringComparison.OrdinalIgnoreCase)
+                    && !parentStr.Equals("none", StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     GameObject parentGo = FindObjectInternal(parentToken, "by_id_or_name_or_path"); // find with name or path in the scene
                     if (parentGo == null)
@@ -515,9 +541,11 @@ namespace UnityMcpBridge.Editor.Tools
                 newGo.transform.localScale = scale.Value;
 
             // Set Tag (added for create action)
-            if (!string.IsNullOrEmpty(tag) &&
-                !tag.Equals("default", StringComparison.OrdinalIgnoreCase) &&
-                !tag.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (
+                !string.IsNullOrEmpty(tag)
+                && !tag.Equals("default", StringComparison.OrdinalIgnoreCase)
+                && !tag.Equals("none", StringComparison.OrdinalIgnoreCase)
+            )
             {
                 // Similar logic as in ModifyGameObject for setting/creating tags
                 string tagToSet = tag;
@@ -560,9 +588,11 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Set Layer (new for create action)
             string layerName = @params["layer"]?.ToString();
-            if (!string.IsNullOrEmpty(layerName) &&
-                !layerName.Equals("default", StringComparison.OrdinalIgnoreCase) &&
-                !layerName.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (
+                !string.IsNullOrEmpty(layerName)
+                && !layerName.Equals("default", StringComparison.OrdinalIgnoreCase)
+                && !layerName.Equals("none", StringComparison.OrdinalIgnoreCase)
+            )
             {
                 int layerId = LayerMask.NameToLayer(layerName);
                 if (layerId != -1)
@@ -623,31 +653,45 @@ namespace UnityMcpBridge.Editor.Tools
                 // If not found, try the base XRGrabInteractable with full namespace
                 if (_cachedXRGrabType == null)
                 {
-                    _cachedXRGrabType = FindType("UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable");
+                    _cachedXRGrabType = FindType(
+                        "UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable"
+                    );
                 }
                 _xrGrabTypeSearched = true;
 
                 if (_cachedXRGrabType != null)
                 {
-                    Debug.Log($"[ManageGameObject] Cached XR Grab type: {_cachedXRGrabType.FullName}");
+                    Debug.Log(
+                        $"[ManageGameObject] Cached XR Grab type: {_cachedXRGrabType.FullName}"
+                    );
                 }
             }
 
             if (_cachedXRGrabType != null && newGo.GetComponent(_cachedXRGrabType) == null)
             {
-                var addResult = AddComponentInternal(newGo, _cachedXRGrabType.FullName ?? _cachedXRGrabType.Name, null);
+                var addResult = AddComponentInternal(
+                    newGo,
+                    _cachedXRGrabType.FullName ?? _cachedXRGrabType.Name,
+                    null
+                );
                 if (addResult == null) // null means success
                 {
-                    Debug.Log($"[ManageGameObject.Create] Added {_cachedXRGrabType.Name} to '{newGo.name}'");
+                    Debug.Log(
+                        $"[ManageGameObject.Create] Added {_cachedXRGrabType.Name} to '{newGo.name}'"
+                    );
                 }
                 else
                 {
-                    Debug.LogWarning($"[ManageGameObject.Create] Failed to add XR Grab component to '{newGo.name}': {addResult}");
+                    Debug.LogWarning(
+                        $"[ManageGameObject.Create] Failed to add XR Grab component to '{newGo.name}': {addResult}"
+                    );
                 }
             }
             else if (_cachedXRGrabType == null && _xrGrabTypeSearched)
             {
-                Debug.LogWarning($"[ManageGameObject.Create] Could not find MyXRGrabInteractable or XRGrabInteractable type. VR grab not added to '{newGo.name}'.");
+                Debug.LogWarning(
+                    $"[ManageGameObject.Create] Could not find MyXRGrabInteractable or XRGrabInteractable type. VR grab not added to '{newGo.name}'."
+                );
             }
 
             // Save as Prefab ONLY if we *created* a new object AND saveAsPrefab is true
@@ -747,16 +791,25 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Use the new serializer helper
             //return Response.Success(successMessage, GetGameObjectData(finalInstance));
-            return Response.Success(successMessage, Helpers.GameObjectSerializer.GetGameObjectData(finalInstance));
+            return Response.Success(
+                successMessage,
+                Helpers.GameObjectSerializer.GetGameObjectData(finalInstance)
+            );
         }
 
-        private static object DuplicateGameObject(JObject @params, JToken targetToken, string searchMethod)
+        private static object DuplicateGameObject(
+            JObject @params,
+            JToken targetToken,
+            string searchMethod
+        )
         {
             // Find the source GameObject to duplicate
             GameObject sourceGo = FindObjectInternal(targetToken, searchMethod);
             if (sourceGo == null)
             {
-                return Response.Error($"Source GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                return Response.Error(
+                    $"Source GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'."
+                );
             }
 
             try
@@ -769,7 +822,10 @@ namespace UnityMcpBridge.Editor.Tools
                 GameObject duplicateGo = UnityEngine.Object.Instantiate(sourceGo);
 
                 // Register for undo
-                Undo.RegisterCreatedObjectUndo(duplicateGo, $"Duplicate GameObject '{sourceGo.name}'");
+                Undo.RegisterCreatedObjectUndo(
+                    duplicateGo,
+                    $"Duplicate GameObject '{sourceGo.name}'"
+                );
 
                 // Set the name - either provided name or "Copy of [original]"
                 if (!string.IsNullOrEmpty(newName))
@@ -810,17 +866,25 @@ namespace UnityMcpBridge.Editor.Tools
             }
             catch (Exception e)
             {
-                return Response.Error($"Error duplicating GameObject '{sourceGo.name}': {e.Message}");
+                return Response.Error(
+                    $"Error duplicating GameObject '{sourceGo.name}': {e.Message}"
+                );
             }
         }
 
-        private static object MoveGameObject(JObject @params, JToken targetToken, string searchMethod)
+        private static object MoveGameObject(
+            JObject @params,
+            JToken targetToken,
+            string searchMethod
+        )
         {
             // Find the source GameObject to move
             GameObject sourceGo = FindObjectInternal(targetToken, searchMethod);
             if (sourceGo == null)
             {
-                return Response.Error($"Source GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                return Response.Error(
+                    $"Source GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'."
+                );
             }
 
             try
@@ -839,13 +903,19 @@ namespace UnityMcpBridge.Editor.Tools
                 }
 
                 // Get the relative position type
-                string relativePosition = @params["relativePosition"]?.ToString()?.ToLower() ?? "next";
+                string relativePosition =
+                    @params["relativePosition"]?.ToString()?.ToLower() ?? "next";
 
                 // Get optional offset
                 Vector3? additionalOffset = ParseVector3(@params["offset"] as JArray);
 
                 // Calculate the new position based on relative position
-                Vector3 newPosition = CalculateRelativePosition(sourceGo, targetGo, relativePosition, additionalOffset);
+                Vector3 newPosition = CalculateRelativePosition(
+                    sourceGo,
+                    targetGo,
+                    relativePosition,
+                    additionalOffset
+                );
 
                 // Record for undo
                 Undo.RecordObject(sourceGo.transform, "Move GameObject");
@@ -867,14 +937,19 @@ namespace UnityMcpBridge.Editor.Tools
             }
         }
 
-        private static Vector3 CalculateRelativePosition(GameObject source, GameObject target, string relativePosition, Vector3? additionalOffset)
+        private static Vector3 CalculateRelativePosition(
+            GameObject source,
+            GameObject target,
+            string relativePosition,
+            Vector3? additionalOffset
+        )
         {
             // Get target's bounds
             Bounds targetBounds = GetObjectBounds(target);
             Bounds sourceBounds = GetObjectBounds(source);
 
             // Base offset to prevent overlapping (can be adjusted)
-            float spacing = 0.5f;  // Reduced spacing to make objects closer together
+            float spacing = 0.5f; // Reduced spacing to make objects closer together
             Vector3 offset = Vector3.zero;
 
             switch (relativePosition)
@@ -883,40 +958,48 @@ namespace UnityMcpBridge.Editor.Tools
                 case "above":
                 case "on":
                 case "over":
-                    offset = Vector3.up * (targetBounds.extents.y + sourceBounds.extents.y + spacing);
+                    offset =
+                        Vector3.up * (targetBounds.extents.y + sourceBounds.extents.y + spacing);
                     break;
 
                 case "bottom":
                 case "below":
                 case "under":
                 case "underneath":
-                    offset = Vector3.down * (targetBounds.extents.y + sourceBounds.extents.y + spacing);
+                    offset =
+                        Vector3.down * (targetBounds.extents.y + sourceBounds.extents.y + spacing);
                     break;
 
                 case "front":
                 case "before":
                 case "infront":
-                    offset = Vector3.forward * (targetBounds.extents.z + sourceBounds.extents.z + spacing);
+                    offset =
+                        Vector3.forward
+                        * (targetBounds.extents.z + sourceBounds.extents.z + spacing);
                     break;
 
                 case "back":
                 case "behind":
                 case "rear":
-                    offset = Vector3.back * (targetBounds.extents.z + sourceBounds.extents.z + spacing);
+                    offset =
+                        Vector3.back * (targetBounds.extents.z + sourceBounds.extents.z + spacing);
                     break;
 
                 case "right":
                 case "rightof":
-                    offset = Vector3.right * (targetBounds.extents.x + sourceBounds.extents.x + spacing);
+                    offset =
+                        Vector3.right * (targetBounds.extents.x + sourceBounds.extents.x + spacing);
                     break;
 
                 case "left":
                 case "leftof":
-                    offset = Vector3.left * (targetBounds.extents.x + sourceBounds.extents.x + spacing);
+                    offset =
+                        Vector3.left * (targetBounds.extents.x + sourceBounds.extents.x + spacing);
                     break;
 
                 default:
-                    offset = Vector3.right * (targetBounds.extents.x + sourceBounds.extents.x + spacing);
+                    offset =
+                        Vector3.right * (targetBounds.extents.x + sourceBounds.extents.x + spacing);
                     break;
             }
 
@@ -993,10 +1076,11 @@ namespace UnityMcpBridge.Editor.Tools
             {
                 string parentStr = parentToken.ToString().Trim();
                 // Treat "default", empty string, or "none" as no parent
-                bool shouldClearParent = string.IsNullOrEmpty(parentStr) ||
-                                        parentStr.Equals("default", StringComparison.OrdinalIgnoreCase) ||
-                                        parentStr.Equals("none", StringComparison.OrdinalIgnoreCase) ||
-                                        parentToken.Type == JTokenType.Null;
+                bool shouldClearParent =
+                    string.IsNullOrEmpty(parentStr)
+                    || parentStr.Equals("default", StringComparison.OrdinalIgnoreCase)
+                    || parentStr.Equals("none", StringComparison.OrdinalIgnoreCase)
+                    || parentToken.Type == JTokenType.Null;
 
                 GameObject newParentGo = null;
 
@@ -1034,9 +1118,12 @@ namespace UnityMcpBridge.Editor.Tools
             string tag = @params["tag"]?.ToString();
             // Only attempt to change tag if a non-null tag is provided and it's different from the current one.
             // Treat "default" or "none" as "skip tag change" basically tag is optional
-            if (tag != null && targetGo.tag != tag &&
-                !tag.Equals("default", StringComparison.OrdinalIgnoreCase) &&
-                !tag.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (
+                tag != null
+                && targetGo.tag != tag
+                && !tag.Equals("default", StringComparison.OrdinalIgnoreCase)
+                && !tag.Equals("none", StringComparison.OrdinalIgnoreCase)
+            )
             {
                 // Ensure the tag is not empty, if empty, it means "Untagged" implicitly
                 string tagToSet = string.IsNullOrEmpty(tag) ? "Untagged" : tag;
@@ -1088,12 +1175,17 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Change Layer (using consolidated 'layer' parameter)
             string layerName = @params["layer"]?.ToString();
-            if (!string.IsNullOrEmpty(layerName) &&
-                !layerName.Equals("default", StringComparison.OrdinalIgnoreCase) &&
-                !layerName.Equals("none", StringComparison.OrdinalIgnoreCase))
+            if (
+                !string.IsNullOrEmpty(layerName)
+                && !layerName.Equals("default", StringComparison.OrdinalIgnoreCase)
+                && !layerName.Equals("none", StringComparison.OrdinalIgnoreCase)
+            )
             {
                 int layerId = LayerMask.NameToLayer(layerName);
-                if (layerId == -1 && !layerName.Equals("Default", StringComparison.OrdinalIgnoreCase))
+                if (
+                    layerId == -1
+                    && !layerName.Equals("Default", StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     return Response.Error(
                         $"Invalid layer specified: '{layerName}'. Use a valid layer name."
@@ -1215,7 +1307,6 @@ namespace UnityMcpBridge.Editor.Tools
             // return Response.Success(
             //     $"GameObject '{targetGo.name}' modified successfully.",
             //     GetGameObjectData(targetGo));
-
         }
 
         private static object DeleteGameObject(JToken targetToken, string searchMethod)
@@ -1279,11 +1370,17 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Use the new serializer helper
             //var results = foundObjects.Select(go => GetGameObjectData(go)).ToList();
-            var results = foundObjects.Select(go => Helpers.GameObjectSerializer.GetGameObjectData(go)).ToList();
+            var results = foundObjects
+                .Select(go => Helpers.GameObjectSerializer.GetGameObjectData(go))
+                .ToList();
             return Response.Success($"Found {results.Count} GameObject(s).", results);
         }
 
-        private static object GetComponentsFromTarget(string target, string searchMethod, bool includeNonPublicSerialized = true)
+        private static object GetComponentsFromTarget(
+            string target,
+            string searchMethod,
+            bool includeNonPublicSerialized = true
+        )
         {
             GameObject targetGo = FindObjectInternal(target, searchMethod);
             if (targetGo == null)
@@ -1295,13 +1392,15 @@ namespace UnityMcpBridge.Editor.Tools
 
             try
             {
-                // --- Get components, immediately copy to list, and null original array --- 
+                // --- Get components, immediately copy to list, and null original array ---
                 Component[] originalComponents = targetGo.GetComponents<Component>();
-                List<Component> componentsToIterate = new List<Component>(originalComponents ?? Array.Empty<Component>()); // Copy immediately, handle null case
+                List<Component> componentsToIterate = new List<Component>(
+                    originalComponents ?? Array.Empty<Component>()
+                ); // Copy immediately, handle null case
                 int componentCount = componentsToIterate.Count;
                 originalComponents = null; // Null the original reference
-                                           // Debug.Log($"[GetComponentsFromTarget] Found {componentCount} components on {targetGo.name}. Copied to list, nulled original. Starting REVERSE for loop...");
-                                           // --- End Copy and Null --- 
+                // Debug.Log($"[GetComponentsFromTarget] Found {componentCount} components on {targetGo.name}. Copied to list, nulled original. Starting REVERSE for loop...");
+                // --- End Copy and Null ---
 
                 var componentData = new List<object>();
 
@@ -1316,7 +1415,10 @@ namespace UnityMcpBridge.Editor.Tools
                     // Debug.Log($"[GetComponentsFromTarget REVERSE for] Processing component: {c.GetType()?.FullName ?? "null"} (ID: {c.GetInstanceID()}) at index {i} on {targetGo.name}");
                     try
                     {
-                        var data = Helpers.GameObjectSerializer.GetComponentData(c, includeNonPublicSerialized);
+                        var data = Helpers.GameObjectSerializer.GetComponentData(
+                            c,
+                            includeNonPublicSerialized
+                        );
                         if (data != null) // Ensure GetComponentData didn't return null
                         {
                             componentData.Insert(0, data); // Insert at beginning to maintain original order in final list
@@ -1328,13 +1430,21 @@ namespace UnityMcpBridge.Editor.Tools
                     }
                     catch (Exception ex)
                     {
-                        Debug.LogError($"[GetComponentsFromTarget REVERSE for] Error processing component {c.GetType().FullName} (ID: {c.GetInstanceID()}) on {targetGo.name}: {ex.Message}\n{ex.StackTrace}");
+                        Debug.LogError(
+                            $"[GetComponentsFromTarget REVERSE for] Error processing component {c.GetType().FullName} (ID: {c.GetInstanceID()}) on {targetGo.name}: {ex.Message}\n{ex.StackTrace}"
+                        );
                         // Optionally add placeholder data or just skip
-                        componentData.Insert(0, new JObject( // Insert error marker at beginning
-                            new JProperty("typeName", c.GetType().FullName + " (Serialization Error)"),
-                            new JProperty("instanceID", c.GetInstanceID()),
-                            new JProperty("error", ex.Message)
-                        ));
+                        componentData.Insert(
+                            0,
+                            new JObject( // Insert error marker at beginning
+                                new JProperty(
+                                    "typeName",
+                                    c.GetType().FullName + " (Serialization Error)"
+                                ),
+                                new JProperty("instanceID", c.GetInstanceID()),
+                                new JProperty("error", ex.Message)
+                            )
+                        );
                     }
                 }
                 // Debug.Log($"[GetComponentsFromTarget] Finished REVERSE for loop.");
@@ -1602,7 +1712,11 @@ namespace UnityMcpBridge.Editor.Tools
                             .GetComponentsInChildren<Transform>(searchInactive)
                             .Select(t => t.gameObject)
                         : GetAllSceneObjects(searchInactive);
-                    results.AddRange(searchPoolName.Where(go => go.name.Equals(searchTerm, StringComparison.OrdinalIgnoreCase)));
+                    results.AddRange(
+                        searchPoolName.Where(go =>
+                            go.name.Equals(searchTerm, StringComparison.OrdinalIgnoreCase)
+                        )
+                    );
                     break;
                 case "by_path":
                     // Path is relative to scene root or rootSearchObject
@@ -1934,7 +2048,7 @@ namespace UnityMcpBridge.Editor.Tools
             JsonSerializerSettings inputSerializerSettings = new JsonSerializerSettings
             {
                 Converters = new List<JsonConverter>
-                 {
+                {
                     // Add specific converters needed for INPUT deserialization if different from output
                     new Vector3Converter(),
                     new Vector2Converter(),
@@ -1942,8 +2056,8 @@ namespace UnityMcpBridge.Editor.Tools
                     new ColorConverter(),
                     new RectConverter(),
                     new BoundsConverter(),
-                    new UnityEngineObjectConverter() // Crucial for finding references from instructions
-                 }
+                    new UnityEngineObjectConverter(), // Crucial for finding references from instructions
+                },
                 // No ReferenceLoopHandling needed typically for input
             };
             JsonSerializer inputSerializer = JsonSerializer.Create(inputSerializerSettings);
@@ -1963,7 +2077,11 @@ namespace UnityMcpBridge.Editor.Tools
                 if (propInfo != null && propInfo.CanWrite)
                 {
                     // Use the inputSerializer for conversion
-                    object convertedValue = ConvertJTokenToType(value, propInfo.PropertyType, inputSerializer);
+                    object convertedValue = ConvertJTokenToType(
+                        value,
+                        propInfo.PropertyType,
+                        inputSerializer
+                    );
                     if (convertedValue != null || value.Type == JTokenType.Null) // Allow setting null
                     {
                         propInfo.SetValue(target, convertedValue);
@@ -1971,7 +2089,9 @@ namespace UnityMcpBridge.Editor.Tools
                     }
                     else
                     {
-                        Debug.LogWarning($"[SetProperty] Conversion failed for property '{memberName}' (Type: {propInfo.PropertyType.Name}) from token: {value.ToString(Formatting.None)}");
+                        Debug.LogWarning(
+                            $"[SetProperty] Conversion failed for property '{memberName}' (Type: {propInfo.PropertyType.Name}) from token: {value.ToString(Formatting.None)}"
+                        );
                     }
                 }
                 else
@@ -1980,7 +2100,11 @@ namespace UnityMcpBridge.Editor.Tools
                     if (fieldInfo != null) // Check if !IsLiteral?
                     {
                         // Use the inputSerializer for conversion
-                        object convertedValue = ConvertJTokenToType(value, fieldInfo.FieldType, inputSerializer);
+                        object convertedValue = ConvertJTokenToType(
+                            value,
+                            fieldInfo.FieldType,
+                            inputSerializer
+                        );
                         if (convertedValue != null || value.Type == JTokenType.Null) // Allow setting null
                         {
                             fieldInfo.SetValue(target, convertedValue);
@@ -1988,7 +2112,9 @@ namespace UnityMcpBridge.Editor.Tools
                         }
                         else
                         {
-                            Debug.LogWarning($"[SetProperty] Conversion failed for field '{memberName}' (Type: {fieldInfo.FieldType.Name}) from token: {value.ToString(Formatting.None)}");
+                            Debug.LogWarning(
+                                $"[SetProperty] Conversion failed for field '{memberName}' (Type: {fieldInfo.FieldType.Name}) from token: {value.ToString(Formatting.None)}"
+                            );
                         }
                     }
                 }
@@ -2007,7 +2133,12 @@ namespace UnityMcpBridge.Editor.Tools
         /// </summary>
         // Pass the input serializer for conversions
         //Using the serializer helper
-        private static bool SetNestedProperty(object target, string path, JToken value, JsonSerializer inputSerializer)
+        private static bool SetNestedProperty(
+            object target,
+            string path,
+            JToken value,
+            JsonSerializer inputSerializer
+        )
         {
             try
             {
@@ -2124,25 +2255,62 @@ namespace UnityMcpBridge.Editor.Tools
                         // Try converting to known types that SetColor/SetVector accept
                         if (jArray.Count == 4)
                         {
-                            try { Color color = value.ToObject<Color>(inputSerializer); material.SetColor(finalPart, color); return true; } catch { }
-                            try { Vector4 vec = value.ToObject<Vector4>(inputSerializer); material.SetVector(finalPart, vec); return true; } catch { }
+                            try
+                            {
+                                Color color = value.ToObject<Color>(inputSerializer);
+                                material.SetColor(finalPart, color);
+                                return true;
+                            }
+                            catch { }
+                            try
+                            {
+                                Vector4 vec = value.ToObject<Vector4>(inputSerializer);
+                                material.SetVector(finalPart, vec);
+                                return true;
+                            }
+                            catch { }
                         }
                         else if (jArray.Count == 3)
                         {
-                            try { Color color = value.ToObject<Color>(inputSerializer); material.SetColor(finalPart, color); return true; } catch { } // ToObject handles conversion to Color
+                            try
+                            {
+                                Color color = value.ToObject<Color>(inputSerializer);
+                                material.SetColor(finalPart, color);
+                                return true;
+                            }
+                            catch { } // ToObject handles conversion to Color
                         }
                         else if (jArray.Count == 2)
                         {
-                            try { Vector2 vec = value.ToObject<Vector2>(inputSerializer); material.SetVector(finalPart, vec); return true; } catch { }
+                            try
+                            {
+                                Vector2 vec = value.ToObject<Vector2>(inputSerializer);
+                                material.SetVector(finalPart, vec);
+                                return true;
+                            }
+                            catch { }
                         }
                     }
                     else if (value.Type == JTokenType.Float || value.Type == JTokenType.Integer)
                     {
-                        try { material.SetFloat(finalPart, value.ToObject<float>(inputSerializer)); return true; } catch { }
+                        try
+                        {
+                            material.SetFloat(finalPart, value.ToObject<float>(inputSerializer));
+                            return true;
+                        }
+                        catch { }
                     }
                     else if (value.Type == JTokenType.Boolean)
                     {
-                        try { material.SetFloat(finalPart, value.ToObject<bool>(inputSerializer) ? 1f : 0f); return true; } catch { }
+                        try
+                        {
+                            material.SetFloat(
+                                finalPart,
+                                value.ToObject<bool>(inputSerializer) ? 1f : 0f
+                            );
+                            return true;
+                        }
+                        catch { }
                     }
                     else if (value.Type == JTokenType.String)
                     {
@@ -2170,7 +2338,11 @@ namespace UnityMcpBridge.Editor.Tools
                 if (finalPropInfo != null && finalPropInfo.CanWrite)
                 {
                     // Use the inputSerializer for conversion
-                    object convertedValue = ConvertJTokenToType(value, finalPropInfo.PropertyType, inputSerializer);
+                    object convertedValue = ConvertJTokenToType(
+                        value,
+                        finalPropInfo.PropertyType,
+                        inputSerializer
+                    );
                     if (convertedValue != null || value.Type == JTokenType.Null)
                     {
                         finalPropInfo.SetValue(currentObject, convertedValue);
@@ -2178,7 +2350,9 @@ namespace UnityMcpBridge.Editor.Tools
                     }
                     else
                     {
-                        Debug.LogWarning($"[SetNestedProperty] Final conversion failed for property '{finalPart}' (Type: {finalPropInfo.PropertyType.Name}) from token: {value.ToString(Formatting.None)}");
+                        Debug.LogWarning(
+                            $"[SetNestedProperty] Final conversion failed for property '{finalPart}' (Type: {finalPropInfo.PropertyType.Name}) from token: {value.ToString(Formatting.None)}"
+                        );
                     }
                 }
                 else
@@ -2187,7 +2361,11 @@ namespace UnityMcpBridge.Editor.Tools
                     if (finalFieldInfo != null)
                     {
                         // Use the inputSerializer for conversion
-                        object convertedValue = ConvertJTokenToType(value, finalFieldInfo.FieldType, inputSerializer);
+                        object convertedValue = ConvertJTokenToType(
+                            value,
+                            finalFieldInfo.FieldType,
+                            inputSerializer
+                        );
                         if (convertedValue != null || value.Type == JTokenType.Null)
                         {
                             finalFieldInfo.SetValue(currentObject, convertedValue);
@@ -2195,7 +2373,9 @@ namespace UnityMcpBridge.Editor.Tools
                         }
                         else
                         {
-                            Debug.LogWarning($"[SetNestedProperty] Final conversion failed for field '{finalPart}' (Type: {finalFieldInfo.FieldType.Name}) from token: {value.ToString(Formatting.None)}");
+                            Debug.LogWarning(
+                                $"[SetNestedProperty] Final conversion failed for field '{finalPart}' (Type: {finalFieldInfo.FieldType.Name}) from token: {value.ToString(Formatting.None)}"
+                            );
                         }
                     }
                     else
@@ -2215,7 +2395,6 @@ namespace UnityMcpBridge.Editor.Tools
 
             return false;
         }
-
 
         /// <summary>
         /// Split a property path into parts, handling both dot notation and array indexers
@@ -2256,14 +2435,20 @@ namespace UnityMcpBridge.Editor.Tools
         /// <summary>
         /// Simple JToken to Type conversion for common Unity types, using JsonSerializer.
         /// </summary>
-         // Pass the input serializer
-        private static object ConvertJTokenToType(JToken token, Type targetType, JsonSerializer inputSerializer)
+        // Pass the input serializer
+        private static object ConvertJTokenToType(
+            JToken token,
+            Type targetType,
+            JsonSerializer inputSerializer
+        )
         {
             if (token == null || token.Type == JTokenType.Null)
             {
                 if (targetType.IsValueType && Nullable.GetUnderlyingType(targetType) == null)
                 {
-                    Debug.LogWarning($"Cannot assign null to non-nullable value type {targetType.Name}. Returning default value.");
+                    Debug.LogWarning(
+                        $"Cannot assign null to non-nullable value type {targetType.Name}. Returning default value."
+                    );
                     return Activator.CreateInstance(targetType);
                 }
                 return null;
@@ -2276,19 +2461,25 @@ namespace UnityMcpBridge.Editor.Tools
             }
             catch (JsonSerializationException jsonEx)
             {
-                Debug.LogError($"JSON Deserialization Error converting token to {targetType.FullName}: {jsonEx.Message}\nToken: {token.ToString(Formatting.None)}");
+                Debug.LogError(
+                    $"JSON Deserialization Error converting token to {targetType.FullName}: {jsonEx.Message}\nToken: {token.ToString(Formatting.None)}"
+                );
                 // Optionally re-throw or return null/default
                 // return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
                 throw; // Re-throw to indicate failure higher up
             }
             catch (ArgumentException argEx)
             {
-                Debug.LogError($"Argument Error converting token to {targetType.FullName}: {argEx.Message}\nToken: {token.ToString(Formatting.None)}");
+                Debug.LogError(
+                    $"Argument Error converting token to {targetType.FullName}: {argEx.Message}\nToken: {token.ToString(Formatting.None)}"
+                );
                 throw;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Unexpected error converting token to {targetType.FullName}: {ex}\nToken: {token.ToString(Formatting.None)}");
+                Debug.LogError(
+                    $"Unexpected error converting token to {targetType.FullName}: {ex}\nToken: {token.ToString(Formatting.None)}"
+                );
                 throw;
             }
             // If ToObject succeeded, it would have returned. If it threw, we wouldn't reach here.
@@ -2304,18 +2495,33 @@ namespace UnityMcpBridge.Editor.Tools
         {
             // ... (implementation - likely replaced by Vector3Converter) ...
             // Consider removing these if the serializer handles them reliably.
-            if (token is JObject obj && obj.ContainsKey("x") && obj.ContainsKey("y") && obj.ContainsKey("z"))
+            if (
+                token is JObject obj
+                && obj.ContainsKey("x")
+                && obj.ContainsKey("y")
+                && obj.ContainsKey("z")
+            )
             {
-                return new Vector3(obj["x"].ToObject<float>(), obj["y"].ToObject<float>(), obj["z"].ToObject<float>());
+                return new Vector3(
+                    obj["x"].ToObject<float>(),
+                    obj["y"].ToObject<float>(),
+                    obj["z"].ToObject<float>()
+                );
             }
             if (token is JArray arr && arr.Count >= 3)
             {
-                return new Vector3(arr[0].ToObject<float>(), arr[1].ToObject<float>(), arr[2].ToObject<float>());
+                return new Vector3(
+                    arr[0].ToObject<float>(),
+                    arr[1].ToObject<float>(),
+                    arr[2].ToObject<float>()
+                );
             }
-            Debug.LogWarning($"Could not parse JToken '{token}' as Vector3 using fallback. Returning Vector3.zero.");
+            Debug.LogWarning(
+                $"Could not parse JToken '{token}' as Vector3 using fallback. Returning Vector3.zero."
+            );
             return Vector3.zero;
-
         }
+
         private static Vector2 ParseJTokenToVector2(JToken token)
         {
             // ... (implementation - likely replaced by Vector2Converter) ...
@@ -2327,51 +2533,111 @@ namespace UnityMcpBridge.Editor.Tools
             {
                 return new Vector2(arr[0].ToObject<float>(), arr[1].ToObject<float>());
             }
-            Debug.LogWarning($"Could not parse JToken '{token}' as Vector2 using fallback. Returning Vector2.zero.");
+            Debug.LogWarning(
+                $"Could not parse JToken '{token}' as Vector2 using fallback. Returning Vector2.zero."
+            );
             return Vector2.zero;
         }
+
         private static Quaternion ParseJTokenToQuaternion(JToken token)
         {
             // ... (implementation - likely replaced by QuaternionConverter) ...
-            if (token is JObject obj && obj.ContainsKey("x") && obj.ContainsKey("y") && obj.ContainsKey("z") && obj.ContainsKey("w"))
+            if (
+                token is JObject obj
+                && obj.ContainsKey("x")
+                && obj.ContainsKey("y")
+                && obj.ContainsKey("z")
+                && obj.ContainsKey("w")
+            )
             {
-                return new Quaternion(obj["x"].ToObject<float>(), obj["y"].ToObject<float>(), obj["z"].ToObject<float>(), obj["w"].ToObject<float>());
+                return new Quaternion(
+                    obj["x"].ToObject<float>(),
+                    obj["y"].ToObject<float>(),
+                    obj["z"].ToObject<float>(),
+                    obj["w"].ToObject<float>()
+                );
             }
             if (token is JArray arr && arr.Count >= 4)
             {
-                return new Quaternion(arr[0].ToObject<float>(), arr[1].ToObject<float>(), arr[2].ToObject<float>(), arr[3].ToObject<float>());
+                return new Quaternion(
+                    arr[0].ToObject<float>(),
+                    arr[1].ToObject<float>(),
+                    arr[2].ToObject<float>(),
+                    arr[3].ToObject<float>()
+                );
             }
-            Debug.LogWarning($"Could not parse JToken '{token}' as Quaternion using fallback. Returning Quaternion.identity.");
+            Debug.LogWarning(
+                $"Could not parse JToken '{token}' as Quaternion using fallback. Returning Quaternion.identity."
+            );
             return Quaternion.identity;
         }
+
         private static Color ParseJTokenToColor(JToken token)
         {
             // ... (implementation - likely replaced by ColorConverter) ...
-            if (token is JObject obj && obj.ContainsKey("r") && obj.ContainsKey("g") && obj.ContainsKey("b") && obj.ContainsKey("a"))
+            if (
+                token is JObject obj
+                && obj.ContainsKey("r")
+                && obj.ContainsKey("g")
+                && obj.ContainsKey("b")
+                && obj.ContainsKey("a")
+            )
             {
-                return new Color(obj["r"].ToObject<float>(), obj["g"].ToObject<float>(), obj["b"].ToObject<float>(), obj["a"].ToObject<float>());
+                return new Color(
+                    obj["r"].ToObject<float>(),
+                    obj["g"].ToObject<float>(),
+                    obj["b"].ToObject<float>(),
+                    obj["a"].ToObject<float>()
+                );
             }
             if (token is JArray arr && arr.Count >= 4)
             {
-                return new Color(arr[0].ToObject<float>(), arr[1].ToObject<float>(), arr[2].ToObject<float>(), arr[3].ToObject<float>());
+                return new Color(
+                    arr[0].ToObject<float>(),
+                    arr[1].ToObject<float>(),
+                    arr[2].ToObject<float>(),
+                    arr[3].ToObject<float>()
+                );
             }
-            Debug.LogWarning($"Could not parse JToken '{token}' as Color using fallback. Returning Color.white.");
+            Debug.LogWarning(
+                $"Could not parse JToken '{token}' as Color using fallback. Returning Color.white."
+            );
             return Color.white;
         }
+
         private static Rect ParseJTokenToRect(JToken token)
         {
             // ... (implementation - likely replaced by RectConverter) ...
-            if (token is JObject obj && obj.ContainsKey("x") && obj.ContainsKey("y") && obj.ContainsKey("width") && obj.ContainsKey("height"))
+            if (
+                token is JObject obj
+                && obj.ContainsKey("x")
+                && obj.ContainsKey("y")
+                && obj.ContainsKey("width")
+                && obj.ContainsKey("height")
+            )
             {
-                return new Rect(obj["x"].ToObject<float>(), obj["y"].ToObject<float>(), obj["width"].ToObject<float>(), obj["height"].ToObject<float>());
+                return new Rect(
+                    obj["x"].ToObject<float>(),
+                    obj["y"].ToObject<float>(),
+                    obj["width"].ToObject<float>(),
+                    obj["height"].ToObject<float>()
+                );
             }
             if (token is JArray arr && arr.Count >= 4)
             {
-                return new Rect(arr[0].ToObject<float>(), arr[1].ToObject<float>(), arr[2].ToObject<float>(), arr[3].ToObject<float>());
+                return new Rect(
+                    arr[0].ToObject<float>(),
+                    arr[1].ToObject<float>(),
+                    arr[2].ToObject<float>(),
+                    arr[3].ToObject<float>()
+                );
             }
-            Debug.LogWarning($"Could not parse JToken '{token}' as Rect using fallback. Returning Rect.zero.");
+            Debug.LogWarning(
+                $"Could not parse JToken '{token}' as Rect using fallback. Returning Rect.zero."
+            );
             return Rect.zero;
         }
+
         private static Bounds ParseJTokenToBounds(JToken token)
         {
             // ... (implementation - likely replaced by BoundsConverter) ...
@@ -2379,7 +2645,7 @@ namespace UnityMcpBridge.Editor.Tools
             {
                 // Requires Vector3 conversion, which should ideally use the serializer too
                 Vector3 center = ParseJTokenToVector3(obj["center"]); // Or use obj["center"].ToObject<Vector3>(inputSerializer)
-                Vector3 size = ParseJTokenToVector3(obj["size"]);     // Or use obj["size"].ToObject<Vector3>(inputSerializer)
+                Vector3 size = ParseJTokenToVector3(obj["size"]); // Or use obj["size"].ToObject<Vector3>(inputSerializer)
                 return new Bounds(center, size);
             }
             // Array fallback for Bounds is less intuitive, maybe remove?
@@ -2387,9 +2653,12 @@ namespace UnityMcpBridge.Editor.Tools
             // {
             //      return new Bounds(new Vector3(arr[0].ToObject<float>(), arr[1].ToObject<float>(), arr[2].ToObject<float>()), new Vector3(arr[3].ToObject<float>(), arr[4].ToObject<float>(), arr[5].ToObject<float>()));
             // }
-            Debug.LogWarning($"Could not parse JToken '{token}' as Bounds using fallback. Returning new Bounds(Vector3.zero, Vector3.zero).");
+            Debug.LogWarning(
+                $"Could not parse JToken '{token}' as Bounds using fallback. Returning new Bounds(Vector3.zero, Vector3.zero)."
+            );
             return new Bounds(Vector3.zero, Vector3.zero);
         }
+
         // --- End Redundant Parse Helpers ---
 
         /// <summary>
@@ -2397,7 +2666,10 @@ namespace UnityMcpBridge.Editor.Tools
         /// Primarily used by UnityEngineObjectConverter during deserialization.
         /// </summary>
         // Made public static so UnityEngineObjectConverter can call it. Moved from ConvertJTokenToType.
-        public static UnityEngine.Object FindObjectByInstruction(JObject instruction, Type targetType)
+        public static UnityEngine.Object FindObjectByInstruction(
+            JObject instruction,
+            Type targetType
+        )
         {
             string findTerm = instruction["find"]?.ToString();
             string method = instruction["method"]?.ToString()?.ToLower();
@@ -2410,45 +2682,57 @@ namespace UnityMcpBridge.Editor.Tools
             }
 
             // Use a flexible default search method if none provided
-            string searchMethodToUse = string.IsNullOrEmpty(method) ? "by_id_or_name_or_path" : method;
+            string searchMethodToUse = string.IsNullOrEmpty(method)
+                ? "by_id_or_name_or_path"
+                : method;
 
             // If the target is an asset (Material, Texture, ScriptableObject etc.) try AssetDatabase first
-            if (typeof(Material).IsAssignableFrom(targetType) ||
-                typeof(Texture).IsAssignableFrom(targetType) ||
-                typeof(ScriptableObject).IsAssignableFrom(targetType) ||
-                targetType.FullName.StartsWith("UnityEngine.U2D") || // Sprites etc.
-                typeof(AudioClip).IsAssignableFrom(targetType) ||
-                typeof(AnimationClip).IsAssignableFrom(targetType) ||
-                typeof(Font).IsAssignableFrom(targetType) ||
-                typeof(Shader).IsAssignableFrom(targetType) ||
-                typeof(ComputeShader).IsAssignableFrom(targetType) ||
-                typeof(GameObject).IsAssignableFrom(targetType) && findTerm.StartsWith("Assets/")) // Prefab check
+            if (
+                typeof(Material).IsAssignableFrom(targetType)
+                || typeof(Texture).IsAssignableFrom(targetType)
+                || typeof(ScriptableObject).IsAssignableFrom(targetType)
+                || targetType.FullName.StartsWith("UnityEngine.U2D")
+                || // Sprites etc.
+                typeof(AudioClip).IsAssignableFrom(targetType)
+                || typeof(AnimationClip).IsAssignableFrom(targetType)
+                || typeof(Font).IsAssignableFrom(targetType)
+                || typeof(Shader).IsAssignableFrom(targetType)
+                || typeof(ComputeShader).IsAssignableFrom(targetType)
+                || typeof(GameObject).IsAssignableFrom(targetType) && findTerm.StartsWith("Assets/")
+            ) // Prefab check
             {
                 // Try loading directly by path/GUID first
                 UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath(findTerm, targetType);
-                if (asset != null) return asset;
+                if (asset != null)
+                    return asset;
                 asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(findTerm); // Try generic if type specific failed
-                if (asset != null && targetType.IsAssignableFrom(asset.GetType())) return asset;
-
+                if (asset != null && targetType.IsAssignableFrom(asset.GetType()))
+                    return asset;
 
                 // If direct path failed, try finding by name/type using FindAssets
-                string searchFilter = $"t:{targetType.Name} {System.IO.Path.GetFileNameWithoutExtension(findTerm)}"; // Search by type and name
+                string searchFilter =
+                    $"t:{targetType.Name} {System.IO.Path.GetFileNameWithoutExtension(findTerm)}"; // Search by type and name
                 string[] guids = AssetDatabase.FindAssets(searchFilter);
 
                 if (guids.Length == 1)
                 {
-                    asset = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guids[0]), targetType);
-                    if (asset != null) return asset;
+                    asset = AssetDatabase.LoadAssetAtPath(
+                        AssetDatabase.GUIDToAssetPath(guids[0]),
+                        targetType
+                    );
+                    if (asset != null)
+                        return asset;
                 }
                 else if (guids.Length > 1)
                 {
-                    Debug.LogWarning($"[FindObjectByInstruction] Ambiguous asset find: Found {guids.Length} assets matching filter '{searchFilter}'. Provide a full path or unique name.");
+                    Debug.LogWarning(
+                        $"[FindObjectByInstruction] Ambiguous asset find: Found {guids.Length} assets matching filter '{searchFilter}'. Provide a full path or unique name."
+                    );
                     // Optionally return the first one? Or null? Returning null is safer.
                     return null;
                 }
                 // If still not found, fall through to scene search (though unlikely for assets)
             }
-
 
             // --- Scene Object Search ---
             // Find the GameObject using the internal finder
@@ -2472,30 +2756,38 @@ namespace UnityMcpBridge.Editor.Tools
                 if (!string.IsNullOrEmpty(componentName))
                 {
                     Type specificCompType = FindType(componentName);
-                    if (specificCompType != null && typeof(Component).IsAssignableFrom(specificCompType))
+                    if (
+                        specificCompType != null
+                        && typeof(Component).IsAssignableFrom(specificCompType)
+                    )
                     {
                         componentToGetType = specificCompType;
                     }
                     else
                     {
-                        Debug.LogWarning($"Could not find component type '{componentName}' specified in find instruction. Falling back to target type '{targetType.Name}'.");
+                        Debug.LogWarning(
+                            $"Could not find component type '{componentName}' specified in find instruction. Falling back to target type '{targetType.Name}'."
+                        );
                     }
                 }
 
                 Component foundComp = foundGo.GetComponent(componentToGetType);
                 if (foundComp == null)
                 {
-                    Debug.LogWarning($"Found GameObject '{foundGo.name}' but could not find component of type '{componentToGetType.Name}'.");
+                    Debug.LogWarning(
+                        $"Found GameObject '{foundGo.name}' but could not find component of type '{componentToGetType.Name}'."
+                    );
                 }
                 return foundComp;
             }
             else
             {
-                Debug.LogWarning($"Find instruction handling not implemented for target type: {targetType.Name}");
+                Debug.LogWarning(
+                    $"Find instruction handling not implemented for target type: {targetType.Name}"
+                );
                 return null;
             }
         }
-
 
         /// <summary>
         /// Helper to find a Type by name, searching relevant assemblies.
@@ -2507,18 +2799,46 @@ namespace UnityMcpBridge.Editor.Tools
 
             // Handle fully qualified names first
             Type type = Type.GetType(typeName);
-            if (type != null) return type;
+            if (type != null)
+                return type;
 
             // Handle common namespaces implicitly (add more as needed)
-            string[] namespaces = { "UnityEngine", "UnityEngine.UI", "UnityEngine.AI", "UnityEngine.Animations", "UnityEngine.Audio", "UnityEngine.EventSystems", "UnityEngine.InputSystem", "UnityEngine.Networking", "UnityEngine.Rendering", "UnityEngine.SceneManagement", "UnityEngine.Tilemaps", "UnityEngine.U2D", "UnityEngine.Video", "UnityEditor", "UnityEditor.AI", "UnityEditor.Animations", "UnityEditor.Experimental.GraphView", "UnityEditor.IMGUI.Controls", "UnityEditor.PackageManager.UI", "UnityEditor.SceneManagement", "UnityEditor.UI", "UnityEditor.U2D", "UnityEditor.VersionControl" }; // Add more relevant namespaces
+            string[] namespaces =
+            {
+                "UnityEngine",
+                "UnityEngine.UI",
+                "UnityEngine.AI",
+                "UnityEngine.Animations",
+                "UnityEngine.Audio",
+                "UnityEngine.EventSystems",
+                "UnityEngine.InputSystem",
+                "UnityEngine.Networking",
+                "UnityEngine.Rendering",
+                "UnityEngine.SceneManagement",
+                "UnityEngine.Tilemaps",
+                "UnityEngine.U2D",
+                "UnityEngine.Video",
+                "UnityEditor",
+                "UnityEditor.AI",
+                "UnityEditor.Animations",
+                "UnityEditor.Experimental.GraphView",
+                "UnityEditor.IMGUI.Controls",
+                "UnityEditor.PackageManager.UI",
+                "UnityEditor.SceneManagement",
+                "UnityEditor.UI",
+                "UnityEditor.U2D",
+                "UnityEditor.VersionControl",
+            }; // Add more relevant namespaces
 
             foreach (string ns in namespaces)
             {
-                type = Type.GetType($"{ns}.{typeName}, {ns.Split('.')[0]}.CoreModule") ?? // Heuristic: Check CoreModule first for UnityEngine/UnityEditor
-                       Type.GetType($"{ns}.{typeName}, {ns.Split('.')[0]}"); // Try assembly matching namespace root
-                if (type != null) return type;
+                type =
+                    Type.GetType($"{ns}.{typeName}, {ns.Split('.')[0]}.CoreModule")
+                    ?? // Heuristic: Check CoreModule first for UnityEngine/UnityEditor
+                    Type.GetType($"{ns}.{typeName}, {ns.Split('.')[0]}"); // Try assembly matching namespace root
+                if (type != null)
+                    return type;
             }
-
 
             // If not found, search all loaded assemblies (slower, last resort)
             // Prioritize assemblies likely to contain game/editor types
@@ -2528,34 +2848,47 @@ namespace UnityMcpBridge.Editor.Tools
                 try
                 {
                     var asm = Assembly.Load(assemblyName);
-                    if (asm != null) priorityAssemblies.Add(asm);
+                    if (asm != null)
+                        priorityAssemblies.Add(asm);
                 }
-                catch { /* Assembly doesn't exist, skip it */ }
+                catch
+                { /* Assembly doesn't exist, skip it */
+                }
             }
 
             foreach (var assembly in priorityAssemblies)
             {
-                type = assembly.GetType(typeName) ?? assembly.GetType("UnityEngine." + typeName) ?? assembly.GetType("UnityEditor." + typeName);
-                if (type != null) return type;
+                type =
+                    assembly.GetType(typeName)
+                    ?? assembly.GetType("UnityEngine." + typeName)
+                    ?? assembly.GetType("UnityEditor." + typeName);
+                if (type != null)
+                    return type;
             }
 
             // Search remaining assemblies
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies().Except(priorityAssemblies))
+            foreach (
+                var assembly in AppDomain.CurrentDomain.GetAssemblies().Except(priorityAssemblies)
+            )
             {
                 try
                 { // Protect against assembly loading errors
                     type = assembly.GetType(typeName);
-                    if (type != null) return type;
+                    if (type != null)
+                        return type;
                     // Also check with common namespaces if simple name given
                     foreach (string ns in namespaces)
                     {
                         type = assembly.GetType($"{ns}.{typeName}");
-                        if (type != null) return type;
+                        if (type != null)
+                            return type;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning($"[FindType] Error searching assembly {assembly.FullName}: {ex.Message}");
+                    Debug.LogWarning(
+                        $"[FindType] Error searching assembly {assembly.FullName}: {ex.Message}"
+                    );
                 }
             }
 
@@ -2566,12 +2899,18 @@ namespace UnityMcpBridge.Editor.Tools
         /// <summary>
         /// Parses a JArray like [x, y, z] into a Vector3.
         /// </summary>
-        private static object ScaleGameObject(JObject @params, JToken targetToken, string searchMethod)
+        private static object ScaleGameObject(
+            JObject @params,
+            JToken targetToken,
+            string searchMethod
+        )
         {
             GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
             if (targetGo == null)
             {
-                return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                return Response.Error(
+                    $"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'."
+                );
             }
 
             try
@@ -2592,18 +2931,29 @@ namespace UnityMcpBridge.Editor.Tools
                 {
                     float scaleFactor = multiplier ?? 2f; // Default multiplier is 2 if not specified
 
-                    if (scaleCommand.Contains("bigger") || scaleCommand.Contains("larger") ||
-                        scaleCommand.Contains("increase") || scaleCommand.Contains("double"))
+                    if (
+                        scaleCommand.Contains("bigger")
+                        || scaleCommand.Contains("larger")
+                        || scaleCommand.Contains("increase")
+                        || scaleCommand.Contains("double")
+                    )
                     {
                         newScale = currentScale * scaleFactor;
                     }
-                    else if (scaleCommand.Contains("smaller") || scaleCommand.Contains("decrease") ||
-                             scaleCommand.Contains("half") || scaleCommand.Contains("reduce"))
+                    else if (
+                        scaleCommand.Contains("smaller")
+                        || scaleCommand.Contains("decrease")
+                        || scaleCommand.Contains("half")
+                        || scaleCommand.Contains("reduce")
+                    )
                     {
                         newScale = currentScale / scaleFactor;
                     }
-                    else if (scaleCommand.Contains("reset") || scaleCommand.Contains("normal") ||
-                             scaleCommand.Contains("original"))
+                    else if (
+                        scaleCommand.Contains("reset")
+                        || scaleCommand.Contains("normal")
+                        || scaleCommand.Contains("original")
+                    )
                     {
                         newScale = Vector3.one;
                     }
@@ -2614,7 +2964,9 @@ namespace UnityMcpBridge.Editor.Tools
                 }
                 else
                 {
-                    return Response.Error("Please provide either a scale command (e.g., 'make bigger', 'make smaller') or exact scale values [x, y, z].");
+                    return Response.Error(
+                        "Please provide either a scale command (e.g., 'make bigger', 'make smaller') or exact scale values [x, y, z]."
+                    );
                 }
 
                 // Ensure minimum scale
@@ -2631,9 +2983,9 @@ namespace UnityMcpBridge.Editor.Tools
                 // Mark the scene as dirty
                 EditorUtility.SetDirty(targetGo);
 
-                string scaleDescription = exactScale.HasValue ?
-                    $"to {newScale}" :
-                    $"from {currentScale} to {newScale}";
+                string scaleDescription = exactScale.HasValue
+                    ? $"to {newScale}"
+                    : $"from {currentScale} to {newScale}";
 
                 return Response.Success(
                     $"GameObject '{targetGo.name}' scaled {scaleDescription}.",
@@ -2661,18 +3013,26 @@ namespace UnityMcpBridge.Editor.Tools
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning($"Failed to parse JArray as Vector3: {array}. Error: {ex.Message}");
+                    Debug.LogWarning(
+                        $"Failed to parse JArray as Vector3: {array}. Error: {ex.Message}"
+                    );
                 }
             }
             return null;
         }
 
-        private static object ChangeGameObjectColor(JObject @params, JToken targetToken, string searchMethod)
+        private static object ChangeGameObjectColor(
+            JObject @params,
+            JToken targetToken,
+            string searchMethod
+        )
         {
             GameObject targetGo = FindObjectInternal(targetToken, searchMethod);
             if (targetGo == null)
             {
-                return Response.Error($"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'.");
+                return Response.Error(
+                    $"Target GameObject ('{targetToken}') not found using method '{searchMethod ?? "default"}'."
+                );
             }
 
             try
@@ -2681,7 +3041,9 @@ namespace UnityMcpBridge.Editor.Tools
                 Renderer renderer = targetGo.GetComponent<Renderer>();
                 if (renderer == null)
                 {
-                    return Response.Error($"GameObject '{targetGo.name}' does not have a Renderer component. Cannot change color.");
+                    return Response.Error(
+                        $"GameObject '{targetGo.name}' does not have a Renderer component. Cannot change color."
+                    );
                 }
 
                 Color newColor = Color.white;
@@ -2694,7 +3056,9 @@ namespace UnityMcpBridge.Editor.Tools
                     colorSet = TryParseColorName(colorName, out newColor);
                     if (!colorSet)
                     {
-                        return Response.Error($"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey.");
+                        return Response.Error(
+                            $"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey."
+                        );
                     }
                 }
                 else
@@ -2708,7 +3072,8 @@ namespace UnityMcpBridge.Editor.Tools
                             float r = colorArray[0].ToObject<float>();
                             float g = colorArray[1].ToObject<float>();
                             float b = colorArray[2].ToObject<float>();
-                            float a = colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
+                            float a =
+                                colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
 
                             // Clamp values to 0-1 range
                             r = Mathf.Clamp01(r);
@@ -2721,14 +3086,18 @@ namespace UnityMcpBridge.Editor.Tools
                         }
                         catch (Exception ex)
                         {
-                            return Response.Error($"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1.");
+                            return Response.Error(
+                                $"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1."
+                            );
                         }
                     }
                 }
 
                 if (!colorSet)
                 {
-                    return Response.Error("Color must be specified as either 'color' array [r,g,b] or [r,g,b,a] (values 0-1) OR 'colorName' string.");
+                    return Response.Error(
+                        "Color must be specified as either 'color' array [r,g,b] or [r,g,b,a] (values 0-1) OR 'colorName' string."
+                    );
                 }
 
                 // Record for undo
@@ -2764,7 +3133,9 @@ namespace UnityMcpBridge.Editor.Tools
             }
             catch (Exception e)
             {
-                return Response.Error($"Error changing color for GameObject '{targetGo.name}': {e.Message}");
+                return Response.Error(
+                    $"Error changing color for GameObject '{targetGo.name}': {e.Message}"
+                );
             }
         }
 
@@ -2833,7 +3204,9 @@ namespace UnityMcpBridge.Editor.Tools
                 {
                     if (!TryParseColorName(colorName, out lightColor))
                     {
-                        return Response.Error($"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey.");
+                        return Response.Error(
+                            $"Invalid color name: '{colorName}'. Supported colors: red, green, blue, yellow, orange, cyan, magenta, pink, gold, white, black, gray/grey."
+                        );
                     }
                 }
                 else
@@ -2847,7 +3220,8 @@ namespace UnityMcpBridge.Editor.Tools
                             float r = colorArray[0].ToObject<float>();
                             float g = colorArray[1].ToObject<float>();
                             float b = colorArray[2].ToObject<float>();
-                            float a = colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
+                            float a =
+                                colorArray.Count == 4 ? colorArray[3].ToObject<float>() : 1.0f;
 
                             // Clamp values to 0-1 range
                             r = Mathf.Clamp01(r);
@@ -2859,7 +3233,9 @@ namespace UnityMcpBridge.Editor.Tools
                         }
                         catch (Exception ex)
                         {
-                            return Response.Error($"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1.");
+                            return Response.Error(
+                                $"Failed to parse color array: {ex.Message}. Use format [r, g, b] or [r, g, b, a] with values 0-1."
+                            );
                         }
                     }
                 }
@@ -2874,7 +3250,8 @@ namespace UnityMcpBridge.Editor.Tools
                 else
                 {
                     // Auto-position by default
-                    position = lastCreationPosition + new Vector3(creationCount * objectSpacing, 0, 0);
+                    position =
+                        lastCreationPosition + new Vector3(creationCount * objectSpacing, 0, 0);
                     creationCount++;
                 }
 
@@ -2900,11 +3277,15 @@ namespace UnityMcpBridge.Editor.Tools
                         unityLightType = LightType.Rectangle;
                         break;
                     default:
-                        return Response.Error($"Invalid light type: '{lightType}'. Supported types: point, spot, area.");
+                        return Response.Error(
+                            $"Invalid light type: '{lightType}'. Supported types: point, spot, area."
+                        );
                 }
 
                 // Create GameObject
-                GameObject lightGo = new GameObject(string.IsNullOrEmpty(name) ? $"{lightType}Light" : name);
+                GameObject lightGo = new GameObject(
+                    string.IsNullOrEmpty(name) ? $"{lightType}Light" : name
+                );
 
                 //  undo possiblity
                 Undo.RegisterCreatedObjectUndo(lightGo, "Create Light");
@@ -2937,17 +3318,24 @@ namespace UnityMcpBridge.Editor.Tools
                     GameObject parentGo = FindObjectInternal(parentToken, null);
                     if (parentGo != null)
                     {
-                        Undo.SetTransformParent(lightGo.transform, parentGo.transform, "Set Light Parent");
+                        Undo.SetTransformParent(
+                            lightGo.transform,
+                            parentGo.transform,
+                            "Set Light Parent"
+                        );
                     }
                     else
                     {
-                        Debug.LogWarning($"Parent GameObject not found: {parentToken}. Light created without parent.");
+                        Debug.LogWarning(
+                            $"Parent GameObject not found: {parentToken}. Light created without parent."
+                        );
                     }
                 }
 
                 EditorUtility.SetDirty(lightGo);
 
-                string lightDescription = $"{lightType} light '{lightGo.name}' with color {lightColor}, intensity {intensity}";
+                string lightDescription =
+                    $"{lightType} light '{lightGo.name}' with color {lightColor}, intensity {intensity}";
                 if (unityLightType == LightType.Point || unityLightType == LightType.Spot)
                 {
                     lightDescription += $", range {range}";
@@ -2972,5 +3360,3 @@ namespace UnityMcpBridge.Editor.Tools
         // They are now in Helpers.GameObjectSerializer
     }
 }
-
-
